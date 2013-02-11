@@ -24,6 +24,7 @@ my $build = Module::Build->new(
         'perl'                      => 5.006,
         'Set::Scalar'               => 0,
         'Text::Balanced'            => 0,
+        'LWP::Simple'               => 0,
     },
     build_requires => {
         'Test::More'                => '0',
