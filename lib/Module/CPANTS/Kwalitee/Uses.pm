@@ -118,6 +118,7 @@ sub kwalitee_indicators {
                     Moose
                     Moose::Role
                     MooseX::Declare
+                    MooseX::Role::Parameterized
                     MooseX::Types
                     Mouse
                     Mouse::Role
