@@ -6,7 +6,7 @@ use Module::ExtractUse;
 use Set::Scalar qw();
 use Data::Dumper;
 
-our $VERSION = '0.88';
+our $VERSION = '0.89';
 
 sub order { 100 }
 
@@ -21,30 +21,22 @@ sub analyse {
     my $distdir=$me->distdir;
     my $modules=$me->d->{modules};
     my $files=$me->d->{files_array};
-
-    # NOTE: all files in xt/ should be ignored because they are
-    # for authors only and their dependencies may not be (and
-    # often are not) listed in meta files.
-    my @tests=grep {m|^t\b.*\.t|} @$files;
+    my @tests=grep {m|^x?t\b.*\.t|} @$files;
     $me->d->{test_files} = \@tests;
-
-    my @test_modules = map { my $m = $_; $m =~ s|/|::|g; $m =~ s|\.pm$||; $m } grep {m|^t\b.*\.pm$|} @$files;
 
     my %skip=map {$_->{module}=>1 } @$modules;
     my %uses;
 
     foreach (@$modules) {
         my $p = Module::ExtractUse->new;
-        my $file = catfile($distdir,$_->{file});
-        $p->extract_use($file) if -f $file;
+        $p->extract_use(catfile($distdir,$_->{file}));
         $_->{uses} = $p->used;
     }
 
     # used in modules
     my $p=Module::ExtractUse->new;
     foreach (@$modules) {
-        my $file = catfile($distdir,$_->{file});
-        $p->extract_use($file) if -f $file;
+        $p->extract_use(catfile($distdir,$_->{file}));
     }
 
     while (my ($mod,$cnt)=each%{$p->used}) {
@@ -54,30 +46,24 @@ sub analyse {
             module=>$mod,
             in_code=>$cnt,
             in_tests=>0,
-            evals_in_code=>($p->used_in_eval($mod) || 0),
         };
     }
     
     # used in tests
     my $pt=Module::ExtractUse->new;
     foreach my $tf (@tests) {
-        my $file = catfile($distdir,$tf);
-        $pt->extract_use($file) if -f $file && -s $file < 1_000_000; # skip very large test files
+        next if -s catfile($distdir,$tf) > 1_000_000; # skip very large test files
+        $pt->extract_use(catfile($distdir,$tf));
     }
     while (my ($mod,$cnt)=each%{$pt->used}) {
         next if $skip{$mod};
-        if (@test_modules) {
-            next if grep {/(?:^|::)$mod$/} @test_modules;
-        }
         if ($uses{$mod}) {
             $uses{$mod}{'in_tests'}=$cnt;
-            $uses{$mod}{'evals_in_tests'}=($pt->used_in_eval($mod) || 0);
         } else {
             $uses{$mod}={
                 module=>$mod,
                 in_code=>0,
                 in_tests=>$cnt,
-                evals_in_tests=>($pt->used_in_eval($mod) || 0),
             }
         }
     }
@@ -114,7 +100,6 @@ sub kwalitee_indicators {
                     Modern::Perl
                     Mojo::Base
                     Moo
-                    Moo::Role
                     Moose
                     Moose::Role
                     MooseX::Declare
@@ -129,21 +114,12 @@ sub kwalitee_indicators {
                     strictures
                 ));
 
-                my @no_strict;
                 for my $module (@{ $modules }) {
-                    push @no_strict, $module->{module} if $strict_equivalents
+                    return 0 if $strict_equivalents
                         ->intersection(Set::Scalar->new(keys %{ $module->{uses} }))
                         ->is_empty;
                 }
-                if (@no_strict) {
-                    $d->{error}{use_strict} = join ", ", @no_strict;
-                    return 0;
-                }
                 return 1;
-            },
-            details=>sub {
-                my $d = shift;
-                return "The following modules don't use strict (or equivalents): " . $d->{error}{use_strict};
             },
         },
         {
@@ -168,7 +144,6 @@ sub kwalitee_indicators {
                     Modern::Perl
                     Mojo::Base
                     Moo
-                    Moo::Role
                     Moose
                     Moose::Role
                     MooseX::Declare
@@ -183,21 +158,53 @@ sub kwalitee_indicators {
                     strictures
                 ));
 
-                my @no_warnings;
                 for my $module (@{ $modules }) {
-                    push @no_warnings, $module->{module} if $warnings_equivalents
+                    return 0 if $warnings_equivalents
                         ->intersection(Set::Scalar->new(keys %{ $module->{uses} }))
                         ->is_empty;
                 }
-                if (@no_warnings) {
-                    $d->{error}{use_warnings} = join ", ", @no_warnings;
-                    return 0;
-                }
                 return 1;
             },
-            details=>sub {
-                my $d = shift;
-                return "The following modules don't use warnings (or equivalents): " . $d->{error}{use_warnings};
+        },
+        
+        {
+            name=>'has_test_pod',
+            error=>q{Doesn't include a test for pod correctness (Test::Pod)},
+            remedy=>q{Add a test using Test::Pod to check for pod correctness.},
+            is_extra=>1,
+            code=>sub {
+                my $d=shift;
+                return 1 if $d->{uses}->{'Test::Pod'};
+                return 0;
+            },
+        },
+        {
+            name=>'has_test_pod_coverage',
+            error=>q{Doesn't include a test for pod coverage (Test::Pod::Coverage)},
+            remedy=>q{Add a test using Test::Pod::Coverage to check for POD coverage.},
+            is_extra=>1,
+            code=>sub {
+                my $d=shift;
+                return 1 if $d->{uses}->{'Test::Pod::Coverage'};
+                return 0;
+            },
+        },
+        {
+            name=>'uses_test_nowarnings',
+            error=>q{Doesn't use Test::NoWarnings in all the test files},
+            remedy=>q{Add Test::NoWarnings to each one of the .t files and increment the test count by 1.},
+            is_experimental=>1,
+            code=>sub {
+                my $d=shift;
+                my $tests=$d->{test_files};
+                my @public_test_files = grep {/^t/} @$tests;
+                my $uses=$d->{uses};
+                return 0 unless $tests && $uses;
+                
+                my ($test_no_warnings)=$uses->{'Test::NoWarnings'};
+                return 0 unless $test_no_warnings;
+                return 1 if $test_no_warnings->{in_tests} >= @public_test_files;
+                return 0;
             },
         },
     ];
@@ -240,6 +247,12 @@ Returns the Kwalitee Indicators datastructure.
 =over
 
 =item * use_strict
+
+=item * has_test_pod
+
+=item * has_test_pod_coverage
+
+=item * uses_test_nowarnings
 
 =back
 

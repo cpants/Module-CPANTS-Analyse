@@ -1,26 +1,30 @@
 package Module::CPANTS::Kwalitee::Signature;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
+use File::chdir;
+use Module::Signature qw(verify SIGNATURE_OK SIGNATURE_MISSING);
 
-our $VERSION = '0.88';
+our $VERSION = '0.89';
 
 sub order { 100 }
 
 sub analyse {
     my ($class, $self) = @_;
-
-    # NOTE: The analysis/metric in this module has moved to
-    # Module::CPANTS::SiteKwalitee because this requires an external
-    # tool (though optional) and decent network connection to
-    # validate a signature.
-
-    # Note also that this stub should not be removed so that
-    # this can replace the old ::Signature module, and the old
-    # metrics will not be loaded while loading plugins.
+    local $CWD = $self->distdir;
+    local $SIG{__WARN__} = sub {};  # shut up M::S diagnostics
+    $self->d->{error}{valid_signature} = verify;
 }
 
 sub kwalitee_indicators {
-    return [];
+    return [{
+        name    => 'valid_signature',
+        error   => q{This dist failed its Module::Signature verification and does not to install automatically through the CPAN client if Module::Signature is installed. Note: unsigned dists will automatically pass this kwalitee check.},
+        remedy  => q{Sign the dist as the last step before creating the archive. Take care not to modify/regenerate dist meta files or the manifest.},
+        code    => sub {
+            my $v = shift->{error}{valid_signature};
+            return (SIGNATURE_OK == $v or SIGNATURE_MISSING == $v) ? 1 : 0;
+        },
+    }];
 }
 
 1;
@@ -35,7 +39,7 @@ Module::CPANTS::Kwalitee::Signature - dist has a valid signature
 
 =head1 SYNOPSIS
 
-The metrics in this module have moved to L<Module::CPANTS::SiteKwalitee::Signature>.
+Check if the cryptographic signature of a dist is valid.
 
 =head1 DESCRIPTION
 
@@ -49,11 +53,19 @@ Returns C<100>.
 
 =head3 analyse
 
-Does nothing now.
+Uses C<Module::Signature> to verify the validity of the dist signature.
+
+Dists without signature pass automatically.
 
 =head3 kwalitee_indicators
 
 Returns the Kwalitee Indicators datastructure.
+
+=over
+
+=item * valid_signature
+
+=back
 
 =head1 SEE ALSO
 

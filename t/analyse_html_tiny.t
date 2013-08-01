@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::NoWarnings;
 
 use Module::CPANTS::Analyse;
@@ -21,10 +21,11 @@ my $d=$a->d;
 is($d->{files},18,'files');
 my $modcount=grep {$_->{module} eq 'HTML::Tiny'} @{$d->{modules}};
 is($modcount,1,'module');
+is($d->{prereq}->[0]{requires},'Test::More','prereq');
 ok($d->{file_meta_yml},'has_yaml');
 ok($d->{metayml_is_parsable},'metayml_is_parsable');
 ok(!$d->{metayml_parse_error},'metayml_parse_error was not set');
-like($d->{license},qr/defined in META\.yml/,'license');
+like($d->{license},qr/defined in POD/,'license');
 ok(!$d->{needs_compiler}, 'does not need compiler');
 ok($d->{dir_xt},'dir_xt');
 

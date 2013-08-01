@@ -4,6 +4,14 @@
 
 Changes - Revision history for Module-CPANTS-Analyse
 
+=head2 0.89 2013-08-01
+
+=over
+
+=item Tentatively reverted all the changes in 0.88
+
+=back
+
 =head2 0.88 2013-08-01
 
 =over

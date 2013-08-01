@@ -1,5 +1,3 @@
-use strict;
-use warnings;
 use Test::More tests => 13;
 
 use Module::CPANTS::Analyse;
@@ -21,7 +19,7 @@ is($d->{size_packed},10646,'size_packed');
 is(ref($d->{modules}),'ARRAY','modules is ARRAY');
 my $modcount=grep {$_->{module} eq 'Devel::Timer'} @{$d->{modules}};
 is($modcount,1,'module');
-is(ref($d->{prereq}),'ARRAY','prereq is ARRAY');
+is(ref($d->{prereq}),'','prereq is empty');
 is(ref($d->{uses}),'HASH','uses is HASH');
 is($d->{uses}{'Test::More'}{in_tests},3,'uses');
 ok($d->{file_meta_yml},'has_yaml');
