@@ -1,6 +1,7 @@
 package Module::CPANTS::Kwalitee::CpantsErrors;
 use warnings;
 use strict;
+use version;
 
 our $VERSION = '0.90_02';
 
