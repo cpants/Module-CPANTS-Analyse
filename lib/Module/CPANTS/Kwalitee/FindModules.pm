@@ -112,8 +112,8 @@ sub kwalitee_indicators {
             is_extra => 1,
             code=>sub { 
                 my $d=shift;
-                my @modules = @{$d->{modules}};
-                return 0 unless @modules;
+                my @modules = @{$d->{modules} || []};
+                return 1 unless @modules;
 
                 my @not_in_lib = grep { !$_->{in_lib} } @modules;
                 return 1 unless @not_in_lib;
@@ -127,7 +127,7 @@ sub kwalitee_indicators {
             },
             details=>sub {
                 my $d = shift;
-                my @modules = @{$d->{modules}};
+                my @modules = @{$d->{modules} || []};
                 return "No modules were found" unless @modules;
                 return "The following files were found: ".$d->{error}{proper_libs};
             },
