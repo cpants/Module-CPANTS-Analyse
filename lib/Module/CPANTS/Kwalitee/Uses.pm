@@ -51,26 +51,20 @@ sub analyse {
     }
     
     # used in tests
-    my $pt=Module::ExtractUse->new;
     foreach my $tf (@tests) {
+        my $pt=Module::ExtractUse->new;
         my $file = catfile($distdir,$tf);
         $pt->extract_use($file) if -f $file && -s $file < 1_000_000; # skip very large test files
-    }
-    while (my ($mod,$cnt)=each%{$pt->used}) {
-        next if $skip{$mod};
-        if (@test_modules) {
-            next if grep {/(?:^|::)$mod$/} @test_modules;
-        }
-        if ($uses{$mod}) {
-            $uses{$mod}{'in_tests'}=$cnt;
-            $uses{$mod}{'evals_in_tests'}=($pt->used_in_eval($mod) || 0);
-        } else {
-            $uses{$mod}={
-                module=>$mod,
-                in_code=>0,
-                in_tests=>$cnt,
-                evals_in_tests=>($pt->used_in_eval($mod) || 0),
+
+        while (my ($mod,$cnt)=each%{$pt->used}) {
+            next if $skip{$mod};
+            if (@test_modules) {
+                next if grep {/(?:^|::)$mod$/} @test_modules;
             }
+
+            $uses{$mod}{module} = $mod;
+            $uses{$mod}{in_tests} += $cnt;
+            $uses{$mod}{evals_in_tests} += $pt->used_in_eval($mod) || 0;
         }
     }
 
