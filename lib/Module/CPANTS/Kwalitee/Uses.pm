@@ -5,6 +5,7 @@ use File::Spec::Functions qw(catfile);
 use Module::ExtractUse;
 use Set::Scalar qw();
 use Data::Dumper;
+use version;
 
 our $VERSION = '0.90_02';
 
@@ -130,8 +131,10 @@ sub kwalitee_indicators {
                     strictures
                 ));
 
+                my $perl_version_with_implicit_stricture = version->new('5.011');
                 my @no_strict;
                 for my $module (@{ $modules }) {
+                    next if grep {/^5\./ && version->parse($_) >= $perl_version_with_implicit_stricture} keys %{$module->{uses}};
                     push @no_strict, $module->{module} if $strict_equivalents
                         ->intersection(Set::Scalar->new(keys %{ $module->{uses} }))
                         ->is_empty;
