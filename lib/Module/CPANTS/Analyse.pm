@@ -110,8 +110,10 @@ sub unpack {
     my @stuff=grep {/\w/} readdir($fh_testdir);
 
     if (@stuff == 1) {
+        my $vname = $di->distvname;
+        $vname =~ s/\-TRIAL//;
         $me->distdir(catdir($me->testdir,$stuff[0]));
-        $me->d->{extracts_nicely}=1 if $di->distvname eq $stuff[0];
+        $me->d->{extracts_nicely}=1 if $vname eq $stuff[0];
         
     } else {
         $me->distdir(catdir($me->testdir));
