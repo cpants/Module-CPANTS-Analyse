@@ -4,11 +4,31 @@
 
 Changes - Revision history for Module-CPANTS-Analyse
 
-=head2 0.93
+=head2 0.91
 
 =over
 
-=item RT#86504 - fix sort order of Kwalitee generators (ether)
+=item Fixed RT#69233 - doesn't detect use >= 5.012 as use strict (ishigaki)
+
+=item Fixed RT#83336 - Fails to detect strict via `use MooseX::Types` (ether)
+
+=item Fixed RT#83851 - 'use v5.16' and greater not deemed "strict" (ishigaki)
+
+=item Fixed RT#86504 - fix sort order of Kwalitee generators (ether)
+
+=item Fixed RT#87155 - more Module::Install tests needed (1.04 is broken) (ishigaki)
+
+=item Fixed RT#87597 - proper_libs is a dubious test (ishigaki)
+
+=item Fixed RT#87598 - Can't use an undefined value as an ARRAY reference at .../FindModules.pm line 115. (ishigaki)
+
+=item Fixed RT#87988 - Fix use of $Test::Kwalitee::VERSION (ether)
+
+=item Fixed RT#88216 - extracts_nicely metric fails for -TRIAL releases (ishigaki)
+
+=item Fixed RT#88365 - YAML/JSON tests are not failing when improperly encoded characters are seen (ishigaki)
+
+=item Moose::Exporter also provides strict and warnings (doy)
 
 =back
 
