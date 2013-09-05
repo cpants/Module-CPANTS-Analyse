@@ -34,29 +34,20 @@ sub analyse {
     my %skip=map {$_->{module}=>1 } @$modules;
     my %uses;
 
+    # used in modules
     foreach (@$modules) {
         my $p = Module::ExtractUse->new;
         my $file = catfile($distdir,$_->{file});
         $p->extract_use($file) if -f $file;
         $_->{uses} = $p->used;
-    }
 
-    # used in modules
-    my $p=Module::ExtractUse->new;
-    foreach (@$modules) {
-        my $file = catfile($distdir,$_->{file});
-        $p->extract_use($file) if -f $file;
-    }
-
-    while (my ($mod,$cnt)=each%{$p->used}) {
-        next if $skip{$mod};
-        next if $mod =~ /::$/;  # see RT#35092
-        $uses{$mod}={
-            module=>$mod,
-            in_code=>$cnt,
-            in_tests=>0,
-            evals_in_code=>($p->used_in_eval($mod) || 0),
-        };
+        while (my ($mod,$cnt)=each%{$p->used}) {
+            next if $skip{$mod};
+            next if $mod =~ /::$/;  # see RT#35092
+            $uses{$mod}{module} = $mod;
+            $uses{$mod}{in_code} += $cnt;
+            $uses{$mod}{evals_in_code} += $p->used_in_eval($mod) || 0;
+        }
     }
     
     # used in tests
