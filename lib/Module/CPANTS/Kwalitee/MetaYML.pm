@@ -85,6 +85,11 @@ sub analyse {
     }
 
     # Should we still try MYMETA.json?
+
+    my $meta = $me->d->{meta_yml};
+    return unless $meta && ref $meta eq ref {};
+
+    $me->d->{dynamic_config} = $meta->{dynamic_config} ? 1 : 0;
 }
 
 ##################################################################
