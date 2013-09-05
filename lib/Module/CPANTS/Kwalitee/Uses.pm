@@ -118,6 +118,7 @@ sub kwalitee_indicators {
                     Moo::Role
                     Moose
                     Moose::Role
+                    Moose::Exporter
                     MooseX::Declare
                     MooseX::Role::Parameterized
                     MooseX::Types
@@ -175,6 +176,7 @@ sub kwalitee_indicators {
                     Moo::Role
                     Moose
                     Moose::Role
+                    Moose::Exporter
                     MooseX::Declare
                     MooseX::Types
                     Mouse
