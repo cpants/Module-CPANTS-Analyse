@@ -90,12 +90,6 @@ Uses C<IO::Capture::Stdout> to check for any strange things that might happen du
 
 Returns the Kwalitee Indicators datastructure.
 
-=over
-
-=item * no_cpants_errors
-
-=back
-
 =head1 SEE ALSO
 
 L<Module::CPANTS::Analyse>

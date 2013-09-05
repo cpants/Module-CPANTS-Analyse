@@ -242,6 +242,8 @@ Returns the Kwalitee Indicators datastructure.
 
 =item * use_strict
 
+=item * use_warnings
+
 =back
 
 =head1 SEE ALSO

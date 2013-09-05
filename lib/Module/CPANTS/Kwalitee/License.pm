@@ -179,10 +179,11 @@ Returns the Kwalitee Indicators datastructure.
 
 =over
 
-=item * has_license 
+=item * has_license_in_source_file
 
-=item * has_license_in_metayml 
+=item * has_human_readable_license
 
+=item * has_separate_license_file
 
 =back
 

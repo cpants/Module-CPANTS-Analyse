@@ -367,10 +367,6 @@ Returns the Kwalitee Indicators datastructure.
 
 =over
 
-=item * extractable
-
-=item * extracts_nicely
-
 =item * has_readme
 
 =item * has_manifest
@@ -387,21 +383,7 @@ Returns the Kwalitee Indicators datastructure.
 
 =item * has_tests_in_t_dir
 
-=item * buildfile_not_executable
-
-=item * has_example (optional)
-
-=item * no_generated_file
-
-=item * has_version_in_each_file
-
 =item * no_stdin_for_prompting
-
-=item * no_large_files
-
-=item * portable_filenames
-
-=item * no_dot_underscore_files
 
 =back
 

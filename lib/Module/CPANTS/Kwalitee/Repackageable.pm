@@ -61,14 +61,6 @@ Defines the order in which Kwalitee tests should be run.
 
 Returns the Kwalitee Indicators datastructure.
 
-=over
-
-=item * easily_repackageable
-
-=item * easily_repackageable_by_fedora
-
-=back
-
 =head1 SEE ALSO
 
 L<Module::CPANTS::Analyse>

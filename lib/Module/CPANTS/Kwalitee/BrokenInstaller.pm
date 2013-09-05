@@ -143,7 +143,9 @@ Returns the Kwalitee Indicators datastructure.
 
 =over
 
-=item * uses_broken_installer
+=item * no_broken_module_install
+
+=item * no_broken_auto_install
 
 =back
 

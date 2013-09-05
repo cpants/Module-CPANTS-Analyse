@@ -76,10 +76,6 @@ Returns the Kwalitee Indicators datastructure.
 
 =over
 
-=item * has_version
-
-=item * has_proper_version
-
 =back
 
 =head1 SEE ALSO
