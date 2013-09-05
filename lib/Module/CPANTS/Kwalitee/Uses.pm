@@ -68,6 +68,21 @@ sub analyse {
         }
     }
 
+    # used in Makefile.PL/Build.PL
+    foreach my $f (grep /\b(?:Makefile|Build)\.PL$/, @{$me->d->{files_array} || []}) {
+        my $p = Module::ExtractUse->new;
+        my $file = catfile($distdir,$f);
+        $p->extract_use($file) if -f $file;
+
+        while (my ($mod,$cnt)=each%{$p->used}) {
+            next if $skip{$mod};
+            next if $mod =~ /::$/;  # see RT#35092
+            $uses{$mod}{module} = $mod;
+            $uses{$mod}{in_config} += $cnt;
+            $uses{$mod}{evals_in_config} += $p->used_in_eval($mod) || 0;
+        }
+    }
+
     $me->d->{uses}=\%uses;
     return;
 }
