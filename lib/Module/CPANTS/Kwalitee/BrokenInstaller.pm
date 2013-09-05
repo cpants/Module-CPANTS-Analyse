@@ -64,6 +64,9 @@ sub analyse {
                 $me->d->{broken_module_install} = $version;
             }
         }
+        elsif ($non_devel == 1.04) {
+            $me->d->{broken_module_install} = $version;
+        }
         else {
             $me->d->{broken_module_install} = 0;
         }
@@ -82,8 +85,8 @@ sub kwalitee_indicators {
   return [
     {
         name=>'no_broken_module_install',
-        error=>q{This distribution uses an obsolete version of Module::Install. Versions of Module::Install prior to 0.61 might not work on some systems at all. Additionally if your Makefile.PL uses the 'auto_install()' feature, you need at least version 0.64.},
-        remedy=>q{Upgrade the bundled version of Module::Install to at least 0.61, but preferably to the most current release. Alternatively, you can switch to another build system / installer that does not suffer from this problem. (ExtUtils::MakeMaker, Module::Build both of which have their own set of problems.)},
+        error=>q{This distribution uses an obsolete version of Module::Install. Versions of Module::Install prior to 0.61 might not work on some systems at all. Additionally if your Makefile.PL uses the 'auto_install()' feature, you need at least version 0.64. Also, 1.04 is known to be broken.},
+        remedy=>q{Upgrade the bundled version of Module::Install to the most current release. Alternatively, you can switch to another build system / installer that does not suffer from this problem. (ExtUtils::MakeMaker, Module::Build both of which have their own set of problems.)},
         code=>sub {
             shift->{broken_module_install} ? 0 : 1 },
         details=> sub {

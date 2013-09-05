@@ -13,4 +13,7 @@ xt::kwalitee::Test::run(
   ['I/IJ/IJLIAO/WWW-Scraper-ISBN-TWTenlong_Driver-0.01.tar.gz', 0], # 9210
   ['I/IJ/IJLIAO/WWW-Scraper-ISBN-TWPchome_Driver-0.01.tar.gz', 0], # 9308
   ['I/IJ/IJLIAO/WWW-Scraper-ISBN-TWSoidea_Driver-0.01.tar.gz', 0], # 9348
+
+  # M::I 1.04
+  ['K/KA/KARMAN/Dezi-UI-0.001000.tar.gz', 0],
 );
