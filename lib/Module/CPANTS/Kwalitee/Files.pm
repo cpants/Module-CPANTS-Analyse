@@ -298,27 +298,6 @@ sub kwalitee_indicators {
             return "<STDIN> was found in Build.PL" if $d->{stdin_in_build_pl};
         },
     },
-    {
-        name=>'no_large_files',
-        error=>qq{This distribution has at least one file larger than $large_file bytes)},
-        remedy=>q{No remedy for that.},
-        is_experimental=>1,
-        code=>sub {
-            my $d=shift;
-            my @errors = map { "$_:$d->{files_hash}{$_}{size}" }
-                         grep { $d->{files_hash}{$_}{size} > $large_file }
-                         keys %{ $d->{files_hash} };
-            if (@errors) {
-                $d->{error}{no_large_files} = join "; ", @errors;
-                return 0;
-            }
-            return 1;
-        },
-        details=>sub {
-            my $d = shift;
-            return "The following files were found: " . $d->{error}{no_large_files};
-        },
-    },
 ];
 }
 

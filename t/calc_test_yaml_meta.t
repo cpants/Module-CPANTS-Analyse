@@ -43,7 +43,6 @@ my $expected_kwalitee = {
            'metayml_conforms_to_known_spec' => 1,
            'no_stdin_for_prompting' => 1,
            'metayml_declares_perl_version' => 0,
-           'no_large_files' => 1,
            'has_license_in_source_file' => 1,
            'metayml_has_provides'=>1,
            'has_separate_license_file', => 1,
