@@ -4,7 +4,7 @@ use strict;
 use File::Spec::Functions qw(catfile);
 use Array::Diff;
 
-our $VERSION = '0.90_02';
+our $VERSION = '0.91';
 
 sub order { 100 }
 

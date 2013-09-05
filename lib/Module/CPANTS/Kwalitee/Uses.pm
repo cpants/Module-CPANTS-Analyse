@@ -7,7 +7,7 @@ use Set::Scalar qw();
 use Data::Dumper;
 use version;
 
-our $VERSION = '0.90_02';
+our $VERSION = '0.91';
 
 sub order { 100 }
 

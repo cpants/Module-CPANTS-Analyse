@@ -4,7 +4,7 @@ use strict;
 use File::Spec::Functions qw(catfile);
 use Text::Balanced qw/extract_bracketed/;
 
-our $VERSION = '0.90_02';
+our $VERSION = '0.91';
 
 sub order { 100 }
 

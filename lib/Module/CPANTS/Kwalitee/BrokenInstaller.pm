@@ -5,7 +5,7 @@ use File::Find;
 use File::Spec::Functions qw(catdir catfile abs2rel);
 use File::stat;
 
-our $VERSION = '0.90_02';
+our $VERSION = '0.91';
 
 sub order { 100 }
 
