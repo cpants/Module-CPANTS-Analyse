@@ -107,6 +107,7 @@ sub kwalitee_indicators {
                 my $strict_equivalents = Set::Scalar->new->insert(qw(
                     strict
                     Any::Moose
+                    Ark
                     Class::Spiffy
                     Coat
                     common::sense
@@ -165,6 +166,7 @@ sub kwalitee_indicators {
                 my $warnings_equivalents = Set::Scalar->new->insert(qw(
                     warnings
                     Any::Moose
+                    Ark
                     Class::Spiffy
                     Coat
                     common::sense
