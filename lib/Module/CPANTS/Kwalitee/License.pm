@@ -46,14 +46,28 @@ sub analyse {
         my @unknown_license_texts;
         while(<$fh>) {
             if (/^=head\d\s+.*\b(?i:LICEN[CS]E|LICEN[CS]ING|COPYRIGHT|LEGAL)\b/) {
+                if ($in_pod) {
+                    my @guessed = Software::LicenseUtils->guess_license_from_pod("$pod\n\n=cut\n");
+                    if (@guessed) {
+                        push @possible_licenses, @guessed;
+                    } else {
+                        push @unknown_license_texts, $pod;
+                    }
+                }
+
                 $in_pod = 1;
                 $pod = "=head1 LICENSE\n";
             }
             elsif (/^=(?:head\d\s+|cut)\b/) {
+                if ($in_pod) {
+                    my @guessed = Software::LicenseUtils->guess_license_from_pod("$pod\n\n=cut\n");
+                    if (@guessed) {
+                        push @possible_licenses, @guessed;
+                    } else {
+                        push @unknown_license_texts, $pod;
+                    }
+                }
                 $in_pod = 0;
-                push @possible_licenses, Software::LicenseUtils->guess_license_from_pod("$pod\n\n=cut\n");
-
-                push @unknown_license_texts, $pod unless @possible_licenses;
                 $pod = '';
             }
             elsif ($in_pod) {
@@ -61,8 +75,12 @@ sub analyse {
             }
         }
         if ($pod) {
-            push @possible_licenses, Software::LicenseUtils->guess_license_from_pod("$pod\n\n=cut\n");
-            push @unknown_license_texts, $pod unless @possible_licenses;
+            my @guessed = Software::LicenseUtils->guess_license_from_pod("$pod\n\n=cut\n");
+            if (@guessed) {
+                push @possible_licenses, @guessed;
+            } else {
+                push @unknown_license_texts, $pod;
+            }
         }
         $me->d->{unknown_license_texts} = join "\n", @unknown_license_texts;
 
