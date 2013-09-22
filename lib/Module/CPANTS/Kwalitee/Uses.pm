@@ -9,6 +9,35 @@ use version;
 
 our $VERSION = '0.91';
 
+# These equivalents should be reasonably well-known and, preferably,
+# well-documented. Don't add obscure modules used by only one person
+# or a few people, to keep the list relatively small and to encourage
+# people to use a better equivalent.
+# "use_(strict|warnings)" should fail if someone feels the need
+# to add "use $1;" in the modules.
+our @STRICT_EQUIV = qw( strict );
+our @WARNINGS_EQUIV = qw( warnings );
+our @STRICT_WARNINGS_EQUIV = qw(
+  common::sense
+  Any::Moose
+  Catmandu::Sane Coat
+  Dancer
+  Mo
+  Modern::Perl
+  Moo Moo::Role
+  Moose Moose::Role Moose::Exporter
+  MooseX::Declare MooseX::Role::Parameterized MooseX::Types
+  Mouse Mouse::Role
+  perl5 perl5i::1 perl5i::2 perl5i::latest
+  Role::Tiny
+  strictures
+);
+# These modules require a flag to enforce strictness.
+push @STRICT_WARNINGS_EQUIV, qw(
+  Mojo::Base
+  Spiffy
+);
+
 sub order { 100 }
 
 ##################################################################
@@ -104,33 +133,7 @@ sub kwalitee_indicators {
                 return 0 unless $modules && $uses;
 
                 # There are lots of acceptable strict alternatives
-                my $strict_equivalents = Set::Scalar->new->insert(qw(
-                    strict
-                    Any::Moose
-                    Class::Spiffy
-                    Coat
-                    common::sense
-                    Dancer
-                    Mo
-                    Modern::Perl
-                    Mojo::Base
-                    Moo
-                    Moo::Role
-                    Moose
-                    Moose::Role
-                    Moose::Exporter
-                    MooseX::Declare
-                    MooseX::Role::Parameterized
-                    MooseX::Types
-                    Mouse
-                    Mouse::Role
-                    perl5
-                    perl5i::1
-                    perl5i::2
-                    perl5i::latest
-                    Spiffy
-                    strictures
-                ));
+                my $strict_equivalents = Set::Scalar->new->insert(@STRICT_EQUIV, @STRICT_WARNINGS_EQUIV);
 
                 my $perl_version_with_implicit_stricture = version->new('5.011');
                 my @no_strict;
@@ -153,41 +156,16 @@ sub kwalitee_indicators {
         },
         {
             name=>'use_warnings',
-            error=>q{This distribution does not 'use warnings;' in all of its modules.},
+            error=>q{This distribution does not 'use warnings;' in all of its modules. Note that this is not about that your modules actually warn when something bad happens. It's bad if nobody can tell if modules warns or not, without reading the source code of your favorite module that actually enforces warnings. In other words, it's bad if someone feels the need to add 'use warnings' to the modules.},
             is_extra=>1,
-            remedy=>q{Add 'use warnings' to all modules. (This will require perl > 5.6)},
+            remedy=>q{Add 'use warnings' to all modules (this will require perl > 5.6), or convince us that your favorite module is well-known enough and people can easily see the modules warn when something bad happens.},
             code=>sub {
                 my $d       = shift;
                 my $modules = $d->{modules};
                 my $uses    = $d->{uses};
                 return 0 unless $modules && $uses;
 
-                my $warnings_equivalents = Set::Scalar->new->insert(qw(
-                    warnings
-                    Any::Moose
-                    Class::Spiffy
-                    Coat
-                    common::sense
-                    Dancer
-                    Mo
-                    Modern::Perl
-                    Mojo::Base
-                    Moo
-                    Moo::Role
-                    Moose
-                    Moose::Role
-                    Moose::Exporter
-                    MooseX::Declare
-                    MooseX::Types
-                    Mouse
-                    Mouse::Role
-                    perl5
-                    perl5i::1
-                    perl5i::2
-                    perl5i::latest
-                    Spiffy
-                    strictures
-                ));
+                my $warnings_equivalents = Set::Scalar->new->insert(@WARNINGS_EQUIV, @STRICT_WARNINGS_EQUIV);
 
                 my @no_warnings;
                 for my $module (@{ $modules }) {
