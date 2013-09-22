@@ -128,8 +128,8 @@ sub kwalitee_indicators {
     return [
         {
             name=>'use_strict',
-            error=>q{This distribution does not 'use strict;' in all of its modules.},
-            remedy=>q{Add 'use strict' to all modules.},
+            error=>q{This distribution does not 'use strict;' (or its equivalents) in all of its modules. Note that this is not about the actual strictness of the modules. It's bad if nobody can tell whether the modules are strictly written or not, without reading the source code of your favorite clever module that actually enforces strictness. In other words, it's bad if someone feels the need to add 'use strict' to the modules.},
+            remedy=>q{Add 'use strict' to all modules, or convince us that your favorite module is well-known enough and people can easily see the modules are strictly written.},
             code=>sub {
                 my $d       = shift;
                 my $modules = $d->{modules};
