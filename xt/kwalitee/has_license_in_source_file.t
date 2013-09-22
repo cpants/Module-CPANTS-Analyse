@@ -14,4 +14,7 @@ xt::kwalitee::Test::run(
 
   # has =head1 COPYRIGHT AND LICENSE without closing =cut
   ['D/DA/DAMI/DBIx-DataModel-2.39.tar.gz', 1],
+
+  # has =head1 LICENSE followed by =head1 COPYRIGHT
+  ['Y/YS/YSASAKI/App-pfswatch-0.08.tar.gz', 1],
 );
