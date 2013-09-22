@@ -32,12 +32,10 @@ sub analyse {
         $me->d->{module_install_version} = my $version = $2;
         my $non_devel = $version;
         $non_devel =~ s/_\d+$//;
-        if ($non_devel < 0.61) {
+        if ($non_devel < 0.61 or $non_devel == 1.04) {
             $me->d->{broken_module_install} = $version;
         }
-        elsif ($non_devel < 0.89) {
-            $me->d->{broken_module_install} = 0;
-            
+        if ($non_devel < 0.89) {
             my $makefilepl = catfile($distdir, 'Makefile.PL');
             return if not -f $makefilepl;
             
@@ -49,13 +47,8 @@ sub analyse {
             
             return if not defined $mftext;
 
-            if ($non_devel < 0.61) {
-                $me->d->{broken_module_install} = $version;
-                return;
-            }
-
             if ($mftext =~ /auto_install/) {
-                $me->d->{mi_auto_install_used} = 1;
+                $me->d->{broken_auto_install} = 1;
             } else {
                 return;
             }
@@ -63,12 +56,6 @@ sub analyse {
             if ($non_devel < 0.64) {
                 $me->d->{broken_module_install} = $version;
             }
-        }
-        elsif ($non_devel == 1.04) {
-            $me->d->{broken_module_install} = $version;
-        }
-        else {
-            $me->d->{broken_module_install} = 0;
         }
     }
     else {
@@ -98,7 +85,7 @@ sub kwalitee_indicators {
         error=>q{This distribution uses an old version of Module::Install. Versions of Module::Install prior to 0.89 does not detect correcty that CPAN/CPANPLUS shell is used.},
         remedy=>q{Upgrade the bundled version of Module::Install to at least 0.89, but preferably to the most current release. Alternatively, you can switch to another build system / installer that does not suffer from this problem. (ExtUtils::MakeMaker, Module::Build both of which have their own set of problems.)},
         code=>sub {
-            shift->{mi_auto_install_used} ? 0 : 1 },
+            shift->{broken_auto_install} ? 0 : 1 },
         details=> sub {
             q{This distribution uses obsolete Module::Install version }.(shift->{module_install_version});
         },
