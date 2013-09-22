@@ -107,9 +107,10 @@ sub _from_build_pl {
         if ($hashref && ref $hashref eq ref {}) {
             for my $module (keys %$hashref) {
                 my $type = $rel =~ /_/ ? $rel : "runtime_$rel";
+                my ($version) = ($hashref->{$module} || 0) =~ /^([0-9.]+)/;
                 push @{$res{$module} ||= []}, {
                     requires => $module,
-                    version => $hashref->{$module},
+                    version => $version,
                     type => $type,
                     ($map{$rel} ? ($map{$rel} => 1) : ()),
                 };
