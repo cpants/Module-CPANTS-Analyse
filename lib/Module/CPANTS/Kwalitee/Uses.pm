@@ -73,6 +73,7 @@ sub analyse {
         while (my ($mod,$cnt)=each%{$p->used}) {
             next if $skip{$mod};
             next if $mod =~ /::$/;  # see RT#35092
+            next unless $mod =~ /^[A-Za-z0-9:_]+$/;
             $uses{$mod}{module} = $mod;
             $uses{$mod}{in_code} += $cnt;
             $uses{$mod}{evals_in_code} += $p->used_in_eval($mod) || 0;
@@ -87,6 +88,8 @@ sub analyse {
 
         while (my ($mod,$cnt)=each%{$pt->used}) {
             next if $skip{$mod};
+            next if $mod =~ /::$/;  # see RT#35092
+            next unless $mod =~ /^[A-Za-z0-9:_]+$/;
             if (@test_modules) {
                 next if grep {/(?:^|::)$mod$/} @test_modules;
             }
@@ -106,6 +109,7 @@ sub analyse {
         while (my ($mod,$cnt)=each%{$p->used}) {
             next if $skip{$mod};
             next if $mod =~ /::$/;  # see RT#35092
+            next unless $mod =~ /^[A-Za-z0-9:_]+$/;
             $uses{$mod}{module} = $mod;
             $uses{$mod}{in_config} += $cnt;
             $uses{$mod}{evals_in_config} += $p->used_in_eval($mod) || 0;
