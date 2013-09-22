@@ -97,7 +97,8 @@ sub _from_build_pl {
         recommends     => 'is_optional_prereq',
     );
     my %res;
-    while($build_pl =~ s/^.*?((?:(?:configure|build|test)_)?requires|recommends|conflicts|auto_features)\s*=>\s*\{/{/s) {
+    # TODO: auto_features
+    while($build_pl =~ s/^.*?((?:(?:configure|build|test)_)?requires|recommends|conflicts)\s*=>\s*\{/{/s) {
         my $rel = $1;
         my ($block, $left) = extract_bracketed($build_pl, '{}');
         last unless $block;
