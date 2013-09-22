@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use version;
 
-our $VERSION = '0.91';
+our $VERSION = '0.92';
 
 sub order { 1000 }
 

@@ -2,7 +2,7 @@ package Module::CPANTS::Kwalitee::Pod;
 use warnings;
 use strict;
 
-our $VERSION = '0.91';
+our $VERSION = '0.92';
 
 sub order { 100 }
 

@@ -4,6 +4,16 @@
 
 Changes - Revision history for Module-CPANTS-Analyse
 
+=head2 0.92 2013-09-22
+
+=over
+
+=item Fixed a case when more than one license sections come in row (spotted by ysasaki++) (ishigaki)
+
+=item stopped checking auto_features (ishigaki)
+
+=back
+
 =head2 0.91 2013-09-05
 
 =over

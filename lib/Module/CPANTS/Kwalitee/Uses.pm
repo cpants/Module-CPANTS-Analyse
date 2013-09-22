@@ -7,7 +7,7 @@ use Set::Scalar qw();
 use Data::Dumper;
 use version;
 
-our $VERSION = '0.91';
+our $VERSION = '0.92';
 
 # These equivalents should be reasonably well-known and, preferably,
 # well-documented. Don't add obscure modules used by only one person
