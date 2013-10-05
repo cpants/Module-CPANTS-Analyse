@@ -246,7 +246,7 @@ Returns the Kwalitee Indicators datastructure.
 
 =head2 License information
 
-Pleaces wher the licens information is taken from:
+Places where the license information is taken from:
 
 Has a LICENSE file   file_license 1|0
 
