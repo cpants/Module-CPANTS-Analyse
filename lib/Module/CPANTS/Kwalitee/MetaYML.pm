@@ -10,7 +10,6 @@ our $VERSION = '0.92';
 
 sub order { 10 }
 
-my $CURRENT_SPEC = '1.4';
 my $JSON_CLASS;
 
 ##################################################################
@@ -89,6 +88,11 @@ sub analyse {
     my $meta = $me->d->{meta_yml};
     return unless $meta && ref $meta eq ref {};
 
+    my $spec = CPAN::Meta::Validator->new($meta);
+    unless ($spec->is_valid) {
+        $me->d->{error}{metayml_conforms_to_known_spec} = join ';', sort $spec->errors;
+    }
+
     $me->d->{dynamic_config} = $meta->{dynamic_config} ? 1 : 0;
 }
 
@@ -130,30 +134,18 @@ sub kwalitee_indicators{
         {
             name=>'metayml_conforms_to_known_spec',
             error=>q{META.yml does not conform to any recognised META.yml Spec.},
-            remedy=>q{Take a look at the META.yml Spec at http://module-build.sourceforge.net/META-spec-current.html and change your META.yml accordingly.},
+            remedy=>q{Take a look at the META.yml Spec at http://module-build.sourceforge.net/META-spec-v1.4.html (for version 1.4) or http://search.cpan.org/perldoc?CPAN::Meta::Spec (for version 2), and change your META.yml accordingly.},
             code=>sub {
                 my $d=shift;
-                return check_spec_conformance($d);
+                return 0 if $d->{error}{metayml_is_parsable};
+                return 0 if $d->{error}{metayml_conforms_to_known_spec};
+                return 1;
             },
             details=>sub {
                 my $d = shift;
                 return "No META.yml." unless $d->{meta_yml};
-                return join "; ", @{$d->{error}{metayml_conforms_to_known_spec}};
-            },
-        },
-    {
-            name=>'metayml_conforms_spec_current',
-            is_extra=>1,
-            error=>qq{META.yml does not conform to the Current META.yml Spec ($CURRENT_SPEC).},
-            remedy=>q{Take a look at the META.yml Spec at http://module-build.sourceforge.net/META-spec-current.html and change your META.yml accordingly.},
-            code=>sub {
-                my $d=shift;
-                return check_spec_conformance($d,$CURRENT_SPEC,1);
-            },
-            details=>sub {
-                my $d = shift;
-                return "No META.yml." unless $d->{meta_yml};
-                return join "; ", @{$d->{error}{metayml_conforms_spec_current}};
+                return "META.yml is broken." unless $d->{metayml_is_parsable};
+                return $d->{error}{metayml_conforms_to_known_spec};
             },
         },
         {
@@ -175,35 +167,6 @@ sub kwalitee_indicators{
             },
         },
     ];
-}
-
-sub check_spec_conformance {
-    my ($d,$version,$check_current)=@_;
-
-    my $report_version= $version || 'known';
-    my $yaml=$d->{meta_yml};
-    unless ($yaml && ref $yaml eq ref {} && %$yaml) {
-        my $errorname='metayml_conforms_'.($check_current?'spec_current':'to_known_spec');
-        $d->{error}{$errorname} = [$report_version, 'META.yml is missing/empty'];
-        return 0;
-    }
-
-    my $spec = CPAN::Meta::Validator->new($yaml);
-    $spec->{spec} = $version if $version;
-
-    if (!$spec->is_valid) {
-        my @errors;
-        foreach my $e ($spec->errors) {
-            next if $e=~/specification URL/ && $check_current;
-            push @errors,$e;
-        }
-        if (@errors) {
-            my $errorname='metayml_conforms_'.($check_current?'spec_current':'to_known_spec');
-            $d->{error}{$errorname} = [$report_version, sort @errors];
-            return 0;
-        }
-    }
-    return 1;
 }
 
 q{Barbies Favourite record of the moment:
@@ -248,17 +211,9 @@ Returns the Kwalitee Indicators datastructure.
 
 =item * metayml_conforms_to_known_spec
 
-=item * metayml_conforms_spec_current
-
 =item * metayml_declares_perl_version
 
 =back
-
-=head3 check_spec_conformance
-
-    check_spec_conformance($d,$version);
-
-Validates META.yml using Test::CPAN::Meta.
 
 =head1 SEE ALSO
 
