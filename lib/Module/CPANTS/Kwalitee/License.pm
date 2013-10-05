@@ -36,7 +36,7 @@ sub analyse {
 
     # check pod
     my %licenses;
-    foreach my $file (grep { /\.p(m|od|l)$/ } keys %$files ) {
+    foreach my $file (grep { /\.p(m|od|l)$/ } sort keys %$files ) {
         my $path = catfile($distdir, $file);
         next unless -r $path; # skip if not readable
         open my $fh, '<', $path or next;
