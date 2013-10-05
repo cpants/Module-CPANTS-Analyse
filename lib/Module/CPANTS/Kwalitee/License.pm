@@ -178,6 +178,21 @@ sub kwalitee_indicators{
                 return "LICENSE section was not found in the pod.";
             },
         },
+        {
+            name=>'has_known_license_in_source_file',
+            error=>q{Does not have license information in any of its source files, or the information is not recognized by Software::License},
+            remedy=>q{Add =head1 LICENSE and/or the proper text of the well-known license to the main module in your code.},
+            is_extra => 1,
+            code=>sub {
+                my $d = shift;
+                return 0 unless $d->{license_in_pod};
+                return exists $d->{unknown_license_texts} ? 0 : 1;
+            },
+            details=>sub {
+                my $d = shift;
+                return "LICENSE section was not found in the pod, or the license information was not recognized by Software::License.";
+            },
+        },
     ];
 }
 
@@ -218,6 +233,8 @@ Returns the Kwalitee Indicators datastructure.
 =over
 
 =item * metayml_has_license
+
+=item * has_known_license_in_source_file
 
 =item * has_license_in_source_file
 
