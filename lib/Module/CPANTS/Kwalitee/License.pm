@@ -47,6 +47,8 @@ sub analyse {
         my @unknown_license_texts;
         while(<$fh>) {
             if (/^=head\d\s+.*\b(?i:LICEN[CS]E|LICEN[CS]ING|COPYRIGHT|LEGAL)\b/) {
+                $me->d->{license_in_pod} = 1;
+                $me->d->{license} ||= "defined in POD ($file)";
                 if ($in_pod) {
                     my @guessed = Software::LicenseUtils->guess_license_from_pod("=head1 LICENSE\n$pod\n\n=cut\n");
                     if (@guessed) {
@@ -84,14 +86,13 @@ sub analyse {
                 push @unknown_license_texts, "$pod_head$pod";
             }
         }
-        $me->d->{unknown_license_texts} = join "\n", @unknown_license_texts;
-
-        next unless @possible_licenses;
-        $me->d->{license_in_pod} = 1;
-        $me->d->{license} ||= "defined in POD ($file)";
-
-        $licenses{$_} = $file for @possible_licenses;
-        $files->{$file}{license} = join ',', @possible_licenses;
+        if (@possible_licenses) {
+            @possible_licenses = map { s/^Software::License:://; $_ } @possible_licenses;
+            push @{$licenses{$_} ||= []}, $file for @possible_licenses;
+            $files->{$file}{license} = join ',', @possible_licenses;
+        } else {
+            $me->d->{unknown_license_texts}{$file} = join "\n", @unknown_license_texts if @unknown_license_texts;
+        }
     }
     if (%licenses) {
         $me->d->{licenses} = \%licenses;
@@ -99,7 +100,7 @@ sub analyse {
         if (@possible_licenses == 1) {
             my ($type) = @possible_licenses;
             $me->d->{license_type} = $type;
-            $me->d->{license_file} = $licenses{$type};
+            $me->d->{license_file} = join ',', @{$licenses{$type}};
         }
     }
 
