@@ -42,29 +42,31 @@ sub analyse {
         open my $fh, '<', $path or next;
         my $in_pod = 0;
         my $pod = '';
+        my $pod_head = '';
         my @possible_licenses;
         my @unknown_license_texts;
         while(<$fh>) {
             if (/^=head\d\s+.*\b(?i:LICEN[CS]E|LICEN[CS]ING|COPYRIGHT|LEGAL)\b/) {
                 if ($in_pod) {
-                    my @guessed = Software::LicenseUtils->guess_license_from_pod("$pod\n\n=cut\n");
+                    my @guessed = Software::LicenseUtils->guess_license_from_pod("=head1 LICENSE\n$pod\n\n=cut\n");
                     if (@guessed) {
                         push @possible_licenses, @guessed;
                     } else {
-                        push @unknown_license_texts, $pod;
+                        push @unknown_license_texts, "$pod_head$pod";
                     }
                 }
 
                 $in_pod = 1;
-                $pod = "=head1 LICENSE\n";
+                $pod_head = $_;
+                $pod = '';
             }
             elsif (/^=(?:head\d\s+|cut)\b/) {
                 if ($in_pod) {
-                    my @guessed = Software::LicenseUtils->guess_license_from_pod("$pod\n\n=cut\n");
+                    my @guessed = Software::LicenseUtils->guess_license_from_pod("=head1 LICENSE\n$pod\n\n=cut\n");
                     if (@guessed) {
                         push @possible_licenses, @guessed;
                     } else {
-                        push @unknown_license_texts, $pod;
+                        push @unknown_license_texts, "$pod_head$pod";
                     }
                 }
                 $in_pod = 0;
@@ -75,11 +77,11 @@ sub analyse {
             }
         }
         if ($pod) {
-            my @guessed = Software::LicenseUtils->guess_license_from_pod("$pod\n\n=cut\n");
+            my @guessed = Software::LicenseUtils->guess_license_from_pod("=head1 LICENSE\n$pod\n\n=cut\n");
             if (@guessed) {
                 push @possible_licenses, @guessed;
             } else {
-                push @unknown_license_texts, $pod;
+                push @unknown_license_texts, "$pod_head$pod";
             }
         }
         $me->d->{unknown_license_texts} = join "\n", @unknown_license_texts;
