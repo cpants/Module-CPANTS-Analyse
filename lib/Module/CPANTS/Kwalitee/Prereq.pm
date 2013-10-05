@@ -30,7 +30,7 @@ sub _from_meta {
 
     my $spec = $meta->{'meta-spec'};
     my %res;
-    if ($spec && ref $spec eq ref {} && ($spec->{version} + 0) >= 2) {
+    if ($spec && ref $spec eq ref {} && ($spec->{version} || 0) >= 2) {
         # meta spec ver2
         my $prereqs = $meta->{prereqs};
 
