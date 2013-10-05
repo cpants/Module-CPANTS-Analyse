@@ -110,7 +110,24 @@ sub analyse {
 
 sub kwalitee_indicators{
     return [
-         {
+        {
+            name=>'metayml_has_license',
+            error=>q{This distribution does not have a license defined in META.yml.},
+            remedy=>q{Define the license if you are using in Build.PL. If you are using MakeMaker (Makefile.PL) you should upgrade to ExtUtils::MakeMaker version 6.31.},
+            is_extra=>1,
+            code=>sub { 
+                my $d=shift;
+                my $yaml=$d->{meta_yml};
+                ($yaml->{license} and $yaml->{license} ne 'unknown') ? 1 : 0 },
+            details=>sub {
+                my $d = shift;
+                my $yaml = $d->{meta_yml};
+                return "No META.yml." unless $yaml;
+                return "No license was found in META.yml." unless $yaml->{license};
+                return "Unknown license was found in META.yml.";
+            },
+        },
+        {
             name=>'has_human_readable_license',
             error=>q{This distribution does not have a license defined in the documentation or in a file called LICENSE},
             remedy=>q{Add a section called "LICENSE" to the documentation, or add a file named LICENSE to the distribution.},
@@ -196,6 +213,8 @@ C<MCK::License> checks if there's a C<license> field C<META.yml>. Additionally, 
 Returns the Kwalitee Indicators datastructure.
 
 =over
+
+=item * metayml_has_license
 
 =item * has_license_in_source_file
 

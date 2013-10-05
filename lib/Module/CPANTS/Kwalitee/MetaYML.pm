@@ -112,23 +112,6 @@ sub kwalitee_indicators{
             },
         },
         {
-            name=>'metayml_has_license',
-            error=>q{This distribution does not have a license defined in META.yml.},
-            remedy=>q{Define the license if you are using in Build.PL. If you are using MakeMaker (Makefile.PL) you should upgrade to ExtUtils::MakeMaker version 6.31.},
-            is_extra=>1,
-            code=>sub { 
-                my $d=shift;
-                my $yaml=$d->{meta_yml};
-                ($yaml->{license} and $yaml->{license} ne 'unknown') ? 1 : 0 },
-            details=>sub {
-                my $d = shift;
-                my $yaml = $d->{meta_yml};
-                return "No META.yml." unless $yaml;
-                return "No license was found in META.yml." unless $yaml->{license};
-                return "Unknown license was found in META.yml.";
-            },
-        },
-        {
             name=>'metayml_has_provides',
             is_experimental=>1,
             error=>q{This distribution does not have a list of provided modules defined in META.yml.},
@@ -260,8 +243,6 @@ Returns the Kwalitee Indicators datastructure.
 =over
 
 =item * metayml_is_parsable
-
-=item * metayml_has_license
 
 =item * metayml_has_provides
 
