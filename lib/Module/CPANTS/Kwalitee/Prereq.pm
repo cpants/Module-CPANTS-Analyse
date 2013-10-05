@@ -292,7 +292,7 @@ sub _from_dist_ini {
 
 sub kwalitee_indicators{
     # NOTE: The metrics in this module have moved to
-    # Module::CPANTS::SiteKwalitee because these requires databases.
+    # Module::CPANTS::SiteKwalitee because these require databases.
 
     return [];
 }

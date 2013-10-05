@@ -12,12 +12,12 @@ sub order { 100 }
 
 sub analyse {
     # NOTE: The analysis/metrics in this module have moved to
-    # Module::CPANTS::SiteKwalitee because these requires
+    # Module::CPANTS::SiteKwalitee because these require
     # a finalized META file to detect (or ignore) versions
     # correctly.
 
     # Note also that this stub should not be removed so that
-    # this can replace the old ::Prereq module, and the old
+    # this can replace the old ::Version module, and the old
     # metrics will not be loaded while loading plugins.
 }
 
