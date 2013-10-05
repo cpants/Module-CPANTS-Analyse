@@ -16,7 +16,7 @@ sub analyse {
     my $class=shift;
     my $me=shift;
     my $files=$me->d->{files_array} || [];
-  
+
     if ($me->d->{meta_yml} && $me->d->{meta_yml}{provides}) {
         my $provides = $me->d->{meta_yml}{provides};
         while (my ($module,$data)=each %$provides) {
@@ -35,13 +35,13 @@ sub analyse {
             elsif ($file !~/\//) {
                 $found->{in_basedir}=1;
             }
-            
+
             push(@{$me->d->{modules}},$found);
         }
     }
     else {
         my %in_basedir= map {$_=>1} grep {/^[^\/]+\.pm$/} @$files;
-        
+
         foreach my $file (@$files) {
             next unless $file=~/\.pm$/;
             next if $file=~m{^x?t/};
@@ -93,7 +93,7 @@ sub analyse {
             }
         }
     }
-    
+
     return 1;
 }
 
@@ -110,7 +110,7 @@ sub kwalitee_indicators {
             error=>q{There is more than one .pm file in the base dir, or the .pm files are not in lib/ directory.},
             remedy=>q{Move your *.pm files in a directory named 'lib'. The directory structure should look like 'lib/Your/Module.pm' for a module named 'Your::Module'.},
             is_extra => 1,
-            code=>sub { 
+            code=>sub {
                 my $d=shift;
                 my @modules = @{$d->{modules} || []};
                 return 1 unless @modules;
