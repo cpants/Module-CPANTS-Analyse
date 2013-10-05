@@ -28,7 +28,6 @@ my @tests = (
            'no_symlinks' => 1,
            'metayml_has_license' => 1,
            'has_meta_yml' => 1,
-           'metayml_conforms_spec_current' => 1,
            'use_warnings' => 1,
            'has_tests_in_t_dir' => 1,
            'metayml_conforms_to_known_spec' => 1,
@@ -56,7 +55,6 @@ my @tests = (
            'no_symlinks' => 1,
            'metayml_has_license' => 0,
            'has_meta_yml' => 0,
-           'metayml_conforms_spec_current' => 0,
            'use_warnings' => 1,
            'has_tests_in_t_dir' => 1,
            'metayml_conforms_to_known_spec' => 0,
@@ -65,12 +63,7 @@ my @tests = (
            'metayml_has_provides'=>0,
         },
         error => {
-            'metayml_conforms_spec_current'  => ['1.4', sort
-                'META.yml is missing/empty',
-            ],
-            'metayml_conforms_to_known_spec' => ['known', sort
-                'META.yml is missing/empty',
-            ],
+            'metayml_is_parsable' => 'META.yml was not found',
             'manifest_matches_dist' => [
                                         'MANIFEST (27) does not match dist (26):',
                                         'Missing in MANIFEST: ',
@@ -96,7 +89,6 @@ my @tests = (
            'no_symlinks' => 1,
            'metayml_has_license' => 1,
            'has_meta_yml' => 1,
-           'metayml_conforms_spec_current' => 0,
            'use_warnings' => 0,
            'has_tests_in_t_dir' => 1,
            'metayml_conforms_to_known_spec' => 1,
@@ -105,13 +97,6 @@ my @tests = (
            'metayml_has_provides'=>0,
          },
         error => {
-           'metayml_conforms_spec_current' => [
-                                                '1.4',
-                                                sort
-                                                'Missing mandatory field, \'url\' (meta-spec -> url) [Validation: 1.4]',
-                                                'Missing mandatory field, \'version\' (meta-spec -> version) [Validation: 1.4]',
-                                                'Expected a list structure (author) [Validation: 1.4]'
-                                              ],
         },
     },
     {
@@ -132,7 +117,6 @@ my @tests = (
            'no_symlinks' => 1,
            'metayml_has_license' => 1,
            'has_meta_yml' => 1,
-           'metayml_conforms_spec_current' => 1,
            'use_warnings' => 1,
            'has_tests_in_t_dir' => 1,
            'metayml_conforms_to_known_spec' => 1,
@@ -164,7 +148,6 @@ my @tests = (
            'metayml_has_license' => 1,
            'metayml_has_provides' => 1,
            'has_meta_yml' => 1,
-           'metayml_conforms_spec_current' => 1,
            'use_warnings' => 1,
            'has_tests_in_t_dir' => 1,
            'metayml_conforms_to_known_spec' => 1,
@@ -193,7 +176,6 @@ my @tests = (
            'metayml_has_license' => 1,
            'metayml_has_provides' => 1,
            'has_meta_yml' => 1,
-           'metayml_conforms_spec_current' => 1,
            'use_warnings' => 1,
            'has_tests_in_t_dir' => 1,
            'metayml_conforms_to_known_spec' => 1,
@@ -222,7 +204,6 @@ my @tests = (
            'metayml_has_license' => 1,
            'metayml_has_provides' => 1,
            'has_meta_yml' => 1,
-           'metayml_conforms_spec_current' => 1,
            'use_warnings' => 1,
            'has_tests_in_t_dir' => 1,
            'metayml_conforms_to_known_spec' => 1,

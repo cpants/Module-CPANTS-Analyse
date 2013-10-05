@@ -47,7 +47,6 @@ my $expected_kwalitee =  {
            'no_symlinks' => 1,
            'metayml_has_license' => 0,
            'has_meta_yml' => 1,
-           'metayml_conforms_spec_current' => 0,
            'use_warnings' => 0,
            'has_tests_in_t_dir' => 1,
            'metayml_conforms_to_known_spec' => 1,
