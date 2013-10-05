@@ -15,8 +15,6 @@ sub order { 15 }
 # Analyse
 ##################################################################
 
-my $large_file = 200_000;
-
 sub analyse {
     my $class=shift;
     my $me=shift;
