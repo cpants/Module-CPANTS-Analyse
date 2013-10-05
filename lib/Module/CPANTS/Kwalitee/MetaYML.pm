@@ -31,8 +31,13 @@ sub analyse {
             my $meta = CPAN::Meta::YAML->read_string($yaml) or die CPAN::Meta::YAML->errstr;
             # Broken META.yml may return a "YAML 1.0" string first.
             # eg. M/MH/MHASCH/Date-Gregorian-0.07.tar.gz
-            $me->d->{meta_yml}=first { ref $_ eq ref {} } @$meta;
-            $me->d->{metayml_is_parsable}=1;
+            if (@$meta > 1 or ref $meta->[0] ne ref {}) {
+                $me->d->{meta_yml}=first { ref $_ eq ref {} } @$meta;
+                $me->d->{error}{metayml_is_parsable}="multiple parts found in META.yml";
+            } else {
+                $me->d->{meta_yml}=$meta->[0];
+                $me->d->{metayml_is_parsable}=1;
+            }
         };
         if ($@) {
             $me->d->{error}{metayml_is_parsable}=$@;
