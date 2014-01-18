@@ -88,7 +88,7 @@ CPANTS does not yet handle the second issue.
 
 Basic homepage: http://packages.debian.org/src:$pkgname
 
-Detalied homepage: http://packages.qa.debian.org/$pkgname
+Detailed homepage: http://packages.qa.debian.org/$pkgname
 
 Bugs report: http://bugs.debian.org/src:$pkgname
 

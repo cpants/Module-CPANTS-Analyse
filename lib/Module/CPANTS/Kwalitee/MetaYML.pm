@@ -183,7 +183,7 @@ __END__
 
 =head1 NAME
 
-Module::CPANTS::Kwalitee::MetaYML - Checks data availabe in META.yml
+Module::CPANTS::Kwalitee::MetaYML - Checks data available in META.yml
 
 =head1 SYNOPSIS
 

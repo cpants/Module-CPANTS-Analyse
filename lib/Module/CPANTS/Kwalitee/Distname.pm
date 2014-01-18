@@ -54,7 +54,7 @@ Module::CPANTS::Kwalitee::Distname - Proper Distname layout
 
 Checks if a distname is well-formed.
 
-A wellformed distname looks like C<Foo-Bar-1.42.tgz>
+A well-formed distname looks like C<Foo-Bar-1.42.tgz>
 
 =head1 DESCRIPTION
 

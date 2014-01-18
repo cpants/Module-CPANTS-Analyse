@@ -45,7 +45,7 @@ Module::CPANTS::Kwalitee::Repackageable - Checks for various signs that make a m
 
 =head1 SYNOPSIS
 
-There are several agregate metrics in here.
+There are several aggregate metrics in here.
 
 =head1 DESCRIPTION
 
