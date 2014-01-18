@@ -171,7 +171,8 @@ sub kwalitee_indicators{
             remedy=>q{Add =head1 LICENSE and the text of the license to the main module in your code.},
             code=>sub {
                 my $d = shift;
-                return $d->{license_in_pod} ? 1 : 0;
+                return $d->{license_in_pod} || $d->{unknown_license_texts}
+                    ? 1 : 0;
             },
             details=>sub {
                 my $d = shift;
