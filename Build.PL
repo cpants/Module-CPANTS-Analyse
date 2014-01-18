@@ -21,6 +21,9 @@ my $build = Module::Build->new(
         'version'                   => '0.73',
         'File::Find::Rule::VCS'     => '0',
         'Software::License'         => '0.003',
+
+        # installs whole Software::License::CCpack
+        'Software::License::CC_BY_SA_3_0' => 0,
         'perl'                      => 5.006,
         'Set::Scalar'               => 0,
         'Text::Balanced'            => 0,
