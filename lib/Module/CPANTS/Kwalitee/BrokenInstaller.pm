@@ -82,7 +82,7 @@ sub kwalitee_indicators {
     },
     {
         name=>'no_broken_auto_install',
-        error=>q{This distribution uses an old version of Module::Install. Versions of Module::Install prior to 0.89 does not detect correcty that CPAN/CPANPLUS shell is used.},
+        error=>q{This distribution uses an old version of Module::Install. Versions of Module::Install prior to 0.89 does not detect correctly that CPAN/CPANPLUS shell is used.},
         remedy=>q{Upgrade the bundled version of Module::Install to at least 0.89, but preferably to the most current release. Alternatively, you can switch to another build system / installer that does not suffer from this problem. (ExtUtils::MakeMaker, Module::Build both of which have their own set of problems.)},
         code=>sub {
             shift->{broken_auto_install} ? 0 : 1 },
