@@ -307,7 +307,7 @@ __END__
 
 =head1 NAME
 
-Module::CPANTS::Kwalitee::Prereq - Checks listed prerequistes
+Module::CPANTS::Kwalitee::Prereq - Checks listed prerequisites
 
 =head1 SYNOPSIS
 

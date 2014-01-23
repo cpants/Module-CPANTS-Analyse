@@ -336,7 +336,7 @@ C<MCK::Files> uses C<File::Find> to get a list of all files and dirs in a dist. 
 
 =head3 get_files
 
-The subroutine used by C<File::Find>. Unfortunantly, it depends on some global values.
+The subroutine used by C<File::Find>. Unfortunately, it depends on some global values.
 
 =head3 kwalitee_indicators
 

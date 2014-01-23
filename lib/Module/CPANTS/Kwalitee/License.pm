@@ -210,7 +210,7 @@ Module::CPANTS::Kwalitee::License - Checks if there is a license
 
 =head1 SYNOPSIS
 
-Checks if the disttribution specifies a license.
+Checks if the distribution specifies a license.
 
 =head1 DESCRIPTION
 
@@ -224,7 +224,7 @@ Returns C<100>.
 
 =head3 analyse
 
-C<MCK::License> checks if there's a C<license> field C<META.yml>. Additionally, it looks for a file called LICENSE and a POD section namend LICENSE
+C<MCK::License> checks if there's a C<license> field C<META.yml>. Additionally, it looks for a file called LICENSE and a POD section named LICENSE
 
 =head3 kwalitee_indicators
 
