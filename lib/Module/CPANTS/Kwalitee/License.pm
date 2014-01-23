@@ -26,17 +26,18 @@ sub analyse {
             $me->d->{license} = $yaml->{license}.' defined in META.yml';
         }
     }
-    my $files = $me->d->{files_hash};
+    # use "files_array" to exclude files listed in "no_index".
+    my $files = $me->d->{files_array} || [];
 
     # check if there's a LICEN[CS]E file
-    if (my ($file) = grep {exists $files->{$_}} qw/LICENCE LICENSE/) {
+    if (my ($file) = grep {$_ =~ /^LICEN[CS]E$/} @$files) {
         $me->d->{license} .= " defined in $file";
         $me->d->{external_license_file}=$file;
     }
 
     # check pod
     my %licenses;
-    foreach my $file (grep { /\.p(m|od|l)$/ } sort keys %$files ) {
+    foreach my $file (grep { /\.p(m|od|l)$/ } sort @$files ) {
         my $path = catfile($distdir, $file);
         next unless -r $path; # skip if not readable
         open my $fh, '<', $path or next;
@@ -89,7 +90,7 @@ sub analyse {
         if (@possible_licenses) {
             @possible_licenses = map { s/^Software::License:://; $_ } @possible_licenses;
             push @{$licenses{$_} ||= []}, $file for @possible_licenses;
-            $files->{$file}{license} = join ',', @possible_licenses;
+            $me->d->{files_hash}{$file}{license} = join ',', @possible_licenses;
         } else {
             $me->d->{unknown_license_texts}{$file} = join "\n", @unknown_license_texts if @unknown_license_texts;
         }
