@@ -132,9 +132,8 @@ sub kwalitee_indicators {
             remedy=>q{Add 'use strict' to all modules, or convince us that your favorite module is well-known enough and people can easily see the modules are strictly written.},
             code=>sub {
                 my $d       = shift;
-                my $modules = $d->{modules};
-                my $uses    = $d->{uses};
-                return 0 unless $modules && $uses;
+                my $modules = $d->{modules} || [];
+                return 1 unless @$modules;
 
                 # There are lots of acceptable strict alternatives
                 my $strict_equivalents = Set::Scalar->new->insert(@STRICT_EQUIV, @STRICT_WARNINGS_EQUIV);
@@ -165,9 +164,8 @@ sub kwalitee_indicators {
             remedy=>q{Add 'use warnings' to all modules (this will require perl > 5.6), or convince us that your favorite module is well-known enough and people can easily see the modules warn when something bad happens.},
             code=>sub {
                 my $d       = shift;
-                my $modules = $d->{modules};
-                my $uses    = $d->{uses};
-                return 0 unless $modules && $uses;
+                my $modules = $d->{modules} || [];
+                return 1 unless @$modules;
 
                 my $warnings_equivalents = Set::Scalar->new->insert(@WARNINGS_EQUIV, @STRICT_WARNINGS_EQUIV);
 
