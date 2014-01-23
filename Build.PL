@@ -20,7 +20,7 @@ my $build = Module::Build->new(
         'Array::Diff'               => '0.04',
         'version'                   => '0.73',
         'File::Find::Rule::VCS'     => '0',
-        'Software::License'         => '0.003',
+        'Software::License'         => '0.103008',
 
         # installs whole Software::License::CCpack
         'Software::License::CC_BY_SA_3_0' => 0,
