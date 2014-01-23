@@ -93,9 +93,9 @@ sub analyse {
     my $meta = $me->d->{meta_yml};
     return unless $meta && ref $meta eq ref {};
 
-    my $spec = CPAN::Meta::Validator->new($meta);
-    unless ($spec->is_valid) {
-        $me->d->{error}{metayml_conforms_to_known_spec} = join ';', sort $spec->errors;
+    my $spec = eval { CPAN::Meta::Validator->new($meta) };
+    if ($@ or !$spec->is_valid) {
+        $me->d->{error}{metayml_conforms_to_known_spec} = $@ ? $@ : join ';', sort $spec->errors;
     }
 
     $me->d->{dynamic_config} = $meta->{dynamic_config} ? 1 : 0;
