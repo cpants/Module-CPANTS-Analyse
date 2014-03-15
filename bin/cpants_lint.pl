@@ -97,7 +97,7 @@ else {
             $output.="Ignoring metrics\t".join(', ',map {$_->{name} } @need_db);
         }
 
-        if ($total_kw == $max_kw - @need_db) {
+        if (!@core_failure && !@opt_failure && !@exp_failure) {
             $output.="\nCongratulations for building a 'perfect' distribution!\n";
         } else {
             if (@core_failure) {
