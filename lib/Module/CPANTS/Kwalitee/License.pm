@@ -187,7 +187,8 @@ sub kwalitee_indicators{
             code=>sub {
                 my $d = shift;
                 return 0 unless $d->{license_in_pod};
-                return exists $d->{unknown_license_texts} ? 0 : 1;
+                my @files_with_licenses = grep {$d->{files_hash}{$_}{license}} keys %{$d->{files_hash}};
+                return @files_with_licenses ? 1 : 0;
             },
             details=>sub {
                 my $d = shift;
