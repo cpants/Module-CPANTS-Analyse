@@ -244,7 +244,7 @@ Reads the META.yml file and returns its content.
 
 =head1 WEBSITE
 
-L<http://cpants.perl.org/>
+L<http://cpants.cpanauthors.org/>
 
 =head1 BUGS
 
