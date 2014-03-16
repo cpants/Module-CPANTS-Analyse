@@ -130,6 +130,7 @@ sub kwalitee_indicators {
             name=>'use_strict',
             error=>q{This distribution does not 'use strict;' (or its equivalents) in all of its modules. Note that this is not about the actual strictness of the modules. It's bad if nobody can tell whether the modules are strictly written or not, without reading the source code of your favorite clever module that actually enforces strictness. In other words, it's bad if someone feels the need to add 'use strict' to your modules.},
             remedy=>q{Add 'use strict' to all modules, or convince us that your favorite module is well-known enough and people can easily see the modules are strictly written.},
+            ignorable => 1,
             code=>sub {
                 my $d       = shift;
                 my $modules = $d->{modules} || [];
@@ -161,6 +162,7 @@ sub kwalitee_indicators {
             name=>'use_warnings',
             error=>q{This distribution does not 'use warnings;' in all of its modules. Note that this is not about that your modules actually warn when something bad happens. It's bad if nobody can tell if a module warns or not, without reading the source code of your favorite module that actually enforces warnings. In other words, it's bad if someone feels the need to add 'use warnings' to your modules.},
             is_extra=>1,
+            ignorable => 1,
             remedy=>q{Add 'use warnings' to all modules (this will require perl > 5.6), or convince us that your favorite module is well-known enough and people can easily see the modules warn when something bad happens.},
             code=>sub {
                 my $d       = shift;
