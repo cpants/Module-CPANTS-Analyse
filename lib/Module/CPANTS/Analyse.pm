@@ -25,7 +25,7 @@ if (! main->can('logger')) {
 use Module::Pluggable search_path=>['Module::CPANTS::Kwalitee'];
 
 __PACKAGE__->mk_accessors(qw(dist opts tarball distdir d mck capture_stdout capture_stderr));
-__PACKAGE__->mk_accessors(qw(_testdir _dont_cleanup _tarball));
+__PACKAGE__->mk_accessors(qw(_testdir _dont_cleanup _tarball _x_opts));
 
 
 sub new {
@@ -142,6 +142,12 @@ sub calc_kwalitee {
             main::logger($i->{name});
             my $rv=$i->{code}($me->d, $i);
             $me->d->{kwalitee}{$i->{name}}=$rv;
+            if ($me->x_opts->{ignore}{$i->{name}} && $i->{ignorable}) {
+                $me->d->{kwalitee}{$i->{name}} = 1;
+                if ($me->d->{error}{$i->{name}}) {
+                    $me->d->{error}{$i->{name}} .= ' [ignored]';
+                }
+            }
             $kwalitee+=$rv;
         }
     }
@@ -175,7 +181,25 @@ sub tarball {
     return $me->_tarball($tb);
 }
 
-
+sub x_opts {
+    my $me = shift;
+    return $me->_x_opts if $me->_x_opts;
+    my %opts;
+    if (my $x_cpants = $me->d->{meta_yml}{x_cpants}) {
+        if (my $ignore = $x_cpants->{ignore}) {
+            if (ref $ignore eq ref []) {
+                $opts{ignore} = { map {$_ => 1} @$ignore };
+            }
+            elsif (!ref $ignore) {
+                $opts{ignore}{$ignore} = 1;
+            }
+            else {
+                $me->d->{error}{x_cpants} = "x_cpants ignore should be an array reference or a scalar";
+            }
+        }
+    }
+    $me->_x_opts(\%opts);
+}
 
 q{Favourite record of the moment:
   Jahcoozi: Pure Breed Mongrel};
@@ -238,9 +262,9 @@ Returns the location of the unextracted tarball.
 
 Returns the filename of the tarball.
 
-=head3 read_meta_yml
+=head3 x_opts
 
-Reads the META.yml file and returns its content.
+Returns a hash reference that holds normalized information set in the "x_cpants" custom META field.
 
 =head1 WEBSITE
 

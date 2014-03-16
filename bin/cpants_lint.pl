@@ -56,10 +56,14 @@ else {
         my ($core_kw,$opt_kw)=(0,0);
         my $kwl=$mca->d->{kwalitee};
  
-        my @need_db;
+        my @ignored;
         foreach my $ind (@{$mca->mck->get_indicators}) {
             if ($ind->{needs_db}) {
-                push(@need_db,$ind);
+                push(@ignored,$ind->{name});
+                next;
+            }
+            if ($mca->x_opts->{ignore}{$ind->{name}} && $ind->{ignorable}) {
+                push(@ignored,$ind->{name});
                 next;
             }
             if ($ind->{is_extra}) {
@@ -93,8 +97,8 @@ else {
         my $total_kw=$core_kw+$opt_kw;
 
         $output.="Kwalitee rating\t\t".sprintf("%.2f",100*$total_kw/$max_core_kw)."% ($total_kw/$max_core_kw)\n";
-        if (@need_db) {
-            $output.="Ignoring metrics\t".join(', ',map {$_->{name} } @need_db);
+        if (@ignored) {
+            $output.="Ignoring metrics\t".join(', ', @ignored);
         }
 
         if (!@core_failure && !@opt_failure && !@exp_failure) {
