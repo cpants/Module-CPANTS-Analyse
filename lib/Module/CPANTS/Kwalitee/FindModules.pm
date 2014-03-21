@@ -48,6 +48,7 @@ sub analyse {
             next if $file=~m{^test/};
             next if $file=~m/^(bin|scripts?|ex|eg|examples?|samples?|demos?)\/\w/i;
             next if $file=~m{^inc/};   # skip Module::Install stuff
+            next if $file=~m{^(local|perl5|fatlib)/};
 
             # proper file in lib/
             if ($file=~m|^lib/(.*)\.pm$|) {
