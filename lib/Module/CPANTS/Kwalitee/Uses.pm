@@ -16,7 +16,7 @@ our $VERSION = '0.92';
 # "use_(strict|warnings)" should fail if someone feels the need
 # to add "use $1;" in the modules.
 our @STRICT_EQUIV = qw( strict );
-our @WARNINGS_EQUIV = qw( warnings );
+our @WARNINGS_EQUIV = qw( warnings warnings::compat );
 our @STRICT_WARNINGS_EQUIV = qw(
   common::sense
   Any::Moose
