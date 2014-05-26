@@ -4,8 +4,6 @@ use strict;
 use Module::CPANTS::Analyse;
 use Getopt::Long;
 use IO::Capture::Stdout;
-use Data::Dumper;
-use YAML::Any;
 use File::Spec::Functions;
 use Cwd;
 use Pod::Usage;
@@ -45,10 +43,13 @@ else {
     $mca->calc_kwalitee;
 
     if ($opts{dump}) {
+        no warnings 'once';
+        require Data::Dumper;
         $Data::Dumper::Sortkeys=1;
-        $output=Dumper($mca->d);
+        $output=Data::Dumper::Dumper($mca->d);
     } elsif ($opts{yaml}) {
-        $output=Dump($mca->d);
+        require CPAN::Meta::YAML;
+        $output=CPAN::Meta::YAML::Dump($mca->d);
     } else {
     
         # build up lists of failed metrics
