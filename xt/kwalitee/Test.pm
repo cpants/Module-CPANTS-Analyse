@@ -8,7 +8,7 @@ use Test::More;
 
 BEGIN {
   eval { require WorePAN };
-  plan skip_all => "requires WorePAN" if $@ or $WorePAN::VERSION < 0.04;
+  plan skip_all => "requires WorePAN" if $@ or $WorePAN::VERSION < 0.09;
 }
 
 use Module::CPANTS::Analyse;
