@@ -93,6 +93,7 @@ sub unpack {
         my ($vol,$dir,$name)=splitpath($me->dist);
         $name=~s/\..*$//;
         $name=~s/\-[\d\.]+$//;
+        $name=~s/\-TRIAL[0-9]*//;
         $me->d->{dist}=$name;
         return $error;
     }
