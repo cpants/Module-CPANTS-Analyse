@@ -26,8 +26,7 @@ sub analyse {
     # but test it anyway because it may be broken sometimes.
     if (-f $meta_yml) {
         eval {
-            open my $fh, '<:utf8', $meta_yml or die $!;
-            my $yaml = do { local $/; <$fh> };
+            my $yaml = _slurp_utf8($meta_yml, $me);
             my $meta = CPAN::Meta::YAML->read_string($yaml) or die CPAN::Meta::YAML->errstr;
             # Broken META.yml may return a "YAML 1.0" string first.
             # eg. M/MH/MHASCH/Date-Gregorian-0.07.tar.gz
@@ -39,8 +38,9 @@ sub analyse {
                 $me->d->{metayml_is_parsable}=1;
             }
         };
-        if ($@) {
-            $me->d->{error}{metayml_is_parsable}=$@;
+        if (my $error = $@) {
+            $error =~ s/ at \S+ line \d+.+$//s;
+            $me->d->{error}{metayml_is_parsable}=$error;
         }
     } else {
         $me->d->{error}{metayml_is_parsable}="META.yml was not found";
@@ -61,8 +61,7 @@ sub analyse {
         my $meta_json = catfile($distdir,'META.json');
         if ($JSON_CLASS && -f $meta_json) {
             eval {
-                open my $fh, '<:utf8', $meta_json or return;
-                my $json = do { local $/; <$fh> };
+                my $json = _slurp_utf8($meta_json, $me);
                 my $meta = $JSON_CLASS->new->utf8->decode($json);
                 $me->d->{meta_yml} = $meta;
                 $me->d->{metayml_is_parsable} = 1;
@@ -79,8 +78,7 @@ sub analyse {
         my $mymeta_yml = catfile($distdir, 'MYMETA.yml');
         if (-f $mymeta_yml) {
             eval {
-                open my $fh, '<:utf8', $mymeta_yml or die $!;
-                my $yaml = do { local $/; <$fh> };
+                my $yaml = _slurp_utf8($mymeta_yml, $me);
                 my $meta = CPAN::Meta::YAML->read_string($yaml) or die CPAN::Meta::YAML->errstr;
                 $me->d->{meta_yml}=first { ref $_ eq ref {} } @$meta;
                 $me->d->{metayml_is_parsable} = 1;
@@ -99,6 +97,20 @@ sub analyse {
     }
 
     $me->d->{dynamic_config} = $meta->{dynamic_config} ? 1 : 0;
+}
+
+sub _slurp_utf8 {
+    my ($file, $me) = @_;
+    my $warning;
+    local $SIG{__WARN__} = sub { $warning = shift };
+    open my $fh, '<:encoding(UTF-8)', $file or die "$file: $!"; ## no critic
+    local $/;
+    my $content = <$fh>;
+    if ($warning) {
+        $warning =~ s/ at .+? line \d+.*$//s;
+        $me->d->{error}{metayml_is_parsable} = $warning;
+    }
+    return $content;
 }
 
 ##################################################################
