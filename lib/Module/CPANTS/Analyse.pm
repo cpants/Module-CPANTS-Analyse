@@ -105,13 +105,19 @@ sub unpack {
     my @stuff=grep {/\w/} readdir($fh_testdir);
 
     if (@stuff == 1) {
-        my $vname = $di->distvname;
-        $vname =~ s/\-TRIAL//;
         $me->distdir(catdir($me->testdir,$stuff[0]));
-        $me->d->{extracts_nicely}=1 if $vname eq $stuff[0];
-        
+        if (-d $me->distdir) {
+
+          my $vname = $di->distvname;
+          $vname =~ s/\-TRIAL[0-9]*//;
+
+          $me->d->{extracts_nicely}=1 if $vname eq $stuff[0];
+        } else {
+          $me->distdir($me->testdir);
+          $me->d->{extracts_nicely}=0;
+        }
     } else {
-        $me->distdir(catdir($me->testdir));
+        $me->distdir($me->testdir);
         $me->d->{extracts_nicely}=0;
     }
     return;
