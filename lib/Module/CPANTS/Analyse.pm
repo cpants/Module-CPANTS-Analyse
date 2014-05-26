@@ -6,6 +6,7 @@ use base qw(Class::Accessor);
 use File::Temp qw(tempdir);
 use File::Spec::Functions qw(catfile catdir splitpath);
 use File::Copy;
+use File::stat;
 use Archive::Any::Lite;
 use Carp;
 use Module::CPANTS::Kwalitee;
@@ -67,6 +68,7 @@ sub unpack {
     $me->d->{version}=$di->version;
     $me->d->{dist}=$di->dist;
     $me->d->{author}=$di->cpanid;
+    $me->d->{released} = stat($me->dist)->mtime;
 
     unless($me->d->{package}) {
         $me->d->{package}=$me->tarball;
