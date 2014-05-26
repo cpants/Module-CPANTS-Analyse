@@ -51,7 +51,7 @@ sub analyse {
     if (!$me->d->{meta_yml}) {
         unless ($JSON_CLASS) {
             for (qw/JSON::XS JSON::PP/) {
-                if (eval "require $_; 1;") {
+                if (eval "require $_; 1;") { ## no critic
                     $JSON_CLASS = $_;
                     last;
                 }

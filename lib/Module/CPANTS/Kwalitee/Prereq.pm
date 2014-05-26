@@ -103,7 +103,7 @@ sub _from_build_pl {
         my ($block, $left) = extract_bracketed($build_pl, '{}');
         last unless $block;
 
-        my $hashref = do { no strict; no warnings; eval $block };
+        my $hashref = do { no strict; no warnings; eval $block }; ## no critic
         if ($hashref && ref $hashref eq ref {}) {
             for my $module (keys %$hashref) {
                 my $type = $rel =~ /_/ ? $rel : "runtime_$rel";
@@ -149,7 +149,7 @@ sub _from_makefile_pl {
             # TODO
             while($makefile_pl =~ s/(?:^|;).+?((?:(?:configure|build|test)_)?requires|recommends)\s*([^;]+);//s) {
                 my ($rel, $tuple_text) = ($1, $2);
-                my @tuples = do { no strict; no warnings; eval $tuple_text };
+                my @tuples = do { no strict; no warnings; eval $tuple_text }; ## no critic
                 my $type = $rel =~ /_/ ? $rel : "runtime_$rel";
                 while(@tuples) {
                     my $module = shift @tuples or last;
@@ -169,7 +169,7 @@ sub _from_makefile_pl {
                 my ($block, $left) = extract_bracketed($makefile_pl, '{}');
                 last unless $block;
 
-                my $hashref = do { no strict; no warnings; eval $block };
+                my $hashref = do { no strict; no warnings; eval $block }; ## no critic
                 if ($hashref && ref $hashref eq ref {}) {
                     for my $module (keys %$hashref) {
                         my $type = $rel eq 'PREREQ_PM' ? "runtime_requires" : lc $rel;

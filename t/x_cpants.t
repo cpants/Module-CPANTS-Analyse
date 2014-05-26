@@ -64,7 +64,7 @@ unlink "$dir/Test.pm";
 
 sub write_metayml {
   my ($file, $options) = @_;
-  open my $fh, '>:utf8', $file or die "$!:$file";
+  open my $fh, '>:utf8', $file or die "$!:$file"; ## no critic
   my $meta = {
     name => 'Module::CPANTS::Analyse::Test',
     abstract => 'test',
