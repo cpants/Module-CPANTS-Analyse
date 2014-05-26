@@ -36,6 +36,9 @@ sub analyse {
             }
             
             push(@{$me->d->{modules}},$found);
+            if (exists $me->d->{files_hash}{$file}) {
+                $me->d->{files_hash}{$file}{module} = $module;
+            }
         }
     }
     else {
@@ -59,6 +62,7 @@ sub analyse {
                     in_basedir=>0,
                     in_lib=>1,
                 });
+                $me->d->{files_hash}{$file}{module} = $module;
             }
             else {
                 # open file and find first package
@@ -89,6 +93,7 @@ sub analyse {
                         in_basedir=> $in_basedir{$file} ? 1 : 0,
                         in_lib=>0,
                     });
+                    $me->d->{files_hash}{$file}{module} = $module;
                 }
             }
         }
