@@ -1,11 +1,10 @@
 package Module::CPANTS::Kwalitee::Files;
 use warnings;
 use strict;
-use File::Find::Rule::VCS;
+use File::Find;
 use File::Spec::Functions qw(catdir catfile abs2rel splitdir);
 use File::stat;
 use File::Basename;
-use Data::Dumper;
 
 our $VERSION = '0.92';
 
@@ -19,128 +18,151 @@ sub analyse {
     my $class=shift;
     my $me=shift;
     my $distdir=$me->distdir;
-
-    my $file_find_rule = File::Find::Rule::VCS->file()->relative();
-    my $dir_find_rule = File::Find::Rule::VCS->directory()->relative();
-    if ($me->d->{is_local_distribution}) {
-        $file_find_rule->ignore_vcs();
-        $dir_find_rule->ignore_vcs();
-    }
-
-    my @files = $file_find_rule->in($distdir);
-    my @dirs  = $dir_find_rule->in($distdir);
-    #my $unixy=join('/',splitdir($File::Find::name));
+    $distdir =~ s|\\|/|g if $^O eq 'MSWin32';
 
     # Respect no_index if possible
     my $no_index_re = $class->_make_no_index_regex($me);
 
+    my (%files, %dirs);
+    my (@files_array, @dirs_array);
     my $size = 0;
-    my %files;
-    foreach my $name (@files) {
-        my $path = catfile($distdir, $name);
-        $files{$name}{size} += -s $path || 0;
-        $size += $files{$name}{size};
-    }
+    my $latest_mtime = 0;
+    my @base_dirs;
+    find({
+        no_chdir => 1,
+        wanted => sub {
+            my $name = $File::Find::name;
+            (my $path = $name) =~ s!^$distdir(?:/|$)!! or return;
+            return if $path eq '';
 
-    #die Dumper \%files;
+            if (-d $name) {
+                if (-l $name) {
+                    $dirs{$path}{symlink} = 1;
+                }
+                $dirs{$path} = {};
+                push @dirs_array, $path;
+                return;
+            }
+
+            if ($me->d->{is_local_distribution}) {
+                return if $path =~ m!/\.!;
+            }
+
+            if (my $stat = stat($name)) {
+                $files{$path}{size} = $stat->size || 0;
+                $size += $files{$path}{size};
+
+                my $mtime = $files{$path}{mtime} = $stat->mtime;
+                $latest_mtime = $mtime if $mtime > $latest_mtime;
+            } else {
+                $files{$path}{stat_error} = $!;
+                return;
+            }
+
+            if (-l $name) {
+                $files{$path}{symlink} = 1;
+            }
+
+            if (!-r $name) {
+                $files{$path}{unreadable} = 1;
+                return;
+            }
+
+            if ($no_index_re && $path =~ qr/$no_index_re/) {
+                $files{$path}{no_index} = 1;
+                return;
+            }
+
+            # ignore files in dot directories (probably VCS stuff)
+            return if $path =~ m!(?:^|/)\.[^/]+/!;
+
+            push @files_array, $path;
+
+            # distribution may have several Makefile.PLs, thus
+            # several 'lib' or 't' directories to care
+            if ($path =~ m!/Makefile\.PL$! && $path !~ m!(^|/)x?t/!) {
+                (my $dir = $path) =~ s|/[^/]+$||;
+                push @base_dirs, $dir;
+            }
+        },
+    }, $distdir);
+
     $me->d->{size_unpacked}=$size;
+    $me->d->{latest_mtime}=$latest_mtime;
 
-    # find symlinks
-    my @symlinks;
-    foreach my $f (@dirs, @files) {
-        my $p = catfile($distdir,$f);
-        if (-l $p) {
-            push(@symlinks,$f);
-        }
+    my @symlinks = (
+        grep({ $files{$_}{symlink} } sort keys %files),
+        grep({ $dirs{$_}{symlink} } sort keys %dirs)
+    );
+
+    if (@symlinks) {
+        $me->d->{error}{symlinks} = join ',', @symlinks;
     }
 
-    # above checks should be done even with files to be ignored
-    if ($no_index_re) {
-        my %ignored_files;
-        for my $name (@files) {
-            (my $name_to_test = $name) =~ s|\\|/|g;
-            $name_to_test =~ s|/$||;
-            if ($name_to_test =~ qr/$no_index_re/) {
-                $ignored_files{$name} = 1;
-                next;
+    $me->d->{base_dirs} = \@base_dirs if @base_dirs;
+    my $base_dirs_re = join '|', '', map {quotemeta "$_/"} @base_dirs;
+
+    # find special files/dirs
+    my @special_files=(qw(Makefile.PL Build.PL META.yml META.json MYMETA.yml MYMETA.json dist.ini cpanfile SIGNATURE MANIFEST test.pl LICENSE LICENCE));
+    my @special_dirs=(qw(lib t xt));
+
+    my %special_files_re=(
+        file_changelog=>qr{^(?:$base_dirs_re)(?:chang|history)}i,
+        file_readme=>qr{^(?:$base_dirs_re)readme(?:\.(?:txt|md))?}i,
+    );
+
+    for my $base_dir ('', @base_dirs) {
+        $base_dir = "$base_dir/" if $base_dir;
+        for my $name (@special_files) {
+            my $file = "$base_dir$name";
+            if (exists $files{$file}) {
+                (my $key = "file_".lc $name) =~ s/\./_/;
+                $me->d->{$key} = $me->d->{$key} ? "$me->d->{$key},$file" : $file;
             }
         }
-        @files = grep { !$ignored_files{$_} } @files;
-        $me->d->{ignored_files_array} = [sort keys %ignored_files];
+        for my $name (@special_dirs) {
+            my $dir = "$base_dir$name";
+            if (exists $dirs{$dir}) {
+                my $key = "dir_$name";
+                $me->d->{$key} = $me->d->{$key} ? "$me->d->{$key},$dir" : $dir;
+            }
+        }
+    }
+
+    for my $file (keys %files) {
+        next unless $file =~ m!^(?:$base_dirs_re)[^/]+$!;
+        while(my ($key, $re) = each %special_files_re) {
+            if ($file =~ /$re/) {
+                $me->d->{$key} = $me->d->{$key} ? $me->d->{$key}.",$file" : $file;
+             }
+         }
     }
 
     # store stuff
-    $me->d->{files}=scalar @files;
-    $me->d->{files_array}=\@files;
+    $me->d->{files}=scalar @files_array;
+    $me->d->{files_array}=\@files_array;
     $me->d->{files_hash}=\%files;
-    $me->d->{dirs}=scalar @dirs;
-    $me->d->{dirs_array}=\@dirs;
-    $me->d->{symlinks}=scalar @symlinks;
-    $me->d->{symlinks_list}=join(';',@symlinks);
+    $me->d->{dirs}=scalar @dirs_array;
+    $me->d->{dirs_array}=\@dirs_array;
 
-    # find special files
-    my %reqfiles;
-    my @special_files=(qw(Makefile.PL Build.PL META.yml META.json MYMETA.yml MYMETA.json dist.ini cpanfile SIGNATURE MANIFEST test.pl LICENSE LICENCE));
-    map_filenames($me, \@special_files, \@files);
-
-    # find more complex files
-    my %regexs=(
-        file_changelog=>qr{^chang|history}i,
-        file_readme=>qr{^readme(?:\.(?:txt|md))?}i,
-    );
-    while (my ($name,$regex)=each %regexs) {
-        $me->d->{$name}=join(',',grep {$_=~/$regex/} @files);
-    }
-    
-    # find special dirs
-    my @special_dirs=(qw(lib t xt));
-    foreach my $dir (@special_dirs){
-        my $db_dir="dir_".$dir;
-        $me->d->{$db_dir}=((grep {$_ eq "$dir"} @dirs)?1:0);
-    }
-    
-    # get mtime
-    my $mtime=0;
-    foreach (@files) {
-        next if /\//;
-        my $to_stat=catfile($distdir,$_);
-        next unless -e $to_stat; # TODO hmm, warum ist das kein File?
-        my $stat=stat($to_stat);
-        $files{$_}{mtime} = my $thismtime=$stat->mtime;
-        $mtime=$thismtime if $mtime<$thismtime;
-    }
-    $me->d->{newest_file_epoch}=$mtime;
-    # $me->d->{released}=scalar localtime($mtime);
+    my @ignored = grep {$files{$_}{no_index}} sort keys %files;
+    $me->d->{ignored_files_array}=\@ignored if @ignored;
 
     # check STDIN in Makefile.PL and Build.PL 
     # objective: convince people to use prompt();
     # http://www.perlfoundation.org/perl5/index.cgi?cpan_packaging
-    {
-        foreach my $file ('Makefile.PL', 'Build.PL') {
-            (my $handle = $file) =~ s/\./_/;
-            $handle = "stdin_in_" . lc $handle;
-            my $path = catfile($me->distdir,$file);
-            next if not -e $path;
-            if (open my $fh, '<', $path) {
-                if (grep {/<STDIN>/} <$fh>) {
-                    $me->d->{$handle} = 1;
-                }
-            }
-        } 
-    } 
-    return;
-}
-
-sub map_filenames {
-    my ($me, $special_files, $files) = @_;
-    my %ret;
-    foreach my $file (@$special_files){
-        (my $db_file=$file)=~s/\./_/g;
-        $db_file="file_".lc($db_file);
-        $me->d->{$db_file}=((grep {$_ eq "$file"} @$files)?1:0);
-        $ret{$db_file}=$file;
+    for my $type (qw/makefile_pl build_pl/) {
+        for my $path (split ',', $me->d->{"file_$type"} || '') {
+            next unless $path;
+            my $file = catfile($me->distdir,$path);
+            next if not -e $file;
+            open my $fh, '<', $file or next;
+            my $content = do { local $/; <$fh> } or next;
+            $me->d->{"stdin_in_$type"} = 1 if $content =~ /<STDIN>/;
+        }
     }
-    return %ret;
+
+    return;
 }
 
 sub _make_no_index_regex {
@@ -240,10 +262,10 @@ sub kwalitee_indicators {
         name=>'no_symlinks',
         error=>q{This distribution includes symbolic links (symlinks). This is bad, because there are operating systems that do not handle symlinks.},
         remedy=>q{Remove the symlinks from the distribution.},
-        code=>sub {shift->{symlinks} ? 0 : 1},
+        code=>sub {shift->{error}{symlinks} ? 0 : 1},
         details=>sub {
             my $d = shift;
-            return "The following symlinks were found: ".$d->{symlinks_list};
+            return "The following symlinks were found: ".$d->{error}{symlinks};
         },
     },
     {
@@ -325,10 +347,6 @@ Find various files and directories that should be part of every self-respecting 
 Defines the order in which Kwalitee tests should be run.
 
 Returns C<15>, as data generated by C<MCK::Files> is used by all other tests.
-
-=head3 map_filenames
-
-get db_filenames from real_filenames
 
 =head3 analyse
 
