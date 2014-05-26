@@ -5,7 +5,7 @@ Build.bat
 cover_db
 Debian_CPANTS.txt
 Debian_CPANTS.txt-*
-Makefile.PL
+Makefile
 MANIFEST
 MANIFEST.bak
 META.json
