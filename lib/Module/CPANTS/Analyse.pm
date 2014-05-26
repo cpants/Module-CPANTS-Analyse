@@ -69,13 +69,13 @@ sub unpack {
     $me->d->{dist}=$di->dist;
     $me->d->{author}=$di->cpanid;
     $me->d->{released} = stat($me->dist)->mtime;
+    $me->d->{size_packed}=-s $me->dist;
 
     unless($me->d->{package}) {
         $me->d->{package}=$me->tarball;
     }
 
     copy($me->dist,$me->testfile);
-    $me->d->{size_packed}=-s $me->testfile;
     
     my $archive;
     eval {
