@@ -137,13 +137,14 @@ sub calc_kwalitee {
 
     my $kwalitee=0;
     $me->d->{kwalitee}={};
+    my %x_ignore = %{$me->x_opts->{ignore} || {}};
     foreach my $mod (@{$me->mck->generators}) {
         foreach my $i (@{$mod->kwalitee_indicators}) {
             next if $i->{needs_db};
             main::logger($i->{name});
             my $rv=$i->{code}($me->d, $i);
             $me->d->{kwalitee}{$i->{name}}=$rv;
-            if ($me->x_opts->{ignore}{$i->{name}} && $i->{ignorable}) {
+            if ($x_ignore{$i->{name}} && $i->{ignorable}) {
                 $me->d->{kwalitee}{$i->{name}} = 1;
                 if ($me->d->{error}{$i->{name}}) {
                     $me->d->{error}{$i->{name}} .= ' [ignored]';
@@ -188,14 +189,11 @@ sub x_opts {
     my %opts;
     if (my $x_cpants = $me->d->{meta_yml}{x_cpants}) {
         if (my $ignore = $x_cpants->{ignore}) {
-            if (ref $ignore eq ref []) {
-                $opts{ignore} = { map {$_ => 1} @$ignore };
-            }
-            elsif (!ref $ignore) {
-                $opts{ignore}{$ignore} = 1;
+            if (ref $ignore eq ref {}) {
+                $opts{ignore} = $ignore;
             }
             else {
-                $me->d->{error}{x_cpants} = "x_cpants ignore should be an array reference or a scalar";
+                $me->d->{error}{x_cpants} = "x_cpants ignore should be a hash reference (key: metric, value: reason to ignore)";
             }
         }
     }
