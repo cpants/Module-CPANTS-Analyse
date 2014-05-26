@@ -18,22 +18,19 @@ sub analyse {
     my $mi = catfile($distdir, 'inc', 'Module', 'Install.pm');
     
     # Must be okay if not using Module::Install
-    if (not -f $mi) {
-        $me->d->{broken_module_install} = 0;
-        return;
-    }
-    
+    return if not -f $mi;
+
     open my $ih, '<', $mi
       or die "Could not open file '$mi' for checking the bad_installer metric: $!";
     my $buf;
     read $ih, $buf, 100000 or die $!;
     close $ih;
     if ($buf =~ /VERSION\s*=\s*("|'|)(\d+|\d*\.\d+(?:_\d+)?)\1/m) {
-        $me->d->{module_install_version} = my $version = $2;
+        $me->d->{module_install}{version} = my $version = $2;
         my $non_devel = $version;
         $non_devel =~ s/_\d+$//;
         if ($non_devel < 0.61 or $non_devel == 1.04) {
-            $me->d->{broken_module_install} = $version;
+            $me->d->{module_install}{broken} = 1;
         }
         if ($non_devel < 0.89) {
             my $makefilepl = catfile($distdir, 'Makefile.PL');
@@ -48,19 +45,19 @@ sub analyse {
             return if not defined $mftext;
 
             if ($mftext =~ /auto_install/) {
-                $me->d->{broken_auto_install} = 1;
+                $me->d->{module_install}{broken_auto_install} = 1;
             } else {
                 return;
             }
             
             if ($non_devel < 0.64) {
-                $me->d->{broken_module_install} = $version;
+                $me->d->{module_install}{broken} = 1;
             }
         }
     }
     else {
         # Unknown version (parsing $VERSION failed)
-        $me->d->{broken_module_install} = 1;
+        $me->d->{module_install}{broken} = 1;
     }
 
     
@@ -75,9 +72,12 @@ sub kwalitee_indicators {
         error=>q{This distribution uses an obsolete version of Module::Install. Versions of Module::Install prior to 0.61 might not work on some systems at all. Additionally if your Makefile.PL uses the 'auto_install()' feature, you need at least version 0.64. Also, 1.04 is known to be broken.},
         remedy=>q{Upgrade the bundled version of Module::Install to the most current release. Alternatively, you can switch to another build system / installer that does not suffer from this problem. (ExtUtils::MakeMaker, Module::Build both of which have their own set of problems.)},
         code=>sub {
-            shift->{broken_module_install} ? 0 : 1 },
+            my $d = shift;
+            return 1 unless exists $d->{module_install};
+            $d->{module_install}{broken} ? 0 : 1;
+        },
         details=> sub {
-            q{This distribution uses obsolete Module::Install version }.(shift->{module_install_version});
+            q{This distribution uses obsolete Module::Install version }.(shift->{module_install}{version});
         },
     },
     {
@@ -85,9 +85,12 @@ sub kwalitee_indicators {
         error=>q{This distribution uses an old version of Module::Install. Versions of Module::Install prior to 0.89 do not detect correcty that CPAN/CPANPLUS shell is used.},
         remedy=>q{Upgrade the bundled version of Module::Install to at least 0.89, but preferably to the most current release. Alternatively, you can switch to another build system / installer that does not suffer from this problem. (ExtUtils::MakeMaker, Module::Build both of which have their own set of problems.)},
         code=>sub {
-            shift->{broken_auto_install} ? 0 : 1 },
+            my $d = shift;
+            return 1 unless exists $d->{module_install};
+            $d->{module_install}{broken_auto_install} ? 0 : 1;
+        },
         details=> sub {
-            q{This distribution uses obsolete Module::Install version }.(shift->{module_install_version});
+            q{This distribution uses obsolete Module::Install version }.(shift->{module_install}{version});
         },
     },
 ];
