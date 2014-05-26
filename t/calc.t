@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More tests => 15;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -23,8 +23,7 @@ is($d->{size_packed},7736,'size_packed');
 is(ref($d->{modules}),'ARRAY','modules is ARRAY');
 is($d->{modules}[0]->{module},'Acme::DonMartin','module');
 is(ref($d->{uses}),'HASH','uses is HASH');
-is($d->{uses}{'Compress::Zlib'}{module},'Compress::Zlib','uses Compress::Zlib in module');
-is($d->{uses}{'Test::More'}{in_tests},1,'uses Test::More in tests');
+is($d->{uses}{used_in_tests}{'Test::More'},1,'uses Test::More in tests');
 ok($d->{file_meta_yml},'has_yaml');
 ok($d->{metayml_is_parsable},'metayml_is_parsable');
 ok(!$d->{metayml_parse_error},'metayml_parse_error was not set');

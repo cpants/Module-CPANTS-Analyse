@@ -23,7 +23,7 @@ my $modcount=grep {$_->{module} eq 'Devel::Timer'} @{$d->{modules}};
 is($modcount,1,'module');
 is(ref($d->{prereq}),'ARRAY','prereq is ARRAY');
 is(ref($d->{uses}),'HASH','uses is HASH');
-is($d->{uses}{'Test::More'}{in_tests},3,'uses');
+is($d->{uses}{used_in_tests}{'Test::More'},3,'uses');
 ok($d->{file_meta_yml},'has_yaml');
 ok($d->{metayml_is_parsable},'metayml_is_parsable');
 ok(!$d->{metayml_parse_error},'metayml_parse_error was not set');

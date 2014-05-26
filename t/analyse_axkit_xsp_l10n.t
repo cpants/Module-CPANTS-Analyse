@@ -23,7 +23,7 @@ is($d->{size_packed},14486,'size_packed');
 is(ref($d->{modules}),'ARRAY','modules is ARRAY');
 is($d->{modules}[0]->{module},'AxKit::XSP::L10N','module');
 is(ref($d->{uses}),'HASH','uses is HASH');
-is($d->{uses}{'Test::More'}{in_tests},6,'uses');
+is($d->{uses}{used_in_tests}{'Test::More'},5,'uses');
 ok($d->{file_meta_yml},'has_yaml');
 ok($d->{metayml_is_parsable},'metayml_is_parsable');
 is($d->{license},'perl defined in META.yml defined in LICENSE','LICENSE');

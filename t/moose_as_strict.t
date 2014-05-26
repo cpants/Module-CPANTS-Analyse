@@ -18,6 +18,6 @@ $a->analyse;
 $a->calc_kwalitee;
 
 my $d=$a->d;
-is($d->{uses}{'Moose'}{in_code},1,'uses Moose');
+is($d->{uses}{used_in_code}{'Moose'},1,'uses Moose');
 is($d->{kwalitee}{use_strict},1,'uses strict via Moose');
 

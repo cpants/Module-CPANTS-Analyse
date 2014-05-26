@@ -18,5 +18,5 @@ $a->analyse;
 $a->calc_kwalitee;
 
 my $d = $a->d;
-is($d->{uses}{'perl5i::2'}{in_code},1,'uses perl5i::2');
+is($d->{uses}{used_in_code}{'perl5i::2'},1,'uses perl5i::2');
 is($d->{kwalitee}{use_strict},1,'uses strict via perl5i::2');
