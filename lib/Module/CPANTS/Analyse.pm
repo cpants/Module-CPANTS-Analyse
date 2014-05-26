@@ -137,10 +137,16 @@ sub calc_kwalitee {
 
     my $kwalitee=0;
     $me->d->{kwalitee}={};
+    my @aggregators;
     my %x_ignore = %{$me->x_opts->{ignore} || {}};
     foreach my $mod (@{$me->mck->generators}) {
         foreach my $i (@{$mod->kwalitee_indicators}) {
             next if $i->{needs_db};
+            if ($i->{aggregating}) {
+                push @aggregators, $i;
+                next;
+            }
+
             main::logger($i->{name});
             my $rv=$i->{code}($me->d, $i);
             $me->d->{kwalitee}{$i->{name}}=$rv;
@@ -153,6 +159,19 @@ sub calc_kwalitee {
             $kwalitee+=$rv;
         }
     }
+    foreach my $i (@aggregators) {
+        main::logger($i->{name});
+        my $rv=$i->{code}($me->d, $i);
+        $me->d->{kwalitee}{$i->{name}}=$rv;
+        if ($x_ignore{$i->{name}} && $i->{ignorable}) {
+            $me->d->{kwalitee}{$i->{name}} = 1;
+            if ($me->d->{error}{$i->{name}}) {
+                $me->d->{error}{$i->{name}} .= ' [ignored]';
+            }
+        }
+        $kwalitee+=$rv;
+    }
+
     $me->d->{'kwalitee'}{'kwalitee'}=$kwalitee;
     main::logger("done");
 }
