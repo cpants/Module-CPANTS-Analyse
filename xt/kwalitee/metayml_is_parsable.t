@@ -3,7 +3,6 @@ use warnings;
 use xt::kwalitee::Test;
 
 xt::kwalitee::Test::run(
-
   # No META.yml
   ['UNBIT/Net-uwsgi-1.1.tar.gz', 0], # 2409
   ['ANANSI/Anansi-Singleton-0.02.tar.gz', 0], # 2664
