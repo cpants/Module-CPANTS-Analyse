@@ -88,7 +88,7 @@ sub unpack {
             $me->capture_stderr->stop;
         }
         $me->d->{extractable}=0;
-        $me->d->{error}{cpants}=$error;
+        $me->d->{error}{extractable}=$error;
         $me->d->{kwalitee}{extractable}=0;
         my ($vol,$dir,$name)=splitpath($me->dist);
         $name=~s/\..*$//;
