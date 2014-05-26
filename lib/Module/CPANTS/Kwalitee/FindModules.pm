@@ -1,7 +1,6 @@
 package Module::CPANTS::Kwalitee::FindModules;
 use warnings;
 use strict;
-use Data::Dumper;
 use File::Spec::Functions;
 
 our $VERSION = '0.92';
