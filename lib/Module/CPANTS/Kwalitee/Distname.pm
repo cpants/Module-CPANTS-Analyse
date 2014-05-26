@@ -18,7 +18,7 @@ sub analyse {
     # duplication.
 
     # Note also that this stub should not be removed so that
-    # this can replace the old ::Signature module, and the old
+    # this can replace the old ::Distname module, and the old
     # metrics will not be loaded while loading plugins.
     return;
 }
