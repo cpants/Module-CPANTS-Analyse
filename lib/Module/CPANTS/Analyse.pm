@@ -76,10 +76,9 @@ sub unpack {
     }
 
     copy($me->dist,$me->testfile);
-    
-    my $archive;
+
     eval {
-        $archive=Archive::Any::Lite->new($me->testfile);
+        my $archive=Archive::Any::Lite->new($me->testfile);
         $archive->extract($me->testdir);
     };
 
