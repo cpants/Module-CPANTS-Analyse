@@ -23,7 +23,9 @@ my $dir = File::Temp::tempdir(CLEANUP => 1);
 
 {
   write_metayml("$dir/META.yml", {
-    x_cpants => {ignore => [qw/use_strict/]}
+    x_cpants => {ignore => {
+      use_strict => 'for some reason',
+    }}
   });
 
   my $mca = Module::CPANTS::Analyse->new({
@@ -39,7 +41,10 @@ my $dir = File::Temp::tempdir(CLEANUP => 1);
 
 {
   write_metayml("$dir/META.yml", {
-    x_cpants => {ignore => [qw/use_strict has_tests/]}
+    x_cpants => {ignore => {
+      use_strict => 'for some reason',
+      has_tests => 'because I am so lazy',
+    }}
   });
 
   my $mca = Module::CPANTS::Analyse->new({
