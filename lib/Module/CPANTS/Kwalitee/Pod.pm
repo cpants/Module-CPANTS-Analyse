@@ -3,7 +3,8 @@ use warnings;
 use strict;
 use File::Spec::Functions qw/catfile/;
 
-our $VERSION = '0.92';
+our $VERSION = '0.93_01';
+$VERSION = eval $VERSION; ## no critic
 
 our @ABSTRACT_STUBS = (
   q{Perl extension for blah blah blah}, # h2xs

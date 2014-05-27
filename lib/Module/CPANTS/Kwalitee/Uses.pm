@@ -6,7 +6,8 @@ use Module::ExtractUse 0.33;
 use Set::Scalar qw();
 use version;
 
-our $VERSION = '0.92';
+our $VERSION = '0.93_01';
+$VERSION = eval $VERSION; ## no critic
 
 # These equivalents should be reasonably well-known and, preferably,
 # well-documented. Don't add obscure modules used by only one person
