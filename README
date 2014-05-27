@@ -1,6 +1,6 @@
 =encoding UTF-8
 
-Module-CPANTS-Analyse version 0.87 is Copyright © 2012, Perl QA team
+Module-CPANTS-Analyse
 
 =head1 NAME
 
@@ -13,9 +13,12 @@ L<CPANTS project|http://cpants.perl.org>.
 
 =head1 AUTHOR
 
+L<Thomas Klausner|https://metacpan.org/author/domm>,
+C<< <domm@cpan.org> >>
+
 =head2 Distribution maintainer
 
-L<Lars Dɪᴇᴄᴋᴏᴡ|https://metacpan.org/author/daxim>, C<< <daxim@cpan.org> >>
+L<Kenichi Ishigaki|https://metacpan.org/author/ishigaki>, C<< <ishigaki@cpan.org> >>
 
 =head2 Contributors
 
@@ -35,6 +38,11 @@ C<< <smueller@cpan.org> >>
 
 Some files are Copyright © 2012
 L<Lars Dɪᴇᴄᴋᴏᴡ|https://metacpan.org/author/daxim>, C<< <daxim@cpan.org> >>
+
+Some files are Copyright © 2013-
+L<Kenichi Ishigaki|https://metacpan.org/author/ishigaki>, C<< <ishigaki@cpan.org> >>
+
+Copyright © 2012, Perl QA team
 
 The module distributions in the F<t/eg/> directory are copyright by their
 respective authors.
