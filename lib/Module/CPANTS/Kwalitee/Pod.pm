@@ -42,9 +42,13 @@ sub _parse_abstract {
     open my $fh, '<', $file or return;
     my $directive;
     while(<$fh>) {
-        $inpod = /^=(?!cut)(.+)/ ? 1 : /^=cut/ ? 0 : $inpod;
+        if (/^=(?!cut)(.+)/) {
+            $directive = $1;
+            $inpod = 1;
+        } elsif (/^=cut/) {
+            $inpod = 0;
+        }
         next if !$inpod;
-        $directive = $1 if $1;
         next unless $directive =~ /^head/;
         if ( /^\s*((?:[A-Za-z0-9_]+::)*[A-Za-z0-9_]+ | [BCIF] < (?:[A-Za-z0-9_]+::)*[A-Za-z0-9_]+ >) \s+ -+ (?:\s+ (.*)\s*$|$)/x ) {
             ($package, $abstract) = ($1, $2);
