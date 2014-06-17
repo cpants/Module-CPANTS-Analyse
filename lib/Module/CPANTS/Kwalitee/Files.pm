@@ -33,7 +33,7 @@ sub analyse {
         no_chdir => 1,
         wanted => sub {
             my $name = $File::Find::name;
-            (my $path = $name) =~ s!^$distdir(?:/|$)!! or return;
+            (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or return;
             return if $path eq '';
 
             if (-d $name) {
