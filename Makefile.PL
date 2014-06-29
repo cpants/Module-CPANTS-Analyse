@@ -12,7 +12,6 @@ WriteMakefile(
   ABSTRACT_FROM => 'lib/Module/CPANTS/Analyse.pm',
   VERSION_FROM => 'lib/Module/CPANTS/Analyse.pm',
   LICENSE => 'perl',
-  EXE_FILES => ['bin/cpants_lint.pl'],
 
   META_MERGE => {
     resources => {
