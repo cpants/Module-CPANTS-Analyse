@@ -44,16 +44,22 @@ sub get_indicators {
     if ($self->_gencache->{$type}) {
         $indicators=$self->_gencache->{$type};
     } else {
+        my @aggregators;
         foreach my $gen (@{$self->generators}) {
             foreach my $ind (@{$gen->kwalitee_indicators}) {
                 if ($type eq 'all'
                     || ($type eq 'core' && !$ind->{is_extra} && !$ind->{is_experimental}) 
                     || $ind->{$type}) {
                     $ind->{defined_in}=$gen;
+                    if ($ind->{aggregating}) {
+                        push @aggregators, $ind;
+                        next;
+                    }
                     push(@$indicators,$ind); 
                 }
             }
         }
+        push @$indicators, @aggregators;
         $self->_gencache->{$type}=$indicators;
     }
     return wantarray ? @$indicators : $indicators;
