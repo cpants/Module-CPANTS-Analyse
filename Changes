@@ -1,6 +1,6 @@
 Revision history for Module-CPANTS-Analyse
 
-0.93_02 to be released
+0.93_02 2014-06-30
   - Removed cpants_lint.pl in favor of App::CPANTS::Lint
   - Fixed RT#94468 - "use_strict" metric doesn't like .pod files
     that contain no perl (ishigaki)
