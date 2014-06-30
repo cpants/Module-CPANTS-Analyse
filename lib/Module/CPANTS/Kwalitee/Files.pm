@@ -37,6 +37,7 @@ sub analyse {
             return if $path eq '';
 
             if (-d $name) {
+                $dirs{$path} ||= {};
                 if (-l $name) {
                     $dirs{$path}{symlink} = 1;
                 }
