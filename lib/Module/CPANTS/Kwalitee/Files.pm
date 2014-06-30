@@ -40,7 +40,6 @@ sub analyse {
                 if (-l $name) {
                     $dirs{$path}{symlink} = 1;
                 }
-                $dirs{$path} = {};
                 push @dirs_array, $path;
                 return;
             }
