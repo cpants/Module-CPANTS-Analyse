@@ -184,6 +184,24 @@ sub kwalitee_indicators{
                 return q{No "perl" subkey was found in META.yml.} unless $yaml->{requires}{perl};
             },
         },
+        {
+            name=>'metayml_has_repository_resource',
+            is_experimental=>1,
+            error=>q{This distribution does not have a link to a repository in META.yml.},
+            remedy=>q{Add a 'repository' resource to the META.yml via 'meta_add' accessor (for Module::Build) or META_ADD parameter (for ExtUtils::MakeMaker).},
+            code=>sub { 
+                my $d=shift;
+                my $yaml = $d->{meta_yml};
+                return ref $yaml->{resources} eq ref {} && $yaml->{resources}{repository} ? 1 : 0;
+            },
+            details=>sub {
+                my $d = shift;
+                my $yaml = $d->{meta_yml};
+                return "No META.yml." unless $yaml;
+                return q{No "resources" was found in META.yml.} unless ref $yaml->{resources} eq ref {};
+                return q{No "repository" subkey was found in META.yml.} unless $yaml->{resources}{repository};
+            },
+        },
     ];
 }
 
@@ -230,6 +248,8 @@ Returns the Kwalitee Indicators datastructure.
 =item * metayml_conforms_to_known_spec
 
 =item * metayml_declares_perl_version
+
+=item * metayml_has_repository_resource
 
 =back
 
