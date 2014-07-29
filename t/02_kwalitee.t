@@ -8,16 +8,15 @@ use Module::CPANTS::Kwalitee;
 
 my $CORE = 16;
 my $EXTRA = 8; #is_extra set
-my $EXPERIMENTAL = 2; #experimental?
+my $EXPERIMENTAL = 3; #experimental?
 my $METRICS = $CORE + $EXTRA + $EXPERIMENTAL;
 
-plan tests => 8 + 2 * $METRICS;
+plan tests => 9 + 2 * $METRICS;
 
 my $k=Module::CPANTS::Kwalitee->new({});
 
 is($k->available_kwalitee, $CORE, 'available kwalitee');
 is($k->total_kwalitee, $CORE + $EXTRA, 'total kwalitee');
-
 
 my $ind=$k->get_indicators_hash;
 is(ref($ind),'HASH','indicator_hash');
@@ -38,6 +37,10 @@ is(ref($ind->{use_strict}),'HASH','hash element');
     is(@all, $EXTRA,'number of optional indicators');
 }
 
+{
+    my @all=$k->experimental_indicator_names;
+    is(@all, $EXPERIMENTAL,'number of experimental indicators');
+}
 
 foreach my $mod (@{$k->generators}) {
     #$mod->analyse($me);
