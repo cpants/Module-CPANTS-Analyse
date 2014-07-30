@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 11;
+use Test::More;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -27,3 +27,4 @@ ok(!$d->{metayml_parse_error},'metayml_parse_error was not set');
 is($d->{license}, '', 'has no license');
 ok($d->{needs_compiler}, 'need compiler');
 
+done_testing;

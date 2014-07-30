@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 7;
+use Test::More;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -24,3 +24,4 @@ ok($d->{metayml_is_parsable},'metayml_is_parsable');
 ok(!$d->{metayml_parse_error},'metayml_parse_error was not set');
 
 
+done_testing;

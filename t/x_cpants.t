@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 8;
+use Test::More;
 use Module::CPANTS::Analyse;
 use CPAN::Meta::YAML;
 use File::Temp;
@@ -85,3 +85,4 @@ sub write_pmfile {
   print $fh "1;\n";
 }
 
+done_testing;

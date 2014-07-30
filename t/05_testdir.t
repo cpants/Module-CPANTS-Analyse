@@ -1,7 +1,7 @@
 use strict;
 use warnings;
-use Test::More tests => 3;
-use Test::NoWarnings;
+use Test::More;
+use Test::Warnings;
 
 use Module::CPANTS::Analyse;
 
@@ -13,4 +13,4 @@ ok(-e $td,"testdir $td created");
 my $td2=$a->testdir;
 is($td,$td2,"still the same testdir");
 
-
+done_testing;

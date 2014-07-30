@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
-use Test::NoWarnings;
+use Test::More;
+use Test::Warnings;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -28,3 +28,4 @@ like($d->{license},qr/defined in META\.yml/,'license');
 ok(!$d->{needs_compiler}, 'does not need compiler');
 ok($d->{dir_xt},'dir_xt');
 
+done_testing;

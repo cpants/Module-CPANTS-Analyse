@@ -22,8 +22,6 @@ my @hardcoded_metrics = qw/
   has_test_pod_coverage
 /;
 
-plan tests => scalar @hardcoded_metrics;
-
 my %seen;
 my $kwalitee = Module::CPANTS::Kwalitee->new;
 for my $generator (@{ $kwalitee->generators }) {
@@ -35,3 +33,5 @@ for my $generator (@{ $kwalitee->generators }) {
 for (@hardcoded_metrics) {
   is $seen{$_} => 1, "$_ is available for Test::Kwalitee";
 }
+
+done_testing;

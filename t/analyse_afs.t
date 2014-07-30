@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
-use Test::NoWarnings;
+use Test::More;
+use Test::Warnings;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -37,3 +37,5 @@ ok(!$d->{metayml_conforms_known_spec},'metayml_conforms_known_spec');
 ok(!$d->{metayml_conforms_spec_current},'metayml_conforms_spec_current');
 
 #diag(Dumper $d);
+
+done_testing;

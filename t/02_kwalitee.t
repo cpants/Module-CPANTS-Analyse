@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Deep;
-use Test::NoWarnings;
+use Test::Warnings;
 use Env qw($TEST_VERBOSE);
 
 use Module::CPANTS::Kwalitee;
@@ -11,9 +11,6 @@ my $CORE = 16;
 my $EXTRA = 8; #is_extra set
 my $EXPERIMENTAL = 3; #experimental?
 my $METRICS = $CORE + $EXTRA + $EXPERIMENTAL;
-
-# first 4 tests + all metrics + groups + 5 kwalitee indicators
-plan tests => 4 + 2 * $METRICS + 5;
 
 my $k=Module::CPANTS::Kwalitee->new({});
 
@@ -68,3 +65,5 @@ foreach my $mod (@{$k->generators}) {
         # $kwalitee+=$rv;
     }
 }
+
+done_testing;

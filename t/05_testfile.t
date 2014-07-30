@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 4;
-use Test::NoWarnings;
+use Test::More;
+use Test::Warnings;
 
 use Module::CPANTS::Analyse;
 use File::Basename;
@@ -18,3 +18,4 @@ $td=basename($td);
 like($a->testfile,qr/$td/,"testdir in testfile");
 like($a->testfile,qr/Foo-Bar/,"filename in testfile");
 
+done_testing;

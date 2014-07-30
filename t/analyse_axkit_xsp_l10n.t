@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
-use Test::NoWarnings;
+use Test::More;
+use Test::Warnings;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -30,3 +30,4 @@ is($d->{license},'perl defined in META.yml defined in LICENSE','LICENSE');
 ok(!$d->{needs_compiler}, 'does not need compiler');
 
 
+done_testing;

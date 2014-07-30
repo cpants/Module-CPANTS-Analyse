@@ -1,8 +1,8 @@
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More;
 use Test::Deep;
-use Test::NoWarnings;
+use Test::Warnings;
 
 use Module::CPANTS::Analyse;
 
@@ -42,3 +42,4 @@ cmp_deeply($plugins,bag(
         )),'plugin the rest');
 
 
+done_testing;

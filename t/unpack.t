@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -18,3 +18,4 @@ ok(-e catfile($a->testdir,'Acme-DonMartin-0.06','META.yml'),'dist meta yaml');
 is($a->distdir,catdir($a->testdir,'Acme-DonMartin-0.06'),'$a->distdir');
 is($a->d->{size_packed},7736,'size_packed');
 
+done_testing;

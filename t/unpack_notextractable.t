@@ -1,7 +1,7 @@
 use strict;
 use warnings;
-use Test::More tests => 3;
-use Test::Warn;
+use Test::More;
+use Test::Warnings qw/warning/;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -14,10 +14,9 @@ my $a=Module::CPANTS::Analyse->new({
 
 my $dir = cwd;
 my $rv;
-warnings_like {$rv=$a->unpack} [
+like(warning {$rv=$a->unpack},
             qr/^No handler available for/,
-            ]
-            , 'unpack warns';
+            , 'unpack warns');
 
 like($rv,qr/Can.t call method .extract./,'unpack failed');
 is($a->d->{extractable},0,'extractable');
@@ -25,3 +24,5 @@ is($a->d->{extractable},0,'extractable');
 END {
     chdir $dir; # work around RT #67509
 }
+
+done_testing;

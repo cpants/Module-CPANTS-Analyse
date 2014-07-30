@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 4;
-use Test::NoWarnings;
+use Test::More;
+use Test::Warnings;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -20,3 +20,5 @@ $a->calc_kwalitee;
 my $d = $a->d;
 is($d->{uses}{used_in_code}{'perl5i::2'},1,'uses perl5i::2');
 is($d->{kwalitee}{use_strict},1,'uses strict via perl5i::2');
+
+done_testing;

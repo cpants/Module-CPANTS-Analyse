@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -53,3 +53,5 @@ cmp_deeply($kw, superhashof($expected_kwalitee), 'metrics are as expected');
 #use Data::Dumper;
 #diag(Dumper $kw);
 #diag(Dumper $a->d);
+
+done_testing;

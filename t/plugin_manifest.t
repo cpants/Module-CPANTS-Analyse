@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More 'no_plan';
+use Test::More;
 use Data::Dumper qw(Dumper);
 
 # for testing the Manifest plugin
@@ -39,3 +39,4 @@ use File::Path qw(rmtree);
         "Missing in Dist: eg/demo2.pl"], 'proper error message');
 }
 
+done_testing;

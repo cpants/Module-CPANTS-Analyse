@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 4;
-use Test::NoWarnings;
+use Test::More;
+use Test::Warnings;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -21,3 +21,4 @@ my $d=$a->d;
 is($d->{uses}{used_in_code}{'Moose'},1,'uses Moose');
 is($d->{kwalitee}{use_strict},1,'uses strict via Moose');
 
+done_testing;

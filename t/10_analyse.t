@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::NoWarnings;
+use Test::Warnings;
 use Test::Deep;
 
 use Module::CPANTS::Analyse;
@@ -213,8 +213,6 @@ my @tests = (
     },
 );
 
-plan tests => 1 + 3 * @tests;
-
 foreach my $t (@tests) {
     my $a=Module::CPANTS::Analyse->new({
         dist=> $t->{dist},
@@ -238,3 +236,4 @@ foreach my $t (@tests) {
     #diag(Dumper $d);
 }
 
+done_testing;

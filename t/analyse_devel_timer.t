@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 13;
+use Test::More;
 
 use Module::CPANTS::Analyse;
 use File::Spec::Functions;
@@ -33,3 +33,4 @@ ok(!$d->{needs_compiler}, 'does not need compiler');
 #use Data::Dumper;
 #diag(Dumper $d);
 
+done_testing;

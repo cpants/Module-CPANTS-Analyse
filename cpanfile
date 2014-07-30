@@ -18,6 +18,5 @@ on test => sub {
   requires 'Cwd' => 0;
   requires 'Test::Deep' => '0';
   requires 'Test::More' => '0';
-  requires 'Test::NoWarnings' => 0;
-  requires 'Test::Warn' => '0.11'; #less problems with new Sub::Uplevel
+  requires 'Test::Warnings' => 0;
 };
