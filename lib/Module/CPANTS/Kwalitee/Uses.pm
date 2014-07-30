@@ -187,6 +187,7 @@ sub kwalitee_indicators {
 
                 for my $file (keys %$files) {
                     next unless exists $files->{$file}{module};
+                    next if $files->{$file}{unreadable};
                     next if $file =~ /\.pod$/;
                     my $module = $files->{$file}{module};
                     my %used;
@@ -226,6 +227,7 @@ sub kwalitee_indicators {
                 my @no_warnings;
                 for my $file (keys %$files) {
                     next unless exists $files->{$file}{module};
+                    next if $files->{$file}{unreadable};
                     next if $file =~ /\.pod$/;
                     my $module = $files->{$file}{module};
                     my %used;
