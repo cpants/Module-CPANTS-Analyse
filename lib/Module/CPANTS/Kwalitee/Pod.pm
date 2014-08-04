@@ -2,6 +2,7 @@ package Module::CPANTS::Kwalitee::Pod;
 use warnings;
 use strict;
 use File::Spec::Functions qw/catfile/;
+use Encode;
 
 our $VERSION = '0.93_02';
 $VERSION = eval $VERSION; ## no critic
@@ -23,14 +24,17 @@ sub analyse {
     my $distdir = $me->distdir;
     my %abstract;
     for my $module (@{$me->d->{modules} || []}) {
-        my ($package, $abstract) = $class->_parse_abstract(catfile($distdir, $module->{file}));
+        my ($package, $abstract, $error) = $class->_parse_abstract(catfile($distdir, $module->{file}));
+        $me->d->{error}{has_abstract_in_pod} = $error if $error;
         $me->d->{abstracts_in_pod}{$package} = $abstract if $package;
     }
 
     # sometimes pod for .pm file is put into .pod
     for my $file (@{$me->d->{files_array} || []}) {
         next unless $file =~ /\.pod$/ && ($file =~ m!^lib/! or $file =~ m!^[^/]+$!);
-        my ($package, $abstract) = $class->_parse_abstract(catfile($distdir, $file));
+        local $@;
+        my ($package, $abstract, $error) = $class->_parse_abstract(catfile($distdir, $file));
+        $me->d->{error}{has_abstract_in_pod} = $error if $error;
         $me->d->{abstracts_in_pod}{$package} = $abstract if $package;
     }
 }
@@ -42,7 +46,11 @@ sub _parse_abstract {
     my $inpod = 0;
     open my $fh, '<', $file or return;
     my $directive;
+    my $encoding;
     while(<$fh>) {
+        if (/^=encoding\s+(.+)/) {
+            $encoding = $1;
+        }
         if (/^=(?!cut)(.+)/) {
             $directive = $1;
             $inpod = 1;
@@ -61,7 +69,10 @@ sub _parse_abstract {
         s/\s+$//s;
         $abstract .= "\n$_";
     }
-    return ($package, $abstract);
+    $abstract = eval { decode($encoding, $abstract) } if $encoding;
+    my $error = $@ ? $@ : '';
+    $error =~ s|\s*at .+ line \d+.+$||s;
+    return ($package, $abstract, $error);
 }
 
 ##################################################################
@@ -94,7 +105,7 @@ sub kwalitee_indicators {
               my %mapping = map {$_ => 1} @ABSTRACT_STUBS;
               my @errors;
               for (sort keys %{$d->{abstracts_in_pod} || {}}) {
-                  push @errors, $_ if $mapping{$d->{abstracts_in_pod}{$_}};
+                  push @errors, $_ if $mapping{$d->{abstracts_in_pod}{$_} || ''};
               }
               if (@errors) {
                   $d->{error}{no_abstract_stub_in_pod} = join ',', @errors;
