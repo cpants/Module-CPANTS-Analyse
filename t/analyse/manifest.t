@@ -42,4 +42,39 @@ EOF
   ok grep /^Missing in Dist: eg\/demo\.pl/, @errors;
 };
 
+# should hide symlink errors not in MANIFEST for a local distribution
+
+test_distribution {
+  my ($mca, $dir) = @_;
+  write_file("$dir/MANIFEST", <<"EOF");
+MANIFEST
+EOF
+
+  eval { symlink "$dir/MANIFEST", "$dir/MANIFEST.lnk" };
+  if ($@) {
+    diag "symlink is not supported";
+    return;
+  }
+
+  my $stash = $mca->run;
+  ok !$stash->{error}{symlinks}, "symlinks not listed in MANIFEST is ignored for a local distribution";
+};
+
+test_distribution {
+  my ($mca, $dir) = @_;
+  write_file("$dir/MANIFEST", <<"EOF");
+MANIFEST
+EOF
+
+  eval { symlink "$dir/MANIFEST", "$dir/MANIFEST.lnk" };
+  if ($@) {
+    diag "symlink is not supported";
+    return;
+  }
+
+  my $stash = archive_and_analyse($dir, "Module-CPANTS-Analyse-Test-0.01.tar.gz");
+
+  ok $stash->{error}{symlinks}, "symlinks not listed in MANIFEST is not ignored for a non-local distribution";
+};
+
 done_testing;

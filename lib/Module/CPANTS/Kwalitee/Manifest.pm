@@ -52,6 +52,17 @@ sub analyse {
                 "Missing in Dist: " . join(', ',@{$diff->deleted}));
             $me->d->{error}{manifest_matches_dist} = \@error;
         }
+
+        # Tweak symlinks error for a local distribution (RT #97858)
+        if ($me->d->{is_local_distribution} && $me->d->{error}{symlinks}) {
+            my %manifested = map {$_ => 1} @manifest;
+            my @symlinks = grep {$manifested{$_}} split ',', $me->d->{error}{symlinks};
+            if (@symlinks) {
+                $me->d->{error}{symlinks} = join ',', @symlinks;
+            } else {
+                delete $me->d->{error}{symlinks};
+            }
+        }
     }
     else {
         $me->d->{manifest_matches_dist}=0;
