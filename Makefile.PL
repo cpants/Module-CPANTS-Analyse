@@ -23,4 +23,6 @@ WriteMakefile(
       'CPANTS','kwalitee',
     ],
   },
+
+  test => {RECURSIVE_TEST_FILES => 1},
 );

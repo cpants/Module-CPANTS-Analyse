@@ -56,6 +56,14 @@ sub new {
     return $me; 
 }
 
+sub run {
+    my $me = shift;
+    $me->unpack unless $me->d->{is_local_distribution};
+    $me->analyse;
+    $me->calc_kwalitee;
+    $me->d;
+}
+
 sub unpack {
     my $me=shift;
     return 'cant find dist' unless $me->dist;
@@ -218,9 +226,7 @@ Module::CPANTS::Analyse - Generate Kwalitee ratings for a distribution
     my $analyser=Module::CPANTS::Analyse->new({
         dist=>'path/to/Foo-Bar-1.42.tgz',
     });
-    $analyser->unpack;
-    $analyser->analyse;
-    $analyser->calc_kwalitee;
+    $analyser->run;
     # results are in $analyser->d;
 
 =head1 DESCRIPTION
@@ -246,6 +252,10 @@ Run all analysers (defined in C<Module::CPANTS::Kwalitee::*> on the dist.
 =head3 calc_kwalitee
 
 Check if the dist conforms to the Kwalitee indicators. 
+
+=head3 run
+
+Unpacks, analyses, and calculates kwalitee, and returns a resulting stash.
 
 =head2 Helper Methods
 
