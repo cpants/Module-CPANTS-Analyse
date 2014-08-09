@@ -7,7 +7,8 @@ use Carp;
 use base 'Exporter';
 use File::Temp qw/tempdir/;
 use File::Path;
-use File::Spec::Functions qw/splitpath/;
+use File::Spec::Functions qw/splitpath catfile abs2rel/;
+use File::Find;
 use Cwd;
 use Module::CPANTS::Analyse;
 use CPAN::Meta::YAML;
@@ -15,9 +16,10 @@ use Test::More;
 
 our @EXPORT = (qw/
   test_distribution
-    write_file
-    write_pmfile
+  write_file
+  write_pmfile
   write_metayml
+  archive_and_analyse
 /, @Test::More::EXPORT);
 
 sub test_distribution (&) {
@@ -71,6 +73,41 @@ sub write_metayml {
     %{$args || {}},
   };
   write_file($path, CPAN::Meta::YAML->new($meta)->write_string);
+}
+
+sub archive_and_analyse {
+  my ($dir, $name) = @_;
+  my $archive_path = catfile($dir, $name);
+  (my $basename = $name) =~ s/(?:\.tar\.(?:gz|bz)|\.zip)$//;
+  require Archive::Tar;
+  my $archive = Archive::Tar->new;
+  find({
+    wanted => sub {
+      my $file = $File::Find::name;
+      my $relpath = abs2rel($file, $dir);
+      return if $relpath =~ /^\./;
+      my $path = catfile($basename, $relpath);
+      if (-l $file) {
+        $archive->add_data($path, '', {
+          type => Archive::Tar::SYMLINK,
+          linkname => readlink $file,
+        }) or die "failed to add symlink: $path";
+      } elsif (-f $file) {
+        my $content = do { local $/; open my $fh, '<', $file; <$fh> };
+        $archive->add_data($path, $content);
+      } elsif (-d $dir && $path ne '.') {
+        $archive->add_data($path, '', Archive::Tar::DIR) or die "failed to add dir: $path";
+      }
+    },
+    no_chdir => 1,
+  }, $dir);
+  $archive->write($archive_path, Archive::Tar::COMPRESS_GZIP);
+
+  ok -f $archive_path, "archive exists";
+
+  Module::CPANTS::Analyse->new({
+    dist => $archive_path,
+  })->run;
 }
 
 1;
