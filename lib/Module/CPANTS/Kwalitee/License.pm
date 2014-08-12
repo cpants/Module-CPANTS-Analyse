@@ -116,7 +116,7 @@ sub analyse {
 sub kwalitee_indicators{
     return [
         {
-            name=>'metayml_has_license',
+            name=>'meta_yml_has_license',
             error=>q{This distribution does not have a license defined in META.yml.},
             remedy=>q{Define the license if you are using in Build.PL. If you are using MakeMaker (Makefile.PL) you should upgrade to ExtUtils::MakeMaker version 6.31.},
             is_extra=>1,
@@ -235,7 +235,7 @@ Returns the Kwalitee Indicators datastructure.
 
 =over
 
-=item * metayml_has_license
+=item * meta_yml_has_license
 
 =item * has_known_license_in_source_file
 

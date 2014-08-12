@@ -3,7 +3,6 @@ use warnings;
 use xt::kwalitee::Test;
 
 xt::kwalitee::Test::run(
-  # No META.yml
   ['UNBIT/Net-uwsgi-1.1.tar.gz', 0], # 2409
   ['ANANSI/Anansi-Singleton-0.02.tar.gz', 0], # 2664
   ['NIELSD/Speech-Google-0.5.tar.gz', 0], # 2907
@@ -13,7 +12,5 @@ xt::kwalitee::Test::run(
   ['MANIGREW/SEG7-1.0.1.tar.gz', 0], # 3847
   ['HITHIM/Socket-Mmsg-0.02.tar.gz', 0], # 3946
   ['STEFANOS/Net-SMTP_auth-SSL-0.2.tar.gz', 0], # 4058
-
-  # Stream does not end with newline character
   ['SCILLEY/POE/Component/IRC/Plugin/IRCDHelp-0.02.tar.gz', 0], # 3243
 );

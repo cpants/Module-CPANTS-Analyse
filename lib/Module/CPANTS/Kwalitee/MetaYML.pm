@@ -133,20 +133,33 @@ sub _validate_meta {
 sub kwalitee_indicators{
     return [
         {
-            name=>'metayml_is_parsable',
+            name=>'meta_yml_is_parsable',
             error=>q{The META.yml file of this distribution could not be parsed by the version of CPAN::Meta::YAML.pm CPANTS is using.},
             remedy=>q{If you don't have one, add a META.yml file. Else, upgrade your YAML generator so it produces valid YAML.},
             code=>sub {
                 my $d = shift;
-                !$d->{error}{metayml_is_parsable} && $d->{metayml_is_parsable} ? 1 : 0
+                !$d->{error}{meta_yml_is_parsable} && $d->{meta_yml_is_parsable} ? 1 : 0
             },
             details=>sub {
                 my $d = shift;
-                $d->{error}{metayml_is_parsable};
+                $d->{error}{meta_yml_is_parsable};
             },
         },
         {
-            name=>'metayml_has_provides',
+            name=>'meta_json_is_parsable',
+            error=>q{The META.json file of this distribution could not be parsed by the version of JSON parser CPANTS is using.},
+            remedy=>q{Upgrade your META.json generator so it produces valid JSON.},
+            code=>sub {
+                my $d = shift;
+                !$d->{error}{meta_json_is_parsable} ? 1 : 0
+            },
+            details=>sub {
+                my $d = shift;
+                $d->{error}{meta_json_is_parsable};
+            },
+        },
+        {
+            name=>'meta_yml_has_provides',
             is_experimental=>1,
             error=>q{This distribution does not have a list of provided modules defined in META.yml.},
             remedy=>q{Add all modules contained in this distribution to the META.yml field 'provides'. Module::Build or Dist::Zilla::Plugin::MetaProvides do this automatically for you.},
@@ -162,24 +175,40 @@ sub kwalitee_indicators{
             },
         },
         {
-            name=>'metayml_conforms_to_known_spec',
+            name=>'meta_yml_conforms_to_known_spec',
             error=>q{META.yml does not conform to any recognised META.yml Spec.},
             remedy=>q{Take a look at the META.yml Spec at http://module-build.sourceforge.net/META-spec-v1.4.html (for version 1.4) or http://search.cpan.org/perldoc?CPAN::Meta::Spec (for version 2), and change your META.yml accordingly.},
             code=>sub {
                 my $d=shift;
-                return 0 if $d->{error}{metayml_is_parsable};
-                return 0 if $d->{error}{metayml_conforms_to_known_spec};
+                return 0 if $d->{error}{meta_yml_is_parsable};
+                return 0 if $d->{error}{meta_yml_conforms_to_known_spec};
                 return 1;
             },
             details=>sub {
                 my $d = shift;
                 return "No META.yml." unless $d->{meta_yml};
-                return "META.yml is broken." unless $d->{metayml_is_parsable};
-                return $d->{error}{metayml_conforms_to_known_spec};
+                return "META.yml is broken." unless $d->{meta_yml_is_parsable};
+                return $d->{error}{meta_yml_conforms_to_known_spec};
             },
         },
         {
-            name=>'metayml_declares_perl_version',
+            name=>'meta_json_conforms_to_known_spec',
+            error=>q{META.json does not conform to any recognised META Spec.},
+            remedy=>q{Take a look at the META.json Spec at http://module-build.sourceforge.net/META-spec-v1.4.html (for version 1.4) or http://search.cpan.org/perldoc?CPAN::Meta::Spec (for version 2), and change your META.json accordingly.},
+            code=>sub {
+                my $d=shift;
+                return 0 if $d->{error}{meta_json_is_parsable};
+                return 0 if $d->{error}{meta_json_conforms_to_known_spec};
+                return 1;
+            },
+            details=>sub {
+                my $d = shift;
+                return "META.json is broken." unless $d->{meta_json_is_parsable};
+                return $d->{error}{meta_json_conforms_to_known_spec};
+            },
+        },
+        {
+            name=>'meta_yml_declares_perl_version',
             error=>q{This distribution does not declare the minimum perl version in META.yml.},
             is_extra=>1,
             remedy=>q{If you are using Build.PL define the {requires}{perl} = VERSION field. If you are using MakeMaker (Makefile.PL) you should upgrade ExtUtils::MakeMaker to 6.48 and use MIN_PERL_VERSION parameter. Perl::MinimumVersion can help you determine which version of Perl your module needs.},
@@ -197,7 +226,7 @@ sub kwalitee_indicators{
             },
         },
         {
-            name=>'metayml_has_repository_resource',
+            name=>'meta_yml_has_repository_resource',
             is_experimental=>1,
             error=>q{This distribution does not have a link to a repository in META.yml.},
             remedy=>q{Add a 'repository' resource to the META.yml via 'meta_add' accessor (for Module::Build) or META_ADD parameter (for ExtUtils::MakeMaker).},
@@ -253,15 +282,19 @@ Returns the Kwalitee Indicators datastructure.
 
 =over
 
-=item * metayml_is_parsable
+=item * meta_yml_is_parsable
 
-=item * metayml_has_provides
+=item * meta_yml_has_provides
 
-=item * metayml_conforms_to_known_spec
+=item * meta_yml_conforms_to_known_spec
 
-=item * metayml_declares_perl_version
+=item * meta_yml_declares_perl_version
 
-=item * metayml_has_repository_resource
+=item * meta_yml_has_repository_resource
+
+=item * meta_json_is_parsable
+
+=item * meta_json_conforms_to_known_spec
 
 =back
 
