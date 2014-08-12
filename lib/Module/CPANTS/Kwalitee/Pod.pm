@@ -4,7 +4,7 @@ use strict;
 use File::Spec::Functions qw/catfile/;
 use Encode;
 
-our $VERSION = '0.93_02';
+our $VERSION = '0.93_03';
 $VERSION = eval $VERSION; ## no critic
 
 our @ABSTRACT_STUBS = (
