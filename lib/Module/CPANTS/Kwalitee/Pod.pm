@@ -23,9 +23,10 @@ sub analyse {
     my ($class, $me) = @_;
     my $distdir = $me->distdir;
     my %abstract;
+    my @errors;
     for my $module (@{$me->d->{modules} || []}) {
         my ($package, $abstract, $error) = $class->_parse_abstract(catfile($distdir, $module->{file}));
-        $me->d->{error}{has_abstract_in_pod} = $error if $error;
+        push @errors, "$error ($package)" if $error;
         $me->d->{abstracts_in_pod}{$package} = $abstract if $package;
     }
 
@@ -34,9 +35,10 @@ sub analyse {
         next unless $file =~ /\.pod$/ && ($file =~ m!^lib/! or $file =~ m!^[^/]+$!);
         local $@;
         my ($package, $abstract, $error) = $class->_parse_abstract(catfile($distdir, $file));
-        $me->d->{error}{has_abstract_in_pod} = $error if $error;
+        push @errors, "$error ($package)" if $error;
         $me->d->{abstracts_in_pod}{$package} = $abstract if $package;
     }
+    $me->d->{error}{has_abstract_in_pod} = join ';', @errors if @errors;
 }
 
 # adapted from ExtUtils::MM_Unix and Module::Build::PodParser
