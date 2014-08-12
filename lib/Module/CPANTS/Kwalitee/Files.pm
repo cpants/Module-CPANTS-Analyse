@@ -91,9 +91,9 @@ sub analyse {
     $me->d->{size_unpacked}=$size;
     $me->d->{latest_mtime}=$latest_mtime;
 
-    my @symlinks = (
-        grep({ $files{$_}{symlink} } sort keys %files),
-        grep({ $dirs{$_}{symlink} } sort keys %dirs)
+    my @symlinks = sort {$a cmp $b} (
+        grep({ $files{$_}{symlink} } keys %files),
+        grep({ $dirs{$_}{symlink} } keys %dirs)
     );
 
     if (@symlinks) {
