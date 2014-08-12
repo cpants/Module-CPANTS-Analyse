@@ -43,6 +43,7 @@ for my $module (@Module::CPANTS::Kwalitee::Uses::STRICT_EQUIV) {
 }
 
 for my $module (@Module::CPANTS::Kwalitee::Uses::WARNINGS_EQUIV) {
+  next if $module eq 'warnings::compat';
   my $res = test($module);
   unless ($res) {
     note "SKIP $module";
