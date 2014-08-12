@@ -18,7 +18,7 @@ test_distribution {
   write_pmfile("$dir/lib/Module/CPANTS/Analyse/Test.pm", $content);
 
   my $stash = $mca->run;
-  is $stash->{error}{has_abstract_in_pod} => 'unknown encoding: utf-8;';
+  like $stash->{error}{has_abstract_in_pod} => qr/^unknown encoding: utf-8;/;
   is $stash->{abstracts_in_pod}{'Module::CPANTS::Analyse::Test'} => 'test abstract';
 };
 
