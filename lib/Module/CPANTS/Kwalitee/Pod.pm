@@ -71,9 +71,20 @@ sub _parse_abstract {
         s/\s+$//s;
         $abstract .= "\n$_";
     }
-    $abstract = eval { decode($encoding, $abstract) } if $encoding;
-    my $error = $@ ? $@ : '';
-    $error =~ s|\s*at .+ line \d+.+$||s;
+
+    my $error;
+    if ($encoding) {
+        my $encoder = find_encoding($encoding);
+        if (!$encoder) {
+            $error = "unknown encoding: $encoding";
+        } else {
+            $abstract = eval { $encoder->decode($abstract) };
+            if ($@) {
+                $error = $@;
+                $error =~ s|\s*at .+ line \d+.+$||s;
+            }
+        }
+    }
     return ($package, $abstract, $error);
 }
 
