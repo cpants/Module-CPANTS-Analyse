@@ -89,6 +89,7 @@ sub kwalitee_indicators {
           remedy => q{Provide a short description in the NAME section of the pod (after the module name followed by a hyphen) at least for the main module of this distribution.},
           code => sub {
               my $d = shift;
+              return 0 if $d->{error}{has_abstract_in_pod};
               my @abstracts = grep {defined $_ && length $_} values %{$d->{abstracts_in_pod} || {}};
               return @abstracts ? 1 : 0;
           },
