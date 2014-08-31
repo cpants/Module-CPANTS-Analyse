@@ -99,7 +99,14 @@ sub analyse {
             }
         }
     }
-    
+
+    for my $file (keys %{$me->d->{files_hash}}) {
+        next unless $file =~ /^inc\/(.+)\.pm/;
+        my $module = $1;
+        $module =~ s|/|::|g;
+        push @{$me->d->{included_modules} ||= []}, $module;
+    }
+
     return 1;
 }
 
