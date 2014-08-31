@@ -31,7 +31,7 @@ sub analyse {
     my $files = $me->d->{files_array} || [];
 
     # check if there's a LICEN[CS]E file
-    if (my ($file) = grep {$_ =~ /^LICEN[CS]E$/} @$files) {
+    if (my ($file) = grep {$_ =~ /^(?:LICEN[CS]E|COPYING)$/} @$files) {
         $me->d->{license} .= " defined in $file";
         $me->d->{external_license_file}=$file;
     }
