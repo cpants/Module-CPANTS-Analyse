@@ -73,7 +73,7 @@ sub _parse_abstract {
     }
 
     my $error;
-    if ($encoding) {
+    if ($encoding && $abstract) {
         my $encoder = find_encoding($encoding);
         if (!$encoder) {
             $error = "unknown encoding: $encoding";
