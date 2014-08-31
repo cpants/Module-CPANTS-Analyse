@@ -31,8 +31,6 @@ sub analyse {
     # but test it anyway because it may be broken sometimes.
     if (-f $meta_yml) {
         _analyse_yml($me, $meta_yml);
-    } else {
-        $me->d->{error}{meta_yml_is_parsable}="META.yml was not found";
     }
 
     # check also META.json (if exists).
@@ -135,10 +133,10 @@ sub kwalitee_indicators{
         {
             name=>'meta_yml_is_parsable',
             error=>q{The META.yml file of this distribution could not be parsed by the version of CPAN::Meta::YAML.pm CPANTS is using.},
-            remedy=>q{If you don't have one, add a META.yml file. Else, upgrade your YAML generator so it produces valid YAML.},
+            remedy=>q{Upgrade your YAML generator so it produces valid YAML.},
             code=>sub {
                 my $d = shift;
-                !$d->{error}{meta_yml_is_parsable} && $d->{meta_yml_is_parsable} ? 1 : 0
+                !$d->{error}{meta_yml_is_parsable} ? 1 : 0
             },
             details=>sub {
                 my $d = shift;
@@ -165,7 +163,8 @@ sub kwalitee_indicators{
             remedy=>q{Add all modules contained in this distribution to the META.yml field 'provides'. Module::Build or Dist::Zilla::Plugin::MetaProvides do this automatically for you.},
             code=>sub { 
                 my $d=shift;
-                return 1 if $d->{meta_yml} && $d->{meta_yml}{provides};
+                return 1 if !$d->{meta_yml};
+                return 1 if $d->{meta_yml}{provides};
                 return 0;
             },
             details=>sub {
@@ -180,7 +179,6 @@ sub kwalitee_indicators{
             remedy=>q{Take a look at the META.yml Spec at http://module-build.sourceforge.net/META-spec-v1.4.html (for version 1.4) or http://search.cpan.org/perldoc?CPAN::Meta::Spec (for version 2), and change your META.yml accordingly.},
             code=>sub {
                 my $d=shift;
-                return 0 if $d->{error}{meta_yml_is_parsable};
                 return 0 if $d->{error}{meta_yml_conforms_to_known_spec};
                 return 1;
             },
@@ -215,6 +213,7 @@ sub kwalitee_indicators{
             code=>sub { 
                 my $d=shift;
                 my $yaml=$d->{meta_yml};
+                return 1 unless $yaml;
                 return ref $yaml->{requires} eq ref {} && $yaml->{requires}{perl} ? 1 : 0;
             },
             details=>sub {
@@ -233,6 +232,7 @@ sub kwalitee_indicators{
             code=>sub { 
                 my $d=shift;
                 my $yaml = $d->{meta_yml};
+                return 1 unless $yaml;
                 return ref $yaml->{resources} eq ref {} && $yaml->{resources}{repository} ? 1 : 0;
             },
             details=>sub {
