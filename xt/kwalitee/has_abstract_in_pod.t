@@ -18,5 +18,7 @@ xt::kwalitee::Test::run(
 
   # abstract in non-.pm file
   ['LEONT/App-find2perl-1.003.tar.gz', 1],
+
+  # invalid =encoding (utf-8;)
   ['INGY/IO-All-0.40.tar.gz', 0],
 );

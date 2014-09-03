@@ -3,14 +3,24 @@ use warnings;
 use xt::kwalitee::Test;
 
 xt::kwalitee::Test::run(
-  ['UNBIT/Net-uwsgi-1.1.tar.gz', 0], # 2409
-  ['ANANSI/Anansi-Singleton-0.02.tar.gz', 0], # 2664
-  ['NIELSD/Speech-Google-0.5.tar.gz', 0], # 2907
-  ['ANANSI/Anansi-Class-0.03.tar.gz', 0], # 3028
-  ['ANANSI/Anansi-Actor-0.04.tar.gz', 0], # 3157
-  ['ANANSI/Anansi-Library-0.02.tar.gz', 0], # 3365
-  ['MANIGREW/SEG7-1.0.1.tar.gz', 0], # 3847
-  ['HITHIM/Socket-Mmsg-0.02.tar.gz', 0], # 3946
-  ['STEFANOS/Net-SMTP_auth-SSL-0.2.tar.gz', 0], # 4058
+  # No META.yml
+  ['UNBIT/Net-uwsgi-1.1.tar.gz', 1], # 2409
+
+  # Stream does not end with newline character
   ['SCILLEY/POE/Component/IRC/Plugin/IRCDHelp-0.02.tar.gz', 0], # 3243
+
+  # Error reading from file: utf8 "\xB0" does not map to Unicode
+  ['WINTRU/Mica-1.a.0.tar.gz', 0], # 1196
+
+  # CPAN::Meta::YAML does not support a feature in line
+  ['STRO/Task-CPANAuthors-STRO-PPMCreator-2009.1018.tar.gz', 0], # 1555
+
+  # CPAN::Meta::YAML failed to classify line ' --- #YAML:1.0'
+  ['XPANEL/XPanel-0.0.7.tar.gz', 0], # 2207
+
+  # CPAN::Meta::YAML found bad indenting
+  ['NUFFIN/Devel-STDERR-Indent-0.01.tar.gz', 0], # 2594
+
+  # CPAN::Meta::YAML found illegal characters
+  ['SOCK/WWW-Search-Feedster-0.02.tar.gz', 0], # 3220
 );

@@ -16,5 +16,7 @@ xt::kwalitee::Test::run(
 
   # no .pm files
   ['RCLAMP/cvn-0.02.tar.gz', 1],
+
+  # .pod without package declaration
   ['ETHER/Moose-2.1209.tar.gz', 1],
 );

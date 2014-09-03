@@ -3,14 +3,31 @@ use warnings;
 use xt::kwalitee::Test;
 
 xt::kwalitee::Test::run(
-  ['UNBIT/Net-uwsgi-1.1.tar.gz', 0], # 2409
-  ['NIELSD/Speech-Google-0.5.tar.gz', 0], # 2907
-  ['ANANSI/Anansi-Actor-0.04.tar.gz', 0], # 3157
-  ['SCILLEY/POE/Component/IRC/Plugin/IRCDHelp-0.02.tar.gz', 0], # 3243
-  ['ANANSI/Anansi-Library-0.02.tar.gz', 0], # 3365
-  ['HITHIM/Socket-Mmsg-0.02.tar.gz', 0], # 3946
-  ['CINDY/AnyEvent-HTTPD-CookiePatch-v0.1.0.tar.gz', 0, 1], # 4162
-  ['BENNIE/ACME-KeyboardMarathon-1.15.tar.gz', 0], # 4479
-  ['MLX/Algorithm-Damm-1.001.002.tar.gz', 0, 1], # 4537
+  # '<undef>' for 'Carp' is not a valid version.
+  ['MATIU/WWW-AfinimaKi-0.1.tar.gz', 0], # 518
+
+  # 'HASH(0xb8924f0)' for 'repository' does not have a URL scheme
+  ['JBERGER/Alien-GSL-0.01.tar.gz', 0], # 556
+
+  # License 'Public domain' is invalid (license)
+  ['SEVEAS/Term-Multiplexed-0.2.2.tar.gz', 0], # 1683
+
+  # Missing mandatory field, 'author' (author)
+  ['ANDK/CPAN-Test-Dummy-Perl5-Make-CircDepeOne-1.00.tar.gz', 0], # 1893
+
+  # 'ExtUtils::MakeMaker version 6.17' for 'generated_by' is not a valid version. (requires -> generated_by)
+  ['MITTI/PDF-Report-Table-1.00.tar.gz', 0], # 2300
+
+  # Expected a map structure from string or file. (requires)
+  ['ANDK/CPAN-Test-Dummy-Perl5-Make-Expect-1.00.tar.gz', 0], # 2323
+
+  # 'DateTime::Event::Easter' for 'Time::Piece' is not a valid version.
+  ['CLIFFORDJ/Date-Holidays-EnglandWales-0.01.tar.gz', 0], # 3085
+
+  # Key 'Acme::Unic<&ouml>de' is not a legal module name.
+  ['SCHWIGON/acme-unicode/Acme-Uenicoede-0.0501.tar.gz', 0], # 3651
+
+  # 'meta-spec' => '1.1' is kind of broken, but it's not regarded
+  # as a fatal error as of CPAN::Meta 2.132830.
   ['JOSEPHW/XML-Writer-0.545.tar.gz', 1],
 );
