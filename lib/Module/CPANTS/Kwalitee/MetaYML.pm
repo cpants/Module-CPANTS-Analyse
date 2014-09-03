@@ -29,18 +29,18 @@ sub analyse {
 
     # META.yml is not always the most preferred meta file,
     # but test it anyway because it may be broken sometimes.
-    if (-f $meta_yml) {
+    if (-f $meta_yml && -r _) {
         _analyse_yml($me, $meta_yml);
     }
 
     # check also META.json (if exists).
-    if (-f $meta_json) {
+    if (-f $meta_json && -r _) {
         _analyse_json($me, $meta_json);
     }
 
     # If, and only if META.yml and META.json don't exist,
     # try MYMETA.yml
-    if (!$me->d->{meta_yml} && -f $mymeta_yml) {
+    if (!$me->d->{meta_yml} && -f $mymeta_yml && -r _) {
         _analyse_yml($me, $mymeta_yml);
     }
 
