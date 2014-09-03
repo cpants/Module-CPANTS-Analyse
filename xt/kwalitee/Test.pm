@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use FindBin;
 use Test::More;
+use JSON::MaybeXS;
 
 BEGIN {
   eval { require WorePAN };
@@ -19,8 +20,6 @@ sub run {
   my ($caller, $file) = caller;
 
   my ($name) = $file =~ /(\w+)\.t$/;
-
-  plan tests => scalar @tests;
 
   for my $test (@tests) {
     my $worepan = WorePAN->new(
@@ -38,7 +37,16 @@ sub run {
     my $metric = $analyzer->mck->get_indicators_hash->{$name};
     my $result = $metric->{code}->($analyzer->d);
     is $result => $test->[1], "$test->[0] $name: $result";
+
+    if (!$result) {
+      my $details = $metric->{details}->($analyzer->d) || '';
+      ok $details, ref $details ? encode_json($details) : $details;
+    }
+    if ($test->[2]) {
+      note explain $analyzer->d;
+    }
   }
+  done_testing;
 }
 
 1;
