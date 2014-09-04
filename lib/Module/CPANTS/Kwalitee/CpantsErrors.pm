@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use version;
 
-our $VERSION = '0.93_03';
+our $VERSION = '0.93_04';
 $VERSION = eval $VERSION; ## no critic
 
 sub order { 1000 }

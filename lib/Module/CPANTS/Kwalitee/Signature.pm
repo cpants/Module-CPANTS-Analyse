@@ -2,7 +2,7 @@ package Module::CPANTS::Kwalitee::Signature;
 use strict;
 use warnings;
 
-our $VERSION = '0.93_03';
+our $VERSION = '0.93_04';
 $VERSION = eval $VERSION; ## no critic
 
 sub order { 100 }

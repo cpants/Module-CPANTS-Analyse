@@ -1,5 +1,12 @@
 Revision history for Module-CPANTS-Analyse
 
+0.93_04 2014-09-05
+  - Accept COPYING as a license file
+  - Take included module (under inc/) into consideration while
+    analyzing prereq_matches_use
+  - Changed most of the META.yml metrics to pass if META.yml doesn't
+    exist
+
 0.93_03 2014-08-13
   - Added meta_json_is_parsable and meta_json_conforms_to_known_spec
   - Added meta_yml_has_repository_resource
