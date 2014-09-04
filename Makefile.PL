@@ -24,5 +24,5 @@ WriteMakefile(
     ],
   },
 
-  test => {RECURSIVE_TEST_FILES => 1},
+  test => {TESTS => 't/*.t t/*/*.t'},
 );
