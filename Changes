@@ -1,5 +1,9 @@
 Revision history for Module-CPANTS-Analyse
 
+0.94 2014-09-26
+  - Fixed RT#99141 - use_strict metric does not recognize
+    `use v5.14` syntax (ishigaki)
+
 0.93_04 2014-09-05
   - Accept COPYING as a license file
   - Take included module (under inc/) into consideration while

@@ -6,7 +6,7 @@ use File::Spec::Functions qw(catdir catfile abs2rel splitdir);
 use File::stat;
 use File::Basename;
 
-our $VERSION = '0.93_04';
+our $VERSION = '0.94';
 $VERSION = eval $VERSION; ## no critic
 
 sub order { 15 }

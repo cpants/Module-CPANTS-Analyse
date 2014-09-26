@@ -8,7 +8,7 @@ use CPAN::Meta::Converter;
 use JSON::MaybeXS;
 use List::Util qw/first/;
 
-our $VERSION = '0.93_04';
+our $VERSION = '0.94';
 $VERSION = eval $VERSION; ## no critic
 
 sub order { 10 }
