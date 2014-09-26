@@ -14,13 +14,29 @@ use Module::CPANTS::Analyse;
 use CPAN::Meta::YAML;
 use Test::More;
 
-our @EXPORT = (qw/
+our @EXPORT = qw/
   test_distribution
   write_file
   write_pmfile
   write_metayml
   archive_and_analyse
-/, @Test::More::EXPORT);
+/;
+
+push @EXPORT, \$Test::More::TODO, grep {Test::More->can($_)} qw/
+  ok use_ok require_ok
+  is isnt like unlike is_deeply
+  cmp_ok
+  skip todo_skip
+  pass fail
+  eq_array eq_hash eq_set
+  plan
+  done_testing
+  can_ok isa_ok new_ok
+  diag note explain
+  BAIL_OUT
+  subtest
+  nest
+/;
 
 sub test_distribution (&) {
   my $code = shift;
