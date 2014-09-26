@@ -126,7 +126,7 @@ sub _extract_use {
     my %combined;
     for my $mod (keys %used) {
         next if $mod =~ /::$/; # see RT#35092
-        next unless $mod =~ /^(?:5\.[0-9.]+|[A-za-z0-9:_]+)$/;
+        next unless $mod =~ /^(?:v?5\.[0-9.]+|[A-za-z0-9:_]+)$/;
         $combined{used}{$mod} += $used{$mod};
         if (my $used_in_eval = $p->used_in_eval($mod)) {
             $combined{used_in_eval}{$mod} += $used_in_eval;
@@ -195,7 +195,7 @@ sub kwalitee_indicators {
                         next unless exists $files->{$file}{$key};
                         $used{$_} = 1 for @{$files->{$file}{$key} || []};
                     }
-                    next if grep {/^5\./ && version->parse($_)->numify >= $perl_version_with_implicit_stricture} keys %used;
+                    next if grep {/^v?5\./ && version->parse($_)->numify >= $perl_version_with_implicit_stricture} keys %used;
 
                     push @no_strict, $module if $strict_equivalents
                         ->intersection(Set::Scalar->new(keys %used))
