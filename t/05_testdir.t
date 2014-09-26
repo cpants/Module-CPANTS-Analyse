@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::Warnings;
+use Test::FailWarnings;
 
 use Module::CPANTS::Analyse;
 
