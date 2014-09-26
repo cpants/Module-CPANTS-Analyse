@@ -17,6 +17,6 @@ requires 'version' => '0.73';
 
 on test => sub {
   requires 'Cwd' => 0;
-  requires 'Test::More' => '0';
+  requires 'Test::More' => '0.88';
   requires 'Test::Warnings' => 0;
 };
