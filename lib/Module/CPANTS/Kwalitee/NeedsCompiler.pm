@@ -2,7 +2,7 @@ package Module::CPANTS::Kwalitee::NeedsCompiler;
 use warnings;
 use strict;
 
-our $VERSION = '0.94';
+our $VERSION = '0.95';
 $VERSION = eval $VERSION; ## no critic
 
 sub order { 200 }

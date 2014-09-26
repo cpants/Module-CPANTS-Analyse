@@ -4,7 +4,7 @@ use strict;
 use File::Spec::Functions qw(catfile);
 use Array::Diff;
 
-our $VERSION = '0.94';
+our $VERSION = '0.95';
 $VERSION = eval $VERSION; ## no critic
 
 sub order { 100 }

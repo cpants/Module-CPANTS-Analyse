@@ -1,5 +1,8 @@
 Revision history for Module-CPANTS-Analyse
 
+0.95 2014-09-26
+  - Switched to Test::FailWarnings to make CPAN testers happier
+
 0.94 2014-09-26
   - Fixed RT#99141 - use_strict metric does not recognize
     `use v5.14` syntax (ishigaki)

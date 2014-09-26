@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use File::Spec::Functions;
 
-our $VERSION = '0.94';
+our $VERSION = '0.95';
 $VERSION = eval $VERSION; ## no critic
 
 sub order { 30 }

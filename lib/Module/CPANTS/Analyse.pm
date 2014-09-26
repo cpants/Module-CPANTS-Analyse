@@ -14,7 +14,7 @@ use IO::Capture::Stdout;
 use IO::Capture::Stderr;
 use CPAN::DistnameInfo;
 
-our $VERSION = '0.94';
+our $VERSION = '0.95';
 $VERSION = eval $VERSION; ## no critic
 
 # setup logger
