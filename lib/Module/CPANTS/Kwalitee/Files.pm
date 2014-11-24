@@ -109,7 +109,7 @@ sub analyse {
 
     my %special_files_re=(
         file_changelog=>qr{^(?:$base_dirs_re)(?:chang|history)}i,
-        file_readme=>qr{^(?:$base_dirs_re)readme(?:\.(?:txt|md))?}i,
+        file_readme=>qr{^(?:$base_dirs_re)readme(?:\.(?:txt|md|pod))?}i,
     );
 
     for my $base_dir ('', @base_dirs) {
