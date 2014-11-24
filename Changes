@@ -1,5 +1,12 @@
 Revision history for Module-CPANTS-Analyse
 
+0.96 2014-11-24
+  - Added an import option to load extra Kwalitee plugins.
+  - Fixed RT#100512 - has_readme now accepts README.pod as well
+  - Improved no_abstract_stub_in_pod to detect "The great new"
+    as a boilerplate
+  - Switched to File::Find::Object
+
 0.95 2014-09-26
   - Switched to Test::FailWarnings to make CPAN testers happier
 
