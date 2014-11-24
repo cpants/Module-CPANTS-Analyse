@@ -1,7 +1,7 @@
 package Module::CPANTS::Kwalitee::FindModules;
 use warnings;
 use strict;
-use File::Spec::Functions;
+use File::Spec::Functions qw(catfile);
 
 our $VERSION = '0.95';
 $VERSION = eval $VERSION; ## no critic

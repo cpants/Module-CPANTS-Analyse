@@ -2,9 +2,8 @@ package Module::CPANTS::Kwalitee::Files;
 use warnings;
 use strict;
 use File::Find::Object;
-use File::Spec::Functions qw(catdir catfile abs2rel splitdir);
+use File::Spec::Functions qw(catfile);
 use File::stat;
-use File::Basename;
 
 our $VERSION = '0.95';
 $VERSION = eval $VERSION; ## no critic
