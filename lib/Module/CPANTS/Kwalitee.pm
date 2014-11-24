@@ -3,13 +3,20 @@ use 5.006;
 use strict;
 use warnings;
 use base qw(Class::Accessor);
-use Module::Pluggable search_path=>['Module::CPANTS::Kwalitee'];
 use Carp;
 
 our $VERSION = '0.95';
 $VERSION = eval $VERSION; ## no critic
 
 __PACKAGE__->mk_accessors(qw(generators _gencache _genhashcache _available _total));
+
+sub import {
+    my $class = shift;
+    my %search_path = map {(/^Module::CPANTS::/ ? $_ : "Module::CPANTS::$_") => 1 } @_;
+    $search_path{'Module::CPANTS::Kwalitee'} = 1;
+    require Module::Pluggable;
+    Module::Pluggable->import(search_path => [keys %search_path]);
+}
 
 sub new {
     my $class=shift;
