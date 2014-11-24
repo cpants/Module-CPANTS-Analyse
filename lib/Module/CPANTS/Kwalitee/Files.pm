@@ -1,7 +1,7 @@
 package Module::CPANTS::Kwalitee::Files;
 use warnings;
 use strict;
-use File::Find;
+use File::Find::Object;
 use File::Spec::Functions qw(catdir catfile abs2rel splitdir);
 use File::stat;
 use File::Basename;
@@ -29,64 +29,64 @@ sub analyse {
     my $size = 0;
     my $latest_mtime = 0;
     my @base_dirs;
-    find({
-        no_chdir => 1,
-        wanted => sub {
-            my $name = $File::Find::name;
-            (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or return;
-            return if $path eq '';
-
-            if (-d $name) {
-                $dirs{$path} ||= {};
-                if (-l $name) {
-                    $dirs{$path}{symlink} = 1;
-                }
-                push @dirs_array, $path;
-                return;
-            }
-
-            if ($me->d->{is_local_distribution}) {
-                return if $path =~ m!/\.!;
-            }
-
-            if (my $stat = stat($name)) {
-                $files{$path}{size} = $stat->size || 0;
-                $size += $files{$path}{size};
-
-                my $mtime = $files{$path}{mtime} = $stat->mtime;
-                $latest_mtime = $mtime if $mtime > $latest_mtime;
-            } else {
-                $files{$path}{stat_error} = $!;
-                return;
-            }
-
-            if (-l $name) {
-                $files{$path}{symlink} = 1;
-            }
-
-            if (!-r $name) {
-                $files{$path}{unreadable} = 1;
-                return;
-            }
-
-            if ($no_index_re && $path =~ qr/$no_index_re/) {
-                $files{$path}{no_index} = 1;
-                return;
-            }
-
-            # ignore files in dot directories (probably VCS stuff)
-            return if $path =~ m!(?:^|/)\.[^/]+/!;
-
-            push @files_array, $path;
-
-            # distribution may have several Makefile.PLs, thus
-            # several 'lib' or 't' directories to care
-            if ($path =~ m!/Makefile\.PL$! && $path !~ m!(^|/)x?t/!) {
-                (my $dir = $path) =~ s|/[^/]+$||;
-                push @base_dirs, $dir;
-            }
-        },
+    my $finder = File::Find::Object->new({
+        depth => 1,
     }, $distdir);
+    while(defined(my $name = $finder->next)) {
+        $name =~ s|\\|/|g if $^O eq 'MSWin32';
+        (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or next;
+        next if $path eq '';
+
+        if (-d $name) {
+            $dirs{$path} ||= {};
+            if (-l $name) {
+                $dirs{$path}{symlink} = 1;
+            }
+            push @dirs_array, $path;
+            next;
+        }
+
+        if ($me->d->{is_local_distribution}) {
+            next if $path =~ m!/\.!;
+        }
+
+        if (my $stat = stat($name)) {
+            $files{$path}{size} = $stat->size || 0;
+            $size += $files{$path}{size};
+
+            my $mtime = $files{$path}{mtime} = $stat->mtime;
+            $latest_mtime = $mtime if $mtime > $latest_mtime;
+        } else {
+            $files{$path}{stat_error} = $!;
+            next;
+        }
+
+        if (-l $name) {
+            $files{$path}{symlink} = 1;
+        }
+
+        if (!-r $name) {
+            $files{$path}{unreadable} = 1;
+            next;
+        }
+
+        if ($no_index_re && $path =~ qr/$no_index_re/) {
+            $files{$path}{no_index} = 1;
+            next;
+        }
+
+        # ignore files in dot directories (probably VCS stuff)
+        next if $path =~ m!(?:^|/)\.[^/]+/!;
+
+        push @files_array, $path;
+
+        # distribution may have several Makefile.PLs, thus
+        # several 'lib' or 't' directories to care
+        if ($path =~ m!/Makefile\.PL$! && $path !~ m!(^|/)x?t/!) {
+            (my $dir = $path) =~ s|/[^/]+$||;
+            push @base_dirs, $dir;
+        }
+    }
 
     $me->d->{size_unpacked}=$size;
     $me->d->{latest_mtime}=$latest_mtime;

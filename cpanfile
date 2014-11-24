@@ -5,6 +5,7 @@ requires 'Class::Accessor' => '0.19';
 requires 'CPAN::DistnameInfo' => '0.06';
 requires 'CPAN::Meta::YAML' => '0.008';
 requires 'CPAN::Meta::Validator' => '2.133380';
+requires 'File::Find::Object' => '0.2.1';
 requires 'IO::Capture' => '0.05';
 requires 'JSON::MaybeXS' => 0;
 requires 'Module::ExtractUse' => '0.33'; # for no support
