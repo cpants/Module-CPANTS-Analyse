@@ -156,17 +156,6 @@ sub kwalitee_indicators{
                 return "LICENSE file was found.";
             },
         },
-#        {
-#            name=>'has_known_license_in_external_license_file',
-#            error=>q{This distribution has a LICENSE or LICENCE file in its root directory but the license in it was not recognized by CPANTS.},
-#            remedy=>q{Either CPANTS needs to be fixed or your LICENSE file.},
-#            is_experimental=>1,
-#            code=>sub { 
-#                my $d = shift;
-#                return 1 if not $d->{external_license_file};
-#                return $d->{license_from_external_license_file} ? 1 : 0;
-#            },
-#        },
         {
             name=>'has_license_in_source_file',
             error=>q{Does not have license information in any of its source files},

@@ -36,7 +36,7 @@ Module::CPANTS::Kwalitee::Signature - dist has a valid signature
 
 =head1 SYNOPSIS
 
-The metrics in this module have moved to L<Module::CPANTS::SiteKwalitee::Signature>.
+The metrics in this module have moved to L<Module::CPANTS::SiteKwalitee::Signature|https://github.com/cpants/Module-CPANTS-SiteKwalitee>.
 
 =head1 DESCRIPTION
 

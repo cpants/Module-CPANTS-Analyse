@@ -51,7 +51,7 @@ Module::CPANTS::Kwalitee::Distros - Information retrieved from the various Linux
 
 =head1 SYNOPSIS
 
-The metrics here were based on data provided by the various downstream packaging systems, but are deprecated now. The list is only preserved for historical reasons.
+The metrics here were based on data provided by the various downstream packaging systems, but are deprecated now.
 
 =head1 DESCRIPTION
 
@@ -63,40 +63,11 @@ Defines the order in which Kwalitee tests should be run.
 
 =head3 analyse
 
+Does nothing now.
+
 =head3 kwalitee_indicators
 
 Returns the Kwalitee Indicators datastructure.
-
-=head1 Caveats
-
-CPAN_dist, the name of CPAN distribution is inferred from the download location,
-for Debian packages. It works 99% of the time, but it is not completely reliable.
-If it fails to detect something, it will spit out the known download location.
-
-CPAN_vers, the version number reported by Debian is inferred from the debian version.
-This fails a lot, since Debian has a mechanism for "unmangling" upstream versions which
-is non-reversible. We have to use that many times to fix versioning problems, 
-and those packages will show a different version (e.g. 1.080 vs 1.80)
-
-The first problem is something the Debian people like to solve by adding 
-metadata to the packages, for many other useful stuff 
-(like automatic upstream bug tracking and handling). About the second... well, 
-it's a difficult one.
-
-CPANTS does not yet handle the second issue.
-
-=head1 LINKS
-
-Basic homepage: http://packages.debian.org/src:$pkgname
-
-Detailed homepage: http://packages.qa.debian.org/$pkgname
-
-Bugs report: http://bugs.debian.org/src:$pkgname
-
-Public SVN repository: http://svn.debian.org/wsvn/pkg-perl/trunk/$pkg
-
-From that last URL, you might be interested in the debian/ and
-debian/patches subdirectories.
 
 =head1 SEE ALSO
 

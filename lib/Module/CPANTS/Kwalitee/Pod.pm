@@ -149,7 +149,7 @@ Module::CPANTS::Kwalitee::Pod - Check Pod
 
 =head1 SYNOPSIS
 
-The check in this module has moved to L<Module::CPANTS::SiteKwalitee::Pod> to double-check the pod correctness on the server side.
+Some of the check in this module has moved to L<Module::CPANTS::SiteKwalitee::Pod|https://github.com/cpants/Module-CPANTS-SiteKwalitee> to double-check the pod correctness on the server side.
 
 If you do care, it is recommended to add a test to test pod (with L<Test::Pod>) in "xt/" directory in your distribution.
 
@@ -165,7 +165,7 @@ Returns C<100>.
 
 =head3 analyse
 
-Does nothing now.
+Parses pod to see if it has a proper abstract.
 
 =head3 kwalitee_indicators
 

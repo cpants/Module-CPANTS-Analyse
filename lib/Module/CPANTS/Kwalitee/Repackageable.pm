@@ -19,7 +19,7 @@ sub analyse {
     # Module::CPANTS::SiteKwalitee.
 
     # Note also that this stub should not be removed so that
-    # this can replace the old ::Signature module, and the old
+    # this can replace the old ::Repackageable module, and the old
     # metrics will not be loaded while loading plugins.
 
     return;
@@ -46,7 +46,7 @@ Module::CPANTS::Kwalitee::Repackageable - Checks for various signs that make a m
 
 =head1 SYNOPSIS
 
-There are several aggregate metrics in here.
+The metrics in this module have moved to L<Module::CPANTS::SiteKwalitee|https://github.com/cpants/Module-CPANTS-SiteKwalitee>.
 
 =head1 DESCRIPTION
 
