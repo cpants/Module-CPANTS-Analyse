@@ -10,6 +10,7 @@ $VERSION = eval $VERSION; ## no critic
 our @ABSTRACT_STUBS = (
   q{Perl extension for blah blah blah}, # h2xs
   q{[One line description of module's purpose here]}, # Module::Starter etc
+  q{The great new}, # Module::Starter
   q{It's new $module}, # Minilla
 );
 
