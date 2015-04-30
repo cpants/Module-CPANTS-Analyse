@@ -12,7 +12,6 @@ requires 'Module::ExtractUse' => '0.33'; # for no support
 requires 'Module::Pluggable' => '2.96';
 requires 'Set::Scalar' => 0;
 requires 'Software::License' => '0.103008';
-requires 'Software::License::CC_BY_SA_3_0' => 0; # installs whole Software::License::CCpack
 requires 'Text::Balanced' => 0;
 requires 'version' => '0.73';
 
