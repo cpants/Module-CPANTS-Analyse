@@ -250,7 +250,7 @@ sub kwalitee_indicators {
     },
     {
         name=>'has_changelog',
-        error=>q{The distribution hasn't got a Changelog (named something like m/^chang(es?|log)|history$/i. A Changelog helps people decide if they want to upgrade to a new version.},
+        error=>q{The distribution hasn't got a Changelog (named something like m/^chang(es?|log)|history$/i). A Changelog helps people decide if they want to upgrade to a new version.},
         remedy=>q{Add a Changelog (best named 'Changes') to the distribution. It should list at least major changes implemented in newer versions.},
         code=>sub { shift->{file_changelog} ? 1 : 0 },
         details=>sub {
