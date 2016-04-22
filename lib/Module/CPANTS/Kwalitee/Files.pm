@@ -117,14 +117,14 @@ sub analyse {
             my $file = "$base_dir$name";
             if (exists $files{$file}) {
                 (my $key = "file_".lc $name) =~ s/\./_/;
-                $me->d->{$key} = $me->d->{$key} ? "$me->d->{$key},$file" : $file;
+                $me->d->{$key} = $me->d->{$key} ? $me->d->{$key}.",$file" : $file;
             }
         }
         for my $name (@special_dirs) {
             my $dir = "$base_dir$name";
             if (exists $dirs{$dir}) {
                 my $key = "dir_$name";
-                $me->d->{$key} = $me->d->{$key} ? "$me->d->{$key},$dir" : $dir;
+                $me->d->{$key} = $me->d->{$key} ? $me->d->{$key}.",$dir" : $dir;
             }
         }
     }
