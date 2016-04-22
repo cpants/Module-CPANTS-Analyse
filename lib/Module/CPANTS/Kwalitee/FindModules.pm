@@ -107,6 +107,13 @@ sub analyse {
         push @{$me->d->{included_modules} ||= []}, $module;
     }
 
+    if (exists $me->d->{modules}) {
+        $me->d->{modules} = [sort {$a->{module} cmp $b->{module}}  @{$me->d->{modules}}];
+    }
+    if (exists $me->d->{included_modules}) {
+        $me->d->{included_modules} = [sort @{$me->d->{included_modules}}];
+    }
+
     return 1;
 }
 

@@ -63,7 +63,7 @@ sub _from_meta {
     }
 
     return unless %res;
-    $me->d->{prereq} = [map {@$_} values %res];
+    $me->d->{prereq} = [sort {$a->{requires} cmp $b->{requires}} map {@$_} values %res];
     $me->d->{got_prereq_from} = 'META.yml';
 }
 
@@ -78,7 +78,7 @@ sub _from_cpanfile {
     my %res = $class->_handle_prereqs_v2($prereqs);
     return unless %res;
 
-    $me->d->{prereq} = [map {@$_} values %res];
+    $me->d->{prereq} = [sort {$a->{requires} cmp $b->{requires}} map {@$_} values %res];
     $me->d->{got_prereq_from} = 'cpanfile';
 }
 
@@ -120,7 +120,7 @@ sub _from_build_pl {
 
         $build_pl = $left;
     }
-    $me->d->{prereq} = [map {@$_} values %res];
+    $me->d->{prereq} = [sort {$a->{requires} cmp $b->{requires}} map {@$_} values %res];
     $me->d->{got_prereq_from} = 'Build.PL';
 }
 
@@ -186,7 +186,7 @@ sub _from_makefile_pl {
             }
         }
     }
-    $me->d->{prereq} = [map {@$_} values %res];
+    $me->d->{prereq} = [sort {$a->{requires} cmp $b->{requires}} map {@$_} values %res];
     $me->d->{got_prereq_from} = 'Makefile.PL';
 }
 
@@ -283,7 +283,7 @@ sub _from_dist_ini {
             };
         }
     }
-    $me->d->{prereq} = [map {@$_} values %res];
+    $me->d->{prereq} = [sort {$a->{requires} cmp $b->{requires}} map {@$_} values %res];
     $me->d->{got_prereq_from} = 'dist.ini';
 }
 

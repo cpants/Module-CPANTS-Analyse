@@ -99,12 +99,12 @@ sub analyse {
         $me->d->{error}{symlinks} = join ',', @symlinks;
     }
 
-    $me->d->{base_dirs} = \@base_dirs if @base_dirs;
+    $me->d->{base_dirs} = [sort @base_dirs] if @base_dirs;
     my $base_dirs_re = join '|', '', map {quotemeta "$_/"} @base_dirs;
 
     # find special files/dirs
-    my @special_files=(qw(Makefile.PL Build.PL META.yml META.json MYMETA.yml MYMETA.json dist.ini cpanfile SIGNATURE MANIFEST test.pl LICENSE LICENCE));
-    my @special_dirs=(qw(lib t xt));
+    my @special_files=sort (qw(Makefile.PL Build.PL META.yml META.json MYMETA.yml MYMETA.json dist.ini cpanfile SIGNATURE MANIFEST test.pl LICENSE LICENCE));
+    my @special_dirs=sort (qw(lib t xt));
 
     my %special_files_re=(
         file_changelog=>qr{^(?:$base_dirs_re)(?:chang|history)}i,
@@ -129,7 +129,7 @@ sub analyse {
         }
     }
 
-    for my $file (keys %files) {
+    for my $file (sort keys %files) {
         next unless $file =~ m!^(?:$base_dirs_re)[^/]+$!;
         while(my ($key, $re) = each %special_files_re) {
             if ($file =~ /$re/) {

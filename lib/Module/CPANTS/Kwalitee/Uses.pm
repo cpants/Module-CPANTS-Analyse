@@ -199,7 +199,7 @@ sub kwalitee_indicators {
                     push @no_strict, $module if none {exists $used{$_}} (@STRICT_EQUIV, @STRICT_WARNINGS_EQUIV);
                 }
                 if (@no_strict) {
-                    $d->{error}{use_strict} = join ", ", @no_strict;
+                    $d->{error}{use_strict} = join ", ", sort @no_strict;
                     return 0;
                 }
                 return 1;
@@ -233,7 +233,7 @@ sub kwalitee_indicators {
                     push @no_warnings, $module if none {exists $used{$_}} (@WARNINGS_EQUIV, @STRICT_WARNINGS_EQUIV);
                 }
                 if (@no_warnings) {
-                    $d->{error}{use_warnings} = join ", ", @no_warnings;
+                    $d->{error}{use_warnings} = join ", ", sort @no_warnings;
                     return 0;
                 }
                 return 1;
