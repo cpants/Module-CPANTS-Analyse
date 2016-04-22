@@ -47,8 +47,10 @@ sub analyse {
         my $pod_head = '';
         my @possible_licenses;
         my @unknown_license_texts;
+        my $uc_head;
         while(<$fh>) {
-            if (/^=head\d\s+.*\b(?i:LICEN[CS]E|LICEN[CS]ING|COPYRIGHT|LEGAL)\b/) {
+            my $first_four = substr($_, 0, 4);
+            if ($first_four eq '=hea' && (($uc_head = uc $_) =~ /(?:LICEN[CS]E|LICEN[CS]ING|COPYRIGHT|LEGAL)/)) {
                 $me->d->{license_in_pod} = 1;
                 $me->d->{license} ||= "defined in POD ($file)";
                 if ($in_pod) {
@@ -64,7 +66,7 @@ sub analyse {
                 $pod_head = $_;
                 $pod = '';
             }
-            elsif (/^=(?:head\d\s+|cut)\b/) {
+            elsif ($first_four eq '=hea' or $first_four eq '=cut') {
                 if ($in_pod) {
                     my @guessed = Software::LicenseUtils->guess_license_from_pod("=head1 LICENSE\n$pod\n\n=cut\n");
                     if (@guessed) {

@@ -51,14 +51,16 @@ sub _parse_abstract {
     my $directive;
     my $encoding;
     while(<$fh>) {
-        if (/^=encoding\s+(.+)/) {
-            $encoding = $1;
-        }
-        if (/^=(?!cut)(.+)/) {
-            $directive = $1;
-            $inpod = 1;
-        } elsif (/^=cut/) {
-            $inpod = 0;
+        if (substr($_, 0, 1) eq '=') {
+            if (/^=encoding\s+(.+)/) {
+                $encoding = $1;
+            }
+            if (/^=cut/) {
+                $inpod = 0;
+            } elsif (/^=(?!cut)(.+)/) {
+                $directive = $1;
+                $inpod = 1;
+            }
         }
         next if !$inpod;
         next unless $directive =~ /^head/;
