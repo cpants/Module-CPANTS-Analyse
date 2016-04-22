@@ -117,28 +117,26 @@ sub total_kwalitee {
     $self->_total($available);
 }
 
-sub all_indicator_names {
-    my $self=shift;
-    my @all=map { $_->{name} } $self->get_indicators;
-    return wantarray ? @all : \@all;
+sub _indicator_names {
+    my ($self, $coderef) = @_;
+    my @names = map { $_->{name} } grep {$coderef->($_)} $self->get_indicators;
+    return wantarray ? @names : \@names;
 }
 
+sub all_indicator_names { shift->_indicator_names(sub {1}) }
+
 sub core_indicator_names {
-    my $self=shift;
-    my @all=map { $_->{name} } grep { !$_->{is_extra} && !$_->{is_experimental} } $self->get_indicators;
-    return wantarray ? @all : \@all;
+    shift->_indicator_names(sub {
+        !$_->{is_extra} && !$_->{is_experimental}
+    });
 }
 
 sub optional_indicator_names {
-    my $self=shift;
-    my @all=map { $_->{name} } grep { $_->{is_extra} } $self->get_indicators;
-    return wantarray ? @all : \@all;
+    shift->_indicator_names(sub {$_->{is_extra}});
 }
 
 sub experimental_indicator_names {
-    my $self=shift;
-    my @all=map { $_->{name} } grep { $_->{is_experimental} } $self->get_indicators;
-    return wantarray ? @all : \@all;
+    shift->_indicator_names(sub {$_->{is_experimental}});
 }
 
 q{Favourite record of the moment:
