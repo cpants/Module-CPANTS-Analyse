@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use File::Spec::Functions qw(catfile);
 use Module::ExtractUse 0.33;
-use Set::Scalar qw();
+use List::Util 1.33 qw/none/;
 use version;
 
 our $VERSION = '0.96';
@@ -179,9 +179,6 @@ sub kwalitee_indicators {
                 my $d       = shift;
                 my $files = $d->{files_hash} || {};
 
-                # There are lots of acceptable strict alternatives
-                my $strict_equivalents = Set::Scalar->new->insert(@STRICT_EQUIV, @STRICT_WARNINGS_EQUIV);
-
                 my $perl_version_with_implicit_stricture = version->new('5.011')->numify;
                 my @no_strict;
 
@@ -197,9 +194,8 @@ sub kwalitee_indicators {
                     }
                     next if grep {/^v?5\./ && version->parse($_)->numify >= $perl_version_with_implicit_stricture} keys %used;
 
-                    push @no_strict, $module if $strict_equivalents
-                        ->intersection(Set::Scalar->new(keys %used))
-                        ->is_empty;
+                    # There are lots of acceptable strict alternatives
+                    push @no_strict, $module if none {exists $used{$_}} (@STRICT_EQUIV, @STRICT_WARNINGS_EQUIV);
                 }
                 if (@no_strict) {
                     $d->{error}{use_strict} = join ", ", @no_strict;
@@ -222,8 +218,6 @@ sub kwalitee_indicators {
                 my $d = shift;
                 my $files = $d->{files_hash} || {};
 
-                my $warnings_equivalents = Set::Scalar->new->insert(@WARNINGS_EQUIV, @STRICT_WARNINGS_EQUIV);
-
                 my @no_warnings;
                 for my $file (keys %$files) {
                     next unless exists $files->{$file}{module};
@@ -235,9 +229,7 @@ sub kwalitee_indicators {
                         next unless exists $files->{$file}{$key};
                         $used{$_} = 1 for @{$files->{$file}{$key} || []};
                     }
-                    push @no_warnings, $module if $warnings_equivalents
-                        ->intersection(Set::Scalar->new(keys %used))
-                        ->is_empty;
+                    push @no_warnings, $module if none {exists $used{$_}} (@WARNINGS_EQUIV, @STRICT_WARNINGS_EQUIV);
                 }
                 if (@no_warnings) {
                     $d->{error}{use_warnings} = join ", ", @no_warnings;

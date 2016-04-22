@@ -9,7 +9,6 @@ requires 'File::Find::Object' => '0.2.1';
 requires 'JSON::MaybeXS' => 0;
 requires 'Module::ExtractUse' => '0.33'; # for no support
 requires 'Module::Pluggable' => '2.96';
-requires 'Set::Scalar' => 0;
 requires 'Software::License' => '0.103008';
 requires 'Text::Balanced' => 0;
 requires 'version' => '0.73';
