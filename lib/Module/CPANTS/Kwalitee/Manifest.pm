@@ -23,7 +23,7 @@ sub analyse {
     if (-e $manifest_file) {
         # read manifest
         open(my $fh, '<', $manifest_file) || die "cannot read MANIFEST $manifest_file: $!";
-        my @manifest;
+        my %seen;
         while (<$fh>) {
             chomp;
             next if /^\s*#/; # discard pure comments
@@ -33,23 +33,32 @@ sub analyse {
                 s/\s.*$//;
             } # strip quotes and comments
             next unless $_; # discard blank lines
-            push(@manifest,$_);
+            $seen{$_}++;
         }
         close $fh;
 
-        @manifest=sort @manifest;
+        my @manifest=sort keys %seen;
         my @files=sort keys %{$me->d->{files_hash} || {}};
+        my @dupes = grep {$seen{$_} > 1} @manifest;
 
         my $diff=Array::Diff->diff(\@manifest,\@files);
-        if ($diff->count == 0) {
+        if ($diff->count == 0 && !@dupes) {
             $me->d->{manifest_matches_dist}=1;
         }
         else {
             $me->d->{manifest_matches_dist}=0;
             my @error = ( 
-                'MANIFEST ('.@manifest.') does not match dist ('.@files."):",
-                "Missing in MANIFEST: ".join(', ',@{$diff->added}), 
-                "Missing in Dist: " . join(', ',@{$diff->deleted}));
+                'MANIFEST ('.(@manifest + @dupes).') does not match dist ('.@files."):",
+            );
+            if (my @added = @{$diff->added}) {
+                push @error, "Missing in MANIFEST: ".join(', ',@added);
+            }
+            if (my @deleted = @{$diff->deleted}) {
+                push @error, "Missing in Dist: " . join(', ',@deleted);
+            }
+            if (@dupes) {
+                push @error, "Duplicates in MANIFEST: " . join(', ',@dupes);
+            }
             $me->d->{error}{manifest_matches_dist} = \@error;
         }
 
