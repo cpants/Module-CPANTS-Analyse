@@ -16,13 +16,6 @@ use CPAN::DistnameInfo;
 our $VERSION = '0.96';
 $VERSION = eval $VERSION; ## no critic
 
-# setup logger
-if (! main->can('logger')) {
-    *main::logger = sub {
-        print "## $_[0]\n" if $main::logging;
-    };
-}
-
 __PACKAGE__->mk_accessors(qw(dist opts tarball distdir d mck capture_stdout capture_stderr));
 __PACKAGE__->mk_accessors(qw(_testdir _dont_cleanup _tarball _x_opts));
 
@@ -38,9 +31,7 @@ sub new {
     $opts->{d}={};
     $opts->{opts} ||= {};
     my $me=bless $opts,$class;
-    $main::logging = 1 if $me->opts->{verbose};
     Carp::croak("need a dist") if not defined $opts->{dist};
-    main::logger("distro: $opts->{dist}");
 
     $me->mck(Module::CPANTS::Kwalitee->new);
 
@@ -138,7 +129,6 @@ sub analyse {
     my $me=shift;
 
     foreach my $mod (@{$me->mck->generators}) {
-        main::logger("analyse $mod");
         $mod->analyse($me);
     }
 }
@@ -151,7 +141,6 @@ sub calc_kwalitee {
     my %x_ignore = %{$me->x_opts->{ignore} || {}};
     foreach my $i ($me->mck->get_indicators) {
         next if $i->{needs_db};
-        main::logger($i->{name});
         my $rv=$i->{code}($me->d, $i);
         $me->d->{kwalitee}{$i->{name}}=$rv;
         if ($x_ignore{$i->{name}} && $i->{ignorable}) {
@@ -164,7 +153,6 @@ sub calc_kwalitee {
     }
 
     $me->d->{'kwalitee'}{'kwalitee'}=$kwalitee;
-    main::logger("done");
 }
 
 #----------------------------------------------------------------
