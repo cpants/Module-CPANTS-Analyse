@@ -9,14 +9,12 @@ use File::Copy;
 use File::stat;
 use Archive::Any::Lite;
 use Carp;
-use IO::Capture::Stdout;
-use IO::Capture::Stderr;
 use CPAN::DistnameInfo;
 
 our $VERSION = '0.96';
 $VERSION = eval $VERSION; ## no critic
 
-__PACKAGE__->mk_accessors(qw(dist opts tarball distdir d mck capture_stdout capture_stderr));
+__PACKAGE__->mk_accessors(qw(dist opts tarball distdir d mck));
 __PACKAGE__->mk_accessors(qw(_testdir _dont_cleanup _tarball _x_opts));
 
 sub import {
@@ -37,15 +35,7 @@ sub new {
 
     # For Test::Kwalitee and friends
     $me->d->{is_local_distribution} = 1 if -d $opts->{dist};
-    
-    unless ($me->opts->{no_capture} or $INC{'Test/More.pm'}) {
-        my $cserr=IO::Capture::Stderr->new;
-        my $csout=IO::Capture::Stdout->new;
-        $cserr->start;
-        $csout->start;
-        $me->capture_stderr($cserr);
-        $me->capture_stdout($csout);
-    }
+
     return $me; 
 }
 
@@ -85,10 +75,6 @@ sub unpack {
     };
 
     if (my $error=$@) {
-        if (not $INC{'Test/More.pm'}) {
-            $me->capture_stdout->stop;
-            $me->capture_stderr->stop;
-        }
         $me->d->{extractable}=0;
         $me->d->{error}{extractable}=$error;
         $me->d->{kwalitee}{extractable}=0;
