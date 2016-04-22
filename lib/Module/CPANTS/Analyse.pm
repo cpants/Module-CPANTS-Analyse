@@ -69,10 +69,24 @@ sub unpack {
 
     copy($me->dist,$me->testfile);
 
+    my @pax_headers;
     eval {
         my $archive=Archive::Any::Lite->new($me->testfile);
-        $archive->extract($me->testdir);
+        $archive->extract($me->testdir, {tar_filter_cb => sub {
+            my $entry = shift;
+            if ($entry->name eq Archive::Tar::Constant::PAX_HEADER() or $entry->type eq 'x' or $entry->type eq 'g') {
+                push @pax_headers, $entry->name;
+                return;
+            }
+            return 1;
+        }});
     };
+    if (@pax_headers) {
+        $me->d->{no_pax_headers} = 0;
+        $me->d->{error}{no_pax_headers} = join ',', @pax_headers;
+    } else {
+        $me->d->{no_pax_headers} = 1;
+    }
 
     if (my $error=$@) {
         $me->d->{extractable}=0;
