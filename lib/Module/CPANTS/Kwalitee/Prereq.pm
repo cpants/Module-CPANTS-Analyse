@@ -4,8 +4,8 @@ use strict;
 use File::Spec::Functions qw(catfile);
 use Text::Balanced qw/extract_bracketed/;
 
-our $VERSION = '0.96';
-$VERSION = eval $VERSION; ## no critic
+our $VERSION = '0.97_01';
+$VERSION =~ s/_//; ## no critic
 
 sub order { 100 }
 

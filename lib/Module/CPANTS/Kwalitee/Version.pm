@@ -2,8 +2,8 @@ package Module::CPANTS::Kwalitee::Version;
 use warnings;
 use strict;
 
-our $VERSION = '0.96';
-$VERSION = eval $VERSION; ## no critic
+our $VERSION = '0.97_01';
+$VERSION =~ s/_//; ## no critic
 
 sub order { 100 }
 

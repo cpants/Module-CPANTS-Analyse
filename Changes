@@ -1,5 +1,13 @@
 Revision history for Module-CPANTS-Analyse
 
+0.97_01 2016-04-24
+  - Added has_meta_json metric (RT#107885)
+  - Accept a few more README extensions (mrcaron)
+  - Accept two more Moose modules as strict equivalents
+  - Various micro optimization for performance
+  - Dropped a few dependencies
+  - Doc patch from brac-mac and joenio
+
 0.96 2014-11-24
   - Added an import option to load extra Kwalitee plugins.
   - Fixed RT#100512 - has_readme now accepts README.pod as well
