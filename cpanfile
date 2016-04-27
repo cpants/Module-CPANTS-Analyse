@@ -7,6 +7,7 @@ requires 'CPAN::Meta::YAML' => '0.008';
 requires 'CPAN::Meta::Validator' => '2.133380';
 requires 'File::Find::Object' => '0.2.1';
 requires 'JSON::MaybeXS' => 0;
+requires 'List::Util' => '1.33';
 requires 'Module::ExtractUse' => '0.33'; # for no support
 requires 'Module::Pluggable' => '2.96';
 requires 'Software::License' => '0.103012';
