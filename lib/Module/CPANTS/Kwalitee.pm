@@ -5,7 +5,7 @@ use warnings;
 use base qw(Class::Accessor);
 use Carp;
 
-our $VERSION = '0.97_01';
+our $VERSION = '0.97_02';
 $VERSION =~ s/_//; ## no critic
 
 __PACKAGE__->mk_accessors(qw(generators _gencache _genhashcache _available _total));
