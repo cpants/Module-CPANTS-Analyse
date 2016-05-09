@@ -13,4 +13,7 @@ xt::kwalitee::Test::run(
   ['MUGENKEN/Bundle-Unicheck-0.02.tar.gz', 0], # 4596
   ['SMUELLER/Math-SymbolicX-Complex-1.01.tar.gz', 0], # 4719
   ['CHENRYN/Nagios-Plugin-ByGmond-0.01.tar.gz', 0], # 5159
+
+  # LICENSE.txt (RT #114274)
+  ['IKEGAMI/Syntax-Feature-Void-v1.0.0.tar.gz', 1], # 
 );
