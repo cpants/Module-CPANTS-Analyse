@@ -185,7 +185,8 @@ sub _make_no_index_regex {
         my @entries = ref $no_index->{$type} eq ref []
             ? @{ $no_index->{$type} }
             : ( $no_index->{$type} );
-        push @ignore, map {"^$_$rest"} @entries;
+        # entries may possibly have escape chars; DAGOLDEN/Class-InsideOut-0.90_01.tar.gz
+        push @ignore, map {s/\\/\\\\/g; "^$_$rest"} @entries;
     }
     return unless @ignore;
 
