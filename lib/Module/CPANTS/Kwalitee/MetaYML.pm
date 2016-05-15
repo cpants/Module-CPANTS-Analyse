@@ -5,7 +5,6 @@ use File::Spec::Functions qw(catfile);
 use CPAN::Meta::YAML;
 use CPAN::Meta::Validator;
 use CPAN::Meta::Converter;
-use JSON::MaybeXS;
 use List::Util qw/first/;
 
 our $VERSION = '0.97_02';
@@ -13,7 +12,7 @@ $VERSION =~ s/_//; ## no critic
 
 sub order { 10 }
 
-my $JSON_CLASS;
+my $JSON_DECODER = _load_json_decoder() || do { require JSON::PP; JSON::PP->can('decode_json') };
 
 ##################################################################
 # Analyse
@@ -93,7 +92,7 @@ sub _analyse_json {
     my $meta;
     eval {
         my $json = do { open my $fh, '<', $file or die "$file: $!"; local $/; <$fh> };
-        $meta = decode_json($json);
+        $meta = $JSON_DECODER->($json);
         $me->d->{meta_json_is_parsable} = 1;
     };
     if (my $error = $@) {
@@ -110,6 +109,12 @@ sub _analyse_json {
         $me->d->{meta_yml_spec_version} = $me->d->{meta_json_spec_version};
         $me->d->{meta_yml_is_meta_json} = 1;
     }
+}
+
+sub _load_json_decoder {
+    my $json_class = $ENV{CPAN_META_JSON_BACKEND} || $ENV{PERL_JSON_BACKEND} || 'JSON::PP';
+    eval "require $json_class; 1" or return;
+    $json_class->can('decode_json');
 }
 
 sub _validate_meta {
