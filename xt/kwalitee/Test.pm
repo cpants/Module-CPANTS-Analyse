@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use FindBin;
 use Test::More;
-use JSON::MaybeXS;
 
 BEGIN {
   eval { require WorePAN };
