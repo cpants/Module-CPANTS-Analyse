@@ -58,7 +58,7 @@ sub analyse {
         }
     }
 
-    $me->d->{dynamic_config} = $me->d->{meta_yml}{dynamic_config} ? 1 : 0;
+    $me->d->{dynamic_config} = (!exists $me->d->{meta_yml}{dynamic_config} or $me->d->{meta_yml}{dynamic_config}) ? 1 : 0;
 }
 
 sub _analyse_yml {
