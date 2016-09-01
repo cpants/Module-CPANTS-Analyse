@@ -193,7 +193,9 @@ sub kwalitee_indicators {
                         next unless exists $files->{$file}{$key};
                         $used{$_} = 1 for @{$files->{$file}{$key} || []};
                     }
-                    next if grep {/^v?5\./ && version->parse($_)->numify >= $perl_version_with_implicit_stricture} keys %used;
+                    next if grep {
+                      (/^v?5\./ && version->parse($_)->numify >= $perl_version_with_implicit_stricture) or /^v6\b/
+                    } keys %used;
 
                     # There are lots of acceptable strict alternatives
                     push @no_strict, $module if none {exists $used{$_}} (@STRICT_EQUIV, @STRICT_WARNINGS_EQUIV);
@@ -230,6 +232,7 @@ sub kwalitee_indicators {
                         next unless exists $files->{$file}{$key};
                         $used{$_} = 1 for @{$files->{$file}{$key} || []};
                     }
+                    next if grep {/^v6\b/} keys %used;
                     push @no_warnings, $module if none {exists $used{$_}} (@WARNINGS_EQUIV, @STRICT_WARNINGS_EQUIV);
                 }
                 if (@no_warnings) {
