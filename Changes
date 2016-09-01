@@ -1,5 +1,12 @@
 Revision history for Module-CPANTS-Analyse
 
+0.97_03 2016-09-01
+  - Not to check use_strict/use_warnings for Perl 6 modules in a
+    Perl 5 distribution (Stefan Seifert++)
+  - Worked around a File::Find::Object issue (reported by dolmen)
+  - Fixed dynamic_config handling (David Golden++)
+  - Improved LICENSE file detection (RT#114247)
+
 0.97_02 2016-04-27
   - Requires List::Util 1.33
 

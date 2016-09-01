@@ -5,7 +5,7 @@ use File::Find::Object;
 use File::Spec::Functions qw(catfile);
 use File::stat;
 
-our $VERSION = '0.97_02';
+our $VERSION = '0.97_03';
 $VERSION =~ s/_//; ## no critic
 
 sub order { 15 }
