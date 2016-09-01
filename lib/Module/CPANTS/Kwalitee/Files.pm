@@ -31,10 +31,12 @@ sub analyse {
     my $finder = File::Find::Object->new({
         depth => 1,
     }, $distdir);
+    my %seen; # GH-83
     while(defined(my $name = $finder->next)) {
         $name =~ s|\\|/|g if $^O eq 'MSWin32';
         (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or next;
         next if $path eq '';
+        next if $seen{$path}++;
 
         if (-d $name) {
             $dirs{$path} ||= {};
