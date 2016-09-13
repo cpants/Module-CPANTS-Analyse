@@ -172,7 +172,7 @@ Parses pod to see if it has a proper abstract.
 
 =head3 kwalitee_indicators
 
-Returns the Kwalitee Indicators datastructure.
+Returns the Kwalitee Indicators data structure.
 
 =over 4
 

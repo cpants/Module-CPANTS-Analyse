@@ -195,7 +195,7 @@ Get the number of available kwalitee points
 
 =head3 total_kwalitee
 
-Get the total number of kwalitee points. This is bigger the available_kwalitee as some kwalitee metrics are marked as 'extra' (eg is_prereq).
+Get the total number of kwalitee points. This is bigger the available_kwalitee as some kwalitee metrics are marked as 'extra' (e.g. C<is_prereq>).
 
 =head1 SEE ALSO
 

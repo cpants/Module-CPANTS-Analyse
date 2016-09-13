@@ -330,7 +330,7 @@ Find information on prerequisite distributions from meta files etc.
 
 =head3 kwalitee_indicators
 
-Returns the Kwalitee Indicators datastructure.
+Returns the Kwalitee Indicators data structure.
 
 =head1 SEE ALSO
 

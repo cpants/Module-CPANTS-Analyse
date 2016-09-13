@@ -60,7 +60,7 @@ Defines the order in which Kwalitee tests should be run.
 
 =head3 kwalitee_indicators
 
-Returns the Kwalitee Indicators datastructure.
+Returns the Kwalitee Indicators data structure.
 
 =head1 SEE ALSO
 

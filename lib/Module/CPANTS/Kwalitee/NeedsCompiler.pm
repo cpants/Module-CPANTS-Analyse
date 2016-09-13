@@ -72,7 +72,7 @@ Returns C<200>.
 
 =head3 analyse
 
-Checks for file with .c, .h or .xs extensions.
+Checks for file with F<.c>, F<.h> or F<.xs> extensions.
 Check is the module depends on any of the Inline:: modules or
 on ExtUtils::CBuilder or ExtUtils::ParseXS.
 

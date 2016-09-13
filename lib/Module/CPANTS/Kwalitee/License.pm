@@ -223,7 +223,7 @@ C<MCK::License> checks if there's a C<license> field C<META.yml>. Additionally, 
 
 =head3 kwalitee_indicators
 
-Returns the Kwalitee Indicators datastructure.
+Returns the Kwalitee Indicators data structure.
 
 =over
 
