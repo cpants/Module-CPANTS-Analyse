@@ -281,7 +281,7 @@ C<MCK::Uses> uses C<Module::ExtractUse> to find all C<use> statements in code (a
 
 =head3 kwalitee_indicators
 
-Returns the Kwalitee Indicators datastructure.
+Returns the Kwalitee Indicators data structure.
 
 =over
 

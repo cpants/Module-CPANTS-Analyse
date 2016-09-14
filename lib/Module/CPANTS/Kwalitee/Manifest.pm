@@ -131,7 +131,7 @@ Check if MANIFEST and dist contents match.
 
 =head3 kwalitee_indicators
 
-Returns the Kwalitee Indicators datastructure.
+Returns the Kwalitee Indicators data structure.
 
 =over
 

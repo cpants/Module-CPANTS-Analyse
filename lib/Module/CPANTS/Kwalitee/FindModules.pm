@@ -188,7 +188,7 @@ C<MCK::FindModules> first looks in C<basedir> and F<lib/> for C<*.pm> files. If 
 
 =head3 kwalitee_indicators
 
-Returns the Kwalitee Indicators datastructure.
+Returns the Kwalitee Indicators data structure.
 
 =over
 

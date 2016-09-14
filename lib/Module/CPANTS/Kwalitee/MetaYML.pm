@@ -264,7 +264,7 @@ Module::CPANTS::Kwalitee::MetaYML - Checks data available in META.yml
 
 =head1 SYNOPSIS
 
-Checks various pieces of information in META.yml
+Checks various pieces of information in F<META.yml>
 
 =head1 DESCRIPTION
 
@@ -274,8 +274,8 @@ Checks various pieces of information in META.yml
 
 Defines the order in which Kwalitee tests should be run.
 
-Returns C<10>. MetaYML should be checked earlier than Files to
-handle no_index correctly.
+Returns C<10>. C<MetaYML> should be checked earlier than C<Files> to
+handle C<no_index> correctly.
 
 =head3 analyse
 
@@ -283,7 +283,7 @@ C<MCK::MetaYML> checks C<META.yml>.
 
 =head3 kwalitee_indicators
 
-Returns the Kwalitee Indicators datastructure.
+Returns the Kwalitee Indicators data structure.
 
 =over
 
