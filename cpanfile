@@ -5,6 +5,7 @@ requires 'Class::Accessor' => '0.19';
 requires 'CPAN::DistnameInfo' => '0.06';
 requires 'CPAN::Meta::YAML' => '0.008';
 requires 'CPAN::Meta::Validator' => '2.133380';
+requires 'Data::Binary' => '0';
 requires 'File::Find::Object' => '0.2.1';
 requires 'JSON::PP' => 0;
 requires 'List::Util' => '1.33';

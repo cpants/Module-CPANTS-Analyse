@@ -3,6 +3,7 @@ use warnings;
 use strict;
 use File::Spec::Functions qw/catfile/;
 use Encode;
+use Data::Binary qw/is_binary/;
 
 our $VERSION = '0.97_03';
 $VERSION =~ s/_//; ## no critic
@@ -26,18 +27,20 @@ sub analyse {
     my %abstract;
     my @errors;
     for my $module (@{$me->d->{modules} || []}) {
-        my ($package, $abstract, $error) = $class->_parse_abstract(catfile($distdir, $module->{file}));
+        my ($package, $abstract, $error, $has_binary_data) = $class->_parse_abstract(catfile($distdir, $module->{file}));
         push @errors, "$error ($package)" if $error;
         $me->d->{abstracts_in_pod}{$package} = $abstract if $package;
+        $me->d->{files_hash}{$module->{file}}{has_binary_data} = 1 if $has_binary_data
     }
 
     # sometimes pod for .pm file is put into .pod
     for my $file (@{$me->d->{files_array} || []}) {
         next unless $file =~ /\.pod$/ && ($file =~ m!^lib/! or $file =~ m!^[^/]+$!);
         local $@;
-        my ($package, $abstract, $error) = $class->_parse_abstract(catfile($distdir, $file));
+        my ($package, $abstract, $error, $has_binary_data) = $class->_parse_abstract(catfile($distdir, $file));
         push @errors, "$error ($package)" if $error;
         $me->d->{abstracts_in_pod}{$package} = $abstract if $package;
+        $me->d->{files_hash}{$file}{has_binary_data} = 1 if $has_binary_data
     }
     $me->d->{error}{has_abstract_in_pod} = join ';', @errors if @errors;
 }
@@ -51,6 +54,10 @@ sub _parse_abstract {
     my $directive;
     my $encoding;
     while(<$fh>) {
+        if (/^\s*__DATA__\s*$/) {
+            my $copy = $_ = <$fh>;
+            return (undef, undef, undef, 1) if is_binary($copy);
+        }
         if (substr($_, 0, 1) eq '=') {
             if (/^=encoding\s+(.+)/) {
                 $encoding = $1;
