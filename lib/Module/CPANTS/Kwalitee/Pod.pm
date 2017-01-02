@@ -56,6 +56,7 @@ sub _parse_abstract {
     while(<$fh>) {
         if (/^\s*__DATA__\s*$/) {
             my $copy = $_ = <$fh>;
+            last unless defined $copy;
             return (undef, undef, undef, 1) if is_binary($copy);
         }
         if (substr($_, 0, 1) eq '=') {
