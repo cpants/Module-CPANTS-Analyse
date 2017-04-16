@@ -15,7 +15,7 @@ sub import {
     my %search_path = map {(/^Module::CPANTS::/ ? $_ : "Module::CPANTS::$_") => 1 } @_;
     $search_path{'Module::CPANTS::Kwalitee'} = 1;
     require Module::Pluggable;
-    Module::Pluggable->import(search_path => [keys %search_path]);
+    return  Module::Pluggable->import(search_path => [keys %search_path]);
 }
 
 sub new {
@@ -100,7 +100,7 @@ sub available_kwalitee {
     foreach my $g ($self->get_indicators) {
         $available++ unless $g->{is_extra} || $g->{is_experimental};
     }
-    $self->_available($available);
+    return $self->_available($available);
 }
 
 sub total_kwalitee {
@@ -114,7 +114,7 @@ sub total_kwalitee {
         $available++ unless $g->{is_experimental};
     }
 
-    $self->_total($available);
+    return $self->_total($available);
 }
 
 sub _indicator_names {
@@ -139,9 +139,10 @@ sub experimental_indicator_names {
     shift->_indicator_names(sub {$_->{is_experimental}});
 }
 
-q{Favourite record of the moment:
-  Jahcoozi: Pure Breed Mongrel};
+#q{Favourite record of the moment:
+#  Jahcoozi: Pure Breed Mongrel};
 
+1;    # Magic true value required at end of module
 __END__
 
 =encoding UTF-8
