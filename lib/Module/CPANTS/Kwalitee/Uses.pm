@@ -28,6 +28,7 @@ our @STRICT_WARNINGS_EQUIV = qw(
   Moose Moose::Role Moose::Exporter
   Moose::Util::TypeConstraints Moose::Util::MetaRole
   MooseX::Declare MooseX::Role::Parameterized MooseX::Types
+  MooseX::POE
   Mouse Mouse::Role
   perl5 perl5i::1 perl5i::2 perl5i::latest
   Role::Tiny
