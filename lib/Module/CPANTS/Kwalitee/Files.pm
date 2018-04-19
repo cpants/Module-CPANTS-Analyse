@@ -4,6 +4,8 @@ use strict;
 use File::Find::Object;
 use File::Spec::Functions qw(catfile);
 use File::stat;
+use ExtUtils::Manifest qw(skipcheck);
+$ExtUtils::Manifest::Quiet = 1;
 
 our $VERSION = '0.97_03';
 $VERSION =~ s/_//; ## no critic
@@ -22,6 +24,7 @@ sub analyse {
 
     # Respect no_index if possible
     my $no_index_re = $class->_make_no_index_regex($me);
+    my %maniskip = map { $_ => 1 } skipcheck;
 
     my (%files, %dirs);
     my (@files_array, @dirs_array);
@@ -36,6 +39,7 @@ sub analyse {
         $name =~ s|\\|/|g if $^O eq 'MSWin32';
         (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or next;
         next if $path eq '';
+        next if $maniskip{$path};
         next if $seen{$path}++;
 
         if (-d $name) {
