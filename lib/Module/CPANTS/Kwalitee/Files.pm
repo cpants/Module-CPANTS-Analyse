@@ -22,6 +22,7 @@ sub analyse {
 
     # Respect no_index if possible
     my $no_index_re = $class->_make_no_index_regex($me);
+    my $maniskip_re = $class->_make_maniskip_regex($me);
 
     my (%files, %dirs);
     my (@files_array, @dirs_array);
@@ -36,6 +37,7 @@ sub analyse {
         $name =~ s|\\|/|g if $^O eq 'MSWin32';
         (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or next;
         next if $path eq '';
+        next if $maniskip_re && $path =~ qr/$maniskip_re/;
         next if $seen{$path}++;
 
         if (-d $name) {
@@ -194,6 +196,15 @@ sub _make_no_index_regex {
 
     $me->d->{no_index} = join ';', sort @ignore;
     return '(?:' . (join '|', @ignore) . ')';
+}
+
+sub _make_maniskip_regex {
+    my ($class, $me) = @_;
+    open my $fh, "<", "MANIFEST.SKIP" or return;
+    my @skip = grep { m/\S/ && !m/^#/ } <$fh>;
+    return unless @skip;
+    chomp @skip;
+    return '(?:' . (join '|', @skip) . ')';
 }
 
 ##################################################################
