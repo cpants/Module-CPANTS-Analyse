@@ -5,7 +5,7 @@ use File::Spec::Functions qw/catfile/;
 use Encode;
 use Data::Binary qw/is_binary/;
 
-our $VERSION = '0.97_08';
+our $VERSION = '0.97_09';
 $VERSION =~ s/_//; ## no critic
 
 our @ABSTRACT_STUBS = (
