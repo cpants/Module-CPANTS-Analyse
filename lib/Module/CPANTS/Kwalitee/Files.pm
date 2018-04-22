@@ -7,7 +7,7 @@ use File::stat;
 use ExtUtils::Manifest qw(skipcheck);
 $ExtUtils::Manifest::Quiet = 1;
 
-our $VERSION = '0.97_06';
+our $VERSION = '0.97_07';
 $VERSION =~ s/_//; ## no critic
 
 sub order { 15 }
