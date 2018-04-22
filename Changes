@@ -1,5 +1,11 @@
 Revision history for Module-CPANTS-Analyse
 
+0.97_05 2018-04-22
+  - no changes; for testing
+
+0.97_04 2018-04-21
+  - Skip everything in MANIFEST.SKIP while testing symlinks (GH#33, Tux++)
+
 0.97_03 2016-09-01
   - Not to check use_strict/use_warnings for Perl 6 modules in a
     Perl 5 distribution (Stefan Seifert++)

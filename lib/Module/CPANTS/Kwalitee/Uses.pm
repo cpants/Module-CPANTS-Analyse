@@ -6,7 +6,7 @@ use Module::ExtractUse 0.33;
 use List::Util 1.33 qw/none/;
 use version;
 
-our $VERSION = '0.97_03';
+our $VERSION = '0.97_05';
 $VERSION =~ s/_//; ## no critic
 
 # These equivalents should be reasonably well-known and, preferably,

@@ -4,7 +4,7 @@ use strict;
 use File::Spec::Functions qw(catfile);
 use Software::LicenseUtils;
 
-our $VERSION = '0.97_03';
+our $VERSION = '0.97_05';
 $VERSION =~ s/_//; ## no critic
 
 sub order { 100 }
