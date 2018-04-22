@@ -11,7 +11,7 @@ use Archive::Any::Lite;
 use Carp;
 use CPAN::DistnameInfo;
 
-our $VERSION = '0.97_05';
+our $VERSION = '0.97_06';
 $VERSION =~ s/_//; ## no critic
 
 __PACKAGE__->mk_accessors(qw(dist opts tarball distdir d mck));
