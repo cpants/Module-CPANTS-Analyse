@@ -53,6 +53,10 @@ sub _parse_abstract {
     open my $fh, '<', $file or return;
     my $directive;
     my $encoding;
+    my $package_name_pattern = '(?:[A-Za-z0-9_]+::)*[A-Za-z0-9_]+ | [BCIF] < (?:[A-Za-z0-9_]+::)*[A-Za-z0-9_]+ >';
+    if ( $file !~ /\.p(?:m|od)$/ ) {
+        $package_name_pattern .= ' | [A-Za-z0-9_.-]+ | [BCIF] < [A-Za-z0-9_.-]+ >';
+    }
     while(<$fh>) {
         if (/^\s*__DATA__\s*$/) {
             my $copy = $_ = <$fh>;
@@ -72,7 +76,7 @@ sub _parse_abstract {
         }
         next if !$inpod;
         next unless $directive =~ /^head/;
-        if ( /^\s*((?:[A-Za-z0-9_]+::)*[A-Za-z0-9_]+ | [BCIF] < (?:[A-Za-z0-9_]+::)*[A-Za-z0-9_]+ >) \s+ -+ (?:\s+ (.*)\s*$|$)/x ) {
+        if ( /^\s*(${package_name_pattern}) \s+ -+ (?:\s+ (.*)\s*$|$)/x ) {
             ($package, $abstract) = ($1, $2);
             $package =~ s![BCIF]<([^>]+)>!$1!;
             next;
