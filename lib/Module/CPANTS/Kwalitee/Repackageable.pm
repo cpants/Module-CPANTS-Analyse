@@ -2,7 +2,7 @@ package Module::CPANTS::Kwalitee::Repackageable;
 use warnings;
 use strict;
 
-our $VERSION = '0.97_10';
+our $VERSION = '0.97_11';
 $VERSION =~ s/_//; ## no critic
 
 sub order { 900 }

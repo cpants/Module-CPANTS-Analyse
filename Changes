@@ -3,6 +3,9 @@ Revision history for Module-CPANTS-Analyse
   - Allow dash and dot in script name in the NAME section for
     non-pm, non-pod files
 
+0.97_11 2018-04-22
+  - no changes; for testing
+
 0.97_10 2018-04-22
   - no changes; for testing
 
