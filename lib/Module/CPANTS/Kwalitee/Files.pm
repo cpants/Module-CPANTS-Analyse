@@ -4,11 +4,13 @@ use strict;
 use File::Find::Object;
 use File::Spec::Functions qw(catfile);
 use File::stat;
-use ExtUtils::Manifest qw(skipcheck);
+use ExtUtils::Manifest qw(maniskip);
 $ExtUtils::Manifest::Quiet = 1;
 
 our $VERSION = '0.97_11';
 $VERSION =~ s/_//; ## no critic
+
+our $RespectManiskip = 1;  # for Test::Kwalitee and its friends
 
 sub order { 15 }
 
@@ -39,8 +41,8 @@ sub analyse {
         $name =~ s|\\|/|g if $^O eq 'MSWin32';
         (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or next;
         next if $path eq '';
-        next if $maniskip{$path};
         next if $seen{$path}++;
+        next if $RespectManiskip && $maniskip{$path};
 
         if (-d $name) {
             $dirs{$path} ||= {};
