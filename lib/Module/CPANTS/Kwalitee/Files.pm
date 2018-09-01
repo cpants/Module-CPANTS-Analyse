@@ -37,6 +37,7 @@ sub analyse {
     my @base_dirs;
     my $finder = File::Find::Object->new({
         depth => 1,
+        followlink => 0,
     }, $distdir);
     my %seen; # GH-83
     while(defined(my $name = $finder->next)) {
