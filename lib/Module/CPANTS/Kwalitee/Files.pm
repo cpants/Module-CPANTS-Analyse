@@ -26,7 +26,9 @@ sub analyse {
 
     # Respect no_index if possible
     my $no_index_re = $class->_make_no_index_regex($me);
-    my %maniskip = map { $_ => 1 } skipcheck;
+    my $maniskip_file = "$distdir/MANIFEST.SKIP";
+    my $has_maniskip = -f $maniskip_file;
+    my $maniskip = maniskip($maniskip_file);
 
     my (%files, %dirs);
     my (@files_array, @dirs_array);
@@ -42,7 +44,7 @@ sub analyse {
         (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or next;
         next if $path eq '';
         next if $seen{$path}++;
-        next if $RespectManiskip && $maniskip{$path};
+        next if $RespectManiskip && $has_maniskip && $maniskip->($path);
 
         if (-d $name) {
             $dirs{$path} ||= {};
