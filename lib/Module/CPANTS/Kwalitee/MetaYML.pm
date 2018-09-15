@@ -181,7 +181,7 @@ sub kwalitee_indicators{
         {
             name=>'meta_yml_conforms_to_known_spec',
             error=>q{META.yml does not conform to any recognised META.yml Spec.},
-            remedy=>q{Take a look at the META.yml Spec at http://module-build.sourceforge.net/META-spec-v1.4.html (for version 1.4) or http://search.cpan.org/perldoc?CPAN::Meta::Spec (for version 2), and change your META.yml accordingly.},
+            remedy=>q{Take a look at the META.yml Spec at https://metacpan.org/pod/CPAN::Meta::History::Meta_1_4 (for version 1.4) or https://metacpan.org/pod/CPAN::Meta::Spec (for version 2), and change your META.yml accordingly.},
             code=>sub {
                 my $d=shift;
                 return 0 if $d->{error}{meta_yml_conforms_to_known_spec};
@@ -197,7 +197,7 @@ sub kwalitee_indicators{
         {
             name=>'meta_json_conforms_to_known_spec',
             error=>q{META.json does not conform to any recognised META Spec.},
-            remedy=>q{Take a look at the META.json Spec at http://module-build.sourceforge.net/META-spec-v1.4.html (for version 1.4) or http://search.cpan.org/perldoc?CPAN::Meta::Spec (for version 2), and change your META.json accordingly.},
+            remedy=>q{Take a look at the META.json Spec at https://metacpan.org/pod/CPAN::Meta::History::Meta_1_4 (for version 1.4) or https://metacpan.org/pod/CPAN::Meta::Spec (for version 2), and change your META.json accordingly.},
             code=>sub {
                 my $d=shift;
                 return 0 if $d->{error}{meta_json_is_parsable};
