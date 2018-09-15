@@ -161,7 +161,6 @@ sub analyse {
 
     # check STDIN in Makefile.PL and Build.PL 
     # objective: convince people to use prompt();
-    # http://www.perlfoundation.org/perl5/index.cgi?cpan_packaging
     for my $type (qw/makefile_pl build_pl/) {
         for my $path (split ',', $me->d->{"file_$type"} || '') {
             next unless $path;
@@ -330,7 +329,7 @@ sub kwalitee_indicators {
     },
     {
         name=>'no_stdin_for_prompting',
-        error=>q{This distribution is using direct call from STDIN instead of prompt(). Make sure STDIN is not used in Makefile.PL or Build.PL. See http://www.perlfoundation.org/perl5/index.cgi?cpan_packaging},
+        error=>q{This distribution is using direct call from STDIN instead of prompt(). Make sure STDIN is not used in Makefile.PL or Build.PL.},
         is_extra=>1,
         remedy=>q{Use the prompt() method from ExtUtils::MakeMaker/Module::Build.},
         code=>sub {
