@@ -12,6 +12,9 @@ $VERSION =~ s/_//; ## no critic
 __PACKAGE__->mk_accessors(qw(generators _gencache _genhashcache _available _total));
 
 my @Plugins;
+my @Indicators;
+my $Total;
+my $Available;
 
 sub import {
     my $class = shift;
@@ -23,62 +26,56 @@ sub import {
 
     %seen = ();
     @Plugins = sort {$a->order <=> $b->order or $a cmp $b} grep {!$seen{$_}++} @Plugins;
+    $class->_cache_indicators;
+}
+
+# I suppose nobody wants to change the generators dynamically though
+sub _cache_indicators {
+    my $class = shift;
+    @Indicators = ();
+    $Total = $Available = 0;
+    for my $plugin (@Plugins) {
+        for my $indicator (@{$plugin->kwalitee_indicators}) {
+            $indicator->{defined_in} = $plugin;
+            $indicator->{is_core} = 1 if !$indicator->{is_extra} and !$indicator->{is_experimental};
+            push @Indicators, $indicator;
+            $Total++ unless $indicator->{is_experimental};
+            $Available++ if $indicator->{is_core};
+        }
+    }
 }
 
 sub plugins { @Plugins }
 
 sub new {
     my $class = shift;
-    my $me = bless {}, $class;
+    bless {}, $class;
+}
 
-    my %generators;
-    foreach my $gen (@Plugins) {
-        ## no critic (ProhibitStringyEval)
-        eval "require $gen";
-        croak qq{cannot load $gen: $@} if $@;
-        $generators{$gen} = [ $gen->order, $gen ];
-    }
-    # sort by 'order' first, then name
-    my @generators = sort {
-        $generators{$a}->[0] <=> $generators{$b}->[0]
-            ||
-        $generators{$a}->[1] cmp $generators{$b}->[1]
-    } keys %generators;
-    $me->generators(\@generators);
-    $me->_gencache({});
-    return $me;
+sub generators {
+    my $self = shift;
+    return \@Plugins unless @_;
+    @Plugins = @{$_[0]};
+    $self->_cache_indicators;
+    \@Plugins;
 }
 
 sub get_indicators {
-    my $self = shift;
-    my $type = shift || 'all';
+    my ($self, $type) = @_;
+    unless ($type) { # almost always true
+        return wantarray ? @Indicators : \@Indicators;
+    }
 
+    $type = 'is_core' if $type eq 'core';
     $type = 'is_extra' if $type eq 'optional';
     $type = 'is_experimental' if $type eq 'experimental';
 
-    my $indicators;
-    if ($self->_gencache->{$type}) {
-        $indicators = $self->_gencache->{$type};
-    } else {
-        my @aggregators;
-        foreach my $gen (@{$self->generators}) {
-            foreach my $ind (@{$gen->kwalitee_indicators}) {
-                if ($type eq 'all'
-                    || ($type eq 'core' && !$ind->{is_extra} && !$ind->{is_experimental}) 
-                    || $ind->{$type}) {
-                    $ind->{defined_in}=$gen;
-                    if ($ind->{aggregating}) {
-                        push @aggregators, $ind;
-                        next;
-                    }
-                    push(@$indicators,$ind);
-                }
-            }
-        }
-        push @$indicators, @aggregators;
-        $self->_gencache->{$type}=$indicators;
+    my @indicators;
+    for my $indicator (@Indicators) {
+        next if !$indicator->{$type};
+        push @indicators, $indicator;
     }
-    return wantarray ? @$indicators : $indicators;
+    return wantarray ? @indicators : \@indicators;
 }
 
 sub get_indicators_hash {
@@ -99,32 +96,9 @@ sub get_indicators_hash {
     return $indicators;
 }
 
-sub available_kwalitee {
-    my $self = shift;
+sub available_kwalitee { $Available }
 
-    my $mem = $self->_available;
-    return $mem if $mem;
-
-    my $available;
-    foreach my $g ($self->get_indicators) {
-        $available++ unless $g->{is_extra} || $g->{is_experimental};
-    }
-    $self->_available($available);
-}
-
-sub total_kwalitee {
-    my $self = shift;
-
-    my $mem = $self->_total;
-    return $mem if $mem;
-
-    my $available;
-    foreach my $g ($self->get_indicators) {
-        $available++ unless $g->{is_experimental};
-    }
-
-    $self->_total($available);
-}
+sub total_kwalitee { $Total }
 
 sub _indicator_names {
     my ($self, $coderef) = @_;
@@ -135,9 +109,7 @@ sub _indicator_names {
 sub all_indicator_names { shift->_indicator_names(sub {1}) }
 
 sub core_indicator_names {
-    shift->_indicator_names(sub {
-        !$_->{is_extra} && !$_->{is_experimental}
-    });
+    shift->_indicator_names(sub {$_->{is_core}});
 }
 
 sub optional_indicator_names {
