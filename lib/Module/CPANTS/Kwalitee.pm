@@ -2,7 +2,7 @@ package Module::CPANTS::Kwalitee;
 use 5.006;
 use strict;
 use warnings;
-use base qw(Class::Accessor);
+use base qw(Class::Accessor::Fast);
 use Carp;
 
 our $VERSION = '0.97_11';

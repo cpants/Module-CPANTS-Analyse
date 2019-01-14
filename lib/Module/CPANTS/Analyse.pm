@@ -2,7 +2,7 @@ package Module::CPANTS::Analyse;
 use 5.006;
 use strict;
 use warnings;
-use base qw(Class::Accessor);
+use base qw(Class::Accessor::Fast);
 use File::Temp qw(tempdir);
 use File::Spec::Functions qw(catfile catdir splitpath);
 use File::Copy;
