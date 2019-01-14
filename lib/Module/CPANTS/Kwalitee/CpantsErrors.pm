@@ -19,7 +19,7 @@ sub analyse {
     # or just fix our problems.
 
     # Note also that this stub should not be removed so that
-    # this can replace the old ::Version module, and the old
+    # this can replace the old ::CpantsErrors module, and the old
     # metrics will not be loaded while loading plugins.
 }
 
