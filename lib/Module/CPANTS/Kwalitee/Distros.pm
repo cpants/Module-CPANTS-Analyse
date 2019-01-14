@@ -13,8 +13,8 @@ sub order { 800 }
 my $debian;
 
 sub analyse {
-    my $class=shift;
-    my $me=shift;
+    my $class = shift;
+    my $me = shift;
 
     # NOTE: The data source of these debian metrics has not been
     # updated for more than a year, and mirroring stuff from

@@ -14,12 +14,12 @@ sub order { 100 }
 ##################################################################
 
 sub analyse {
-    my $class=shift;
-    my $me=shift;
-    my $distdir=$me->distdir;
+    my $class = shift;
+    my $me = shift;
+    my $distdir = $me->distdir;
 
     # check META.yml
-    my $yaml=$me->d->{meta_yml};
+    my $yaml = $me->d->{meta_yml};
     $me->d->{license} = '';
     if ($yaml) {
         if ($yaml->{license} and $yaml->{license} ne 'unknown') {
@@ -34,7 +34,7 @@ sub analyse {
     # (also accept LICENSE.txt etc; RT #114247)
     if (my ($file) = grep {$_ =~ /^(?:LICEN[CS]E|COPYING)\b/} @$files) {
         $me->d->{license} .= " defined in $file";
-        $me->d->{external_license_file}=$file;
+        $me->d->{external_license_file} = $file;
     }
 
     # check pod
@@ -119,15 +119,15 @@ sub analyse {
 sub kwalitee_indicators{
     return [
         {
-            name=>'meta_yml_has_license',
-            error=>q{This distribution does not have a license defined in META.yml.},
-            remedy=>q{Define the license if you are using in Build.PL. If you are using MakeMaker (Makefile.PL) you should upgrade to ExtUtils::MakeMaker version 6.31.},
-            is_extra=>1,
-            code=>sub { 
-                my $d=shift;
-                my $yaml=$d->{meta_yml};
+            name => 'meta_yml_has_license',
+            error => q{This distribution does not have a license defined in META.yml.},
+            remedy => q{Define the license if you are using in Build.PL. If you are using MakeMaker (Makefile.PL) you should upgrade to ExtUtils::MakeMaker version 6.31.},
+            is_extra => 1,
+            code => sub {
+                my $d = shift;
+                my $yaml = $d->{meta_yml};
                 ($yaml->{license} and $yaml->{license} ne 'unknown') ? 1 : 0 },
-            details=>sub {
+            details => sub {
                 my $d = shift;
                 my $yaml = $d->{meta_yml};
                 return "No META.yml." unless $yaml;
@@ -136,54 +136,54 @@ sub kwalitee_indicators{
             },
         },
         {
-            name=>'has_human_readable_license',
-            error=>q{This distribution does not have a license defined in the documentation or in a file called LICENSE},
-            remedy=>q{Add a section called "LICENSE" to the documentation, or add a file named LICENSE to the distribution.},
-            code=>sub {
+            name => 'has_human_readable_license',
+            error => q{This distribution does not have a license defined in the documentation or in a file called LICENSE},
+            remedy => q{Add a section called "LICENSE" to the documentation, or add a file named LICENSE to the distribution.},
+            code => sub {
                 my $d = shift;
                 return $d->{external_license_file} || $d->{license_in_pod} ? 1 : 0;
             },
-            details=>sub {
+            details => sub {
                 my $d = shift;
                 return "Neither LICENSE file nor LICENSE section in pod was found.";
             },
         },
         {
-            name=>'has_separate_license_file',
-            error=>q{This distribution does not have a LICENSE or LICENCE file in its root directory.},
-            remedy=>q{This is not a critical issue. Currently mainly informative for the CPANTS authors. It might be removed later.},
-            is_experimental=>1,
-            code=>sub { shift->{external_license_file} ? 1 : 0 },
-            details=>sub {
+            name => 'has_separate_license_file',
+            error => q{This distribution does not have a LICENSE or LICENCE file in its root directory.},
+            remedy => q{This is not a critical issue. Currently mainly informative for the CPANTS authors. It might be removed later.},
+            is_experimental => 1,
+            code => sub { shift->{external_license_file} ? 1 : 0 },
+            details => sub {
                 my $d = shift;
                 return "LICENSE file was found.";
             },
         },
         {
-            name=>'has_license_in_source_file',
-            error=>q{Does not have license information in any of its source files},
-            remedy=>q{Add =head1 LICENSE and the text of the license to the main module in your code.},
-            code=>sub {
+            name => 'has_license_in_source_file',
+            error => q{Does not have license information in any of its source files},
+            remedy => q{Add =head1 LICENSE and the text of the license to the main module in your code.},
+            code => sub {
                 my $d = shift;
                 return $d->{license_in_pod} ? 1 : 0;
             },
-            details=>sub {
+            details => sub {
                 my $d = shift;
                 return "LICENSE section was not found in the pod.";
             },
         },
         {
-            name=>'has_known_license_in_source_file',
-            error=>q{Does not have license information in any of its source files, or the information is not recognized by Software::License},
-            remedy=>q{Add =head1 LICENSE and/or the proper text of the well-known license to the main module in your code.},
+            name => 'has_known_license_in_source_file',
+            error => q{Does not have license information in any of its source files, or the information is not recognized by Software::License},
+            remedy => q{Add =head1 LICENSE and/or the proper text of the well-known license to the main module in your code.},
             is_extra => 1,
-            code=>sub {
+            code => sub {
                 my $d = shift;
                 return 0 unless $d->{license_in_pod};
                 my @files_with_licenses = grep {$d->{files_hash}{$_}{license}} keys %{$d->{files_hash}};
                 return @files_with_licenses ? 1 : 0;
             },
-            details=>sub {
+            details => sub {
                 my $d = shift;
                 return "LICENSE section was not found in the pod, or the license information was not recognized by Software::License.";
             },

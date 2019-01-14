@@ -14,8 +14,8 @@ sub order { 100 }
 ##################################################################
 
 sub analyse {
-    my $class=shift;
-    my $me=shift;
+    my $class = shift;
+    my $me = shift;
 
     $class->_from_meta($me) or
     $class->_from_cpanfile($me) or

@@ -12,13 +12,13 @@ sub order { 200 }
 ##################################################################
 
 sub analyse {
-    my $class=shift;
-    my $me=shift;
+    my $class = shift;
+    my $me = shift;
     
-    my $files=$me->d->{files_array};
+    my $files = $me->d->{files_array};
     foreach my $f (@$files) {
         if ($f =~ /\.[hc]$/i or $f =~ /\.xs$/i) {
-            $me->d->{needs_compiler}=1;
+            $me->d->{needs_compiler} = 1;
             return;
         }
     }
@@ -27,7 +27,7 @@ sub analyse {
             if ($m->{requires} =~ /^Inline::/
                or $m->{requires} eq 'ExtUtils::CBuilder'
                or $m->{requires} eq 'ExtUtils::ParseXS') {
-                $me->d->{needs_compiler}=1;
+                $me->d->{needs_compiler} = 1;
                 return;
             }
         }

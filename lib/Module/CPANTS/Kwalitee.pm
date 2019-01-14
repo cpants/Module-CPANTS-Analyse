@@ -19,18 +19,18 @@ sub import {
 }
 
 sub new {
-    my $class=shift;
-    my $me=bless {},$class;
-    
+    my $class = shift;
+    my $me = bless {}, $class;
+
     my %generators;
     foreach my $gen ($me->plugins) {
         ## no critic (ProhibitStringyEval)
         eval "require $gen";
         croak qq{cannot load $gen: $@} if $@;
-        $generators{$gen}= [ $gen->order, $gen ];
+        $generators{$gen} = [ $gen->order, $gen ];
     }
     # sort by 'order' first, then name
-    my @generators=sort {
+    my @generators = sort {
         $generators{$a}->[0] <=> $generators{$b}->[0]
             ||
         $generators{$a}->[1] cmp $generators{$b}->[1]
@@ -41,15 +41,15 @@ sub new {
 }
 
 sub get_indicators {
-    my $self=shift;
+    my $self = shift;
     my $type = shift || 'all';
-    
-    $type='is_extra' if $type eq 'optional';
-    $type='is_experimental' if $type eq 'experimental';
+
+    $type = 'is_extra' if $type eq 'optional';
+    $type = 'is_experimental' if $type eq 'experimental';
 
     my $indicators;
     if ($self->_gencache->{$type}) {
-        $indicators=$self->_gencache->{$type};
+        $indicators = $self->_gencache->{$type};
     } else {
         my @aggregators;
         foreach my $gen (@{$self->generators}) {
@@ -62,7 +62,7 @@ sub get_indicators {
                         push @aggregators, $ind;
                         next;
                     }
-                    push(@$indicators,$ind); 
+                    push(@$indicators,$ind);
                 }
             }
         }
@@ -73,16 +73,16 @@ sub get_indicators {
 }
 
 sub get_indicators_hash {
-    my $self=shift;
+    my $self = shift;
 
     my $indicators;
     if ($self->_genhashcache) {
-        $indicators=$self->_genhashcache;
+        $indicators = $self->_genhashcache;
     } else {
         foreach my $gen (@{$self->generators}) {
             foreach my $ind (@{$gen->kwalitee_indicators}) {
-                $ind->{defined_in}=$gen;
-                $indicators->{$ind->{name}}=$ind;
+                $ind->{defined_in} = $gen;
+                $indicators->{$ind->{name}} = $ind;
             }
         }
         $self->_genhashcache($indicators);
@@ -91,9 +91,9 @@ sub get_indicators_hash {
 }
 
 sub available_kwalitee {
-    my $self=shift;
+    my $self = shift;
 
-    my $mem=$self->_available;
+    my $mem = $self->_available;
     return $mem if $mem;
 
     my $available;
@@ -104,11 +104,11 @@ sub available_kwalitee {
 }
 
 sub total_kwalitee {
-    my $self=shift;
+    my $self = shift;
 
-    my $mem=$self->_total;
+    my $mem = $self->_total;
     return $mem if $mem;
-    
+
     my $available;
     foreach my $g ($self->get_indicators) {
         $available++ unless $g->{is_experimental};
@@ -152,8 +152,8 @@ Module::CPANTS::Kwalitee - Interface to Kwalitee generators
 
 =head1 SYNOPSIS
 
-  my $mck=Module::CPANTS::Kwalitee->new;
-  my @generators=$mck->generators;
+  my $mck = Module::CPANTS::Kwalitee->new;
+  my @generators = $mck->generators;
 
 =head1 DESCRIPTION
 

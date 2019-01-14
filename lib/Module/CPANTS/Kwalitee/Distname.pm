@@ -12,8 +12,8 @@ sub order { 20 }
 ##################################################################
 
 sub analyse {
-    my $class=shift;
-    my $me=shift;
+    my $class = shift;
+    my $me = shift;
 
     # NOTE: The analysis code has moved to ::Analyse to avoid
     # duplication.

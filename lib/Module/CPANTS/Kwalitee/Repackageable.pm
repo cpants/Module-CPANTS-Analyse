@@ -12,8 +12,8 @@ sub order { 900 }
 ##################################################################
 
 sub analyse {
-    my $class=shift;
-    my $me=shift;
+    my $class = shift;
+    my $me = shift;
 
     # NOTE: The analysis/metric in this module has moved to
     # Module::CPANTS::SiteKwalitee.

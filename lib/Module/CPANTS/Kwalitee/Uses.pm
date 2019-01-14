@@ -46,17 +46,17 @@ sub order { 100 }
 ##################################################################
 
 sub analyse {
-    my $class=shift;
-    my $me=shift;
+    my $class = shift;
+    my $me = shift;
     
-    my $distdir=$me->distdir;
-    my $modules=$me->d->{modules};
-    my $files=$me->d->{files_hash};
+    my $distdir = $me->distdir;
+    my $modules = $me->d->{modules};
+    my $files = $me->d->{files_hash};
 
     # NOTE: all files in xt/ should be ignored because they are
     # for authors only and their dependencies may not be (and
     # often are not) listed in meta files.
-    my @tests=grep {m|^t\b.*\.t|} sort keys %$files;
+    my @tests = grep {m|^t\b.*\.t|} sort keys %$files;
     $me->d->{test_files} = \@tests;
 
     my @test_modules = map {
@@ -68,7 +68,7 @@ sub analyse {
     } grep {m|^t\b.*\.pm$|} keys %$files;
     my %test_modules = map {$_ => 1} @test_modules;
 
-    my %skip=map {$_->{module}=>1 } @$modules;
+    my %skip = map {$_->{module} => 1} @$modules;
     my %uses;
 
     # used in modules
@@ -106,7 +106,7 @@ sub analyse {
         }
     }
 
-    $me->d->{uses}=\%uses;
+    $me->d->{uses} = \%uses;
     return;
 }
 
@@ -172,11 +172,11 @@ sub _extract_use {
 sub kwalitee_indicators {
     return [
         {
-            name=>'use_strict',
-            error=>q{This distribution does not 'use strict;' (or its equivalents) in all of its modules. Note that this is not about the actual strictness of the modules. It's bad if nobody can tell whether the modules are strictly written or not, without reading the source code of your favorite clever module that actually enforces strictness. In other words, it's bad if someone feels the need to add 'use strict' to your modules.},
-            remedy=>q{Add 'use strict' (or its equivalents) to all modules, or convince us that your favorite module is well-known enough and people can easily see the modules are strictly written.},
+            name => 'use_strict',
+            error => q{This distribution does not 'use strict;' (or its equivalents) in all of its modules. Note that this is not about the actual strictness of the modules. It's bad if nobody can tell whether the modules are strictly written or not, without reading the source code of your favorite clever module that actually enforces strictness. In other words, it's bad if someone feels the need to add 'use strict' to your modules.},
+            remedy => q{Add 'use strict' (or its equivalents) to all modules, or convince us that your favorite module is well-known enough and people can easily see the modules are strictly written.},
             ignorable => 1,
-            code=>sub {
+            code => sub {
                 my $d       = shift;
                 my $files = $d->{files_hash} || {};
 
@@ -206,18 +206,18 @@ sub kwalitee_indicators {
                 }
                 return 1;
             },
-            details=>sub {
+            details => sub {
                 my $d = shift;
                 return "The following modules don't use strict (or equivalents): " . $d->{error}{use_strict};
             },
         },
         {
-            name=>'use_warnings',
-            error=>q{This distribution does not 'use warnings;' (or its equivalents) in all of its modules. Note that this is not about that your modules actually warn when something bad happens. It's bad if nobody can tell if a module warns or not, without reading the source code of your favorite module that actually enforces warnings. In other words, it's bad if someone feels the need to add 'use warnings' to your modules.},
-            is_extra=>1,
+            name => 'use_warnings',
+            error => q{This distribution does not 'use warnings;' (or its equivalents) in all of its modules. Note that this is not about that your modules actually warn when something bad happens. It's bad if nobody can tell if a module warns or not, without reading the source code of your favorite module that actually enforces warnings. In other words, it's bad if someone feels the need to add 'use warnings' to your modules.},
+            is_extra => 1,
             ignorable => 1,
-            remedy=>q{Add 'use warnings' (or its equivalents) to all modules (this will require perl > 5.6), or convince us that your favorite module is well-known enough and people can easily see the modules warn when something bad happens.},
-            code=>sub {
+            remedy => q{Add 'use warnings' (or its equivalents) to all modules (this will require perl > 5.6), or convince us that your favorite module is well-known enough and people can easily see the modules warn when something bad happens.},
+            code => sub {
                 my $d = shift;
                 my $files = $d->{files_hash} || {};
 
@@ -241,7 +241,7 @@ sub kwalitee_indicators {
                 }
                 return 1;
             },
-            details=>sub {
+            details => sub {
                 my $d = shift;
                 return "The following modules don't use warnings (or equivalents): " . $d->{error}{use_warnings};
             },
