@@ -114,13 +114,18 @@ sub unpack {
           $vname =~ s/\-TRIAL[0-9]*//;
 
           $me->d->{extracts_nicely} = 1;
+          if ($vname eq $stuff[0]) {
+            $me->d->{error}{extracts_nicely} = "expected $vname but got $stuff[0]";
+          }
         } else {
           $me->distdir($me->testdir);
           $me->d->{extracts_nicely} = 0;
+          $me->d->{error}{extracts_nicely} = join ",", @stuff;
         }
     } else {
         $me->distdir($me->testdir);
         $me->d->{extracts_nicely} = 0;
+        $me->d->{error}{extracts_nicely} = join ",", @stuff;
     }
     return;
 }
