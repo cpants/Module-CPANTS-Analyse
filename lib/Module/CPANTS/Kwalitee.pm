@@ -9,10 +9,11 @@ use Module::Find qw(useall);
 our $VERSION = '0.97_11';
 $VERSION =~ s/_//; ## no critic
 
-__PACKAGE__->mk_accessors(qw(generators _gencache _genhashcache _available _total));
+__PACKAGE__->mk_accessors(qw(_available _total));
 
 my @Plugins;
 my @Indicators;
+my %IndicatorHash;
 my $Total;
 my $Available;
 
@@ -75,25 +76,18 @@ sub get_indicators {
         next if !$indicator->{$type};
         push @indicators, $indicator;
     }
+
     return wantarray ? @indicators : \@indicators;
 }
 
 sub get_indicators_hash {
     my $self = shift;
+    return \%IndicatorHash if %IndicatorHash;
 
-    my $indicators;
-    if ($self->_genhashcache) {
-        $indicators = $self->_genhashcache;
-    } else {
-        foreach my $gen (@{$self->generators}) {
-            foreach my $ind (@{$gen->kwalitee_indicators}) {
-                $ind->{defined_in} = $gen;
-                $indicators->{$ind->{name}} = $ind;
-            }
-        }
-        $self->_genhashcache($indicators);
+    foreach my $ind (@Indicators) {
+        $IndicatorHash{$ind->{name}} = $ind;
     }
-    return $indicators;
+    return \%IndicatorHash;
 }
 
 sub available_kwalitee { $Available }
