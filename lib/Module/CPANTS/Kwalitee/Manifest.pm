@@ -22,7 +22,7 @@ sub analyse {
 
     if (-e $manifest_file) {
         # read manifest
-        open(my $fh, '<', $manifest_file) || die "cannot read MANIFEST $manifest_file: $!";
+        open(my $fh, '<', $manifest_file) or die "cannot read MANIFEST $manifest_file: $!";
         my %seen;
         while (<$fh>) {
             chomp;

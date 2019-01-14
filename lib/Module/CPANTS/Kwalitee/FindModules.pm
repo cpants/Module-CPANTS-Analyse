@@ -69,7 +69,7 @@ sub analyse {
                 # open file and find first package
                 my $module;
                 my $max_lines_to_look_at = 666;
-                open (my $fh, "<", catfile($me->distdir, $file)) || die "__PACKAGE__: Cannot open $file to find package declaration: $!";
+                open (my $fh, "<", catfile($me->distdir, $file)) or die "__PACKAGE__: Cannot open $file to find package declaration: $!";
                 while (my $line = <$fh>) {
                     next if $line =~ /^\s*#/; # ignore comments
                     if ($line =~ /^\s*package\s*(.*?)\s*;/) {

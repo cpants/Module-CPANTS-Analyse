@@ -103,7 +103,7 @@ sub unpack {
     $me->d->{extractable} = 1;
     unlink($me->testfile);
 
-    opendir(my $fh_testdir, $me->testdir) || die "Cannot open ".$me->testdir.": $!";
+    opendir(my $fh_testdir, $me->testdir) or die "Cannot open ".$me->testdir.": $!";
     my @stuff = grep {/\w/} readdir($fh_testdir);
 
     if (@stuff == 1) {
