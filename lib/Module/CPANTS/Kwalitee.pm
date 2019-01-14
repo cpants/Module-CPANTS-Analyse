@@ -4,26 +4,35 @@ use strict;
 use warnings;
 use base qw(Class::Accessor::Fast);
 use Carp;
+use Module::Find qw(useall);
 
 our $VERSION = '0.97_11';
 $VERSION =~ s/_//; ## no critic
 
 __PACKAGE__->mk_accessors(qw(generators _gencache _genhashcache _available _total));
 
+my @Plugins;
+
 sub import {
     my $class = shift;
-    my %search_path = map {(/^Module::CPANTS::/ ? $_ : "Module::CPANTS::$_") => 1 } @_;
-    $search_path{'Module::CPANTS::Kwalitee'} = 1;
-    require Module::Pluggable;
-    Module::Pluggable->import(search_path => [keys %search_path]);
+    my @search_path = map {(/^Module::CPANTS::/ ? $_ : "Module::CPANTS::$_") => 1 } @_;
+    push @search_path, 'Module::CPANTS::Kwalitee';
+
+    my %seen;
+    push @Plugins, useall $_ for grep {!$seen{$_}++} @search_path;
+
+    %seen = ();
+    @Plugins = sort {$a->order <=> $b->order or $a cmp $b} grep {!$seen{$_}++} @Plugins;
 }
+
+sub plugins { @Plugins }
 
 sub new {
     my $class = shift;
     my $me = bless {}, $class;
 
     my %generators;
-    foreach my $gen ($me->plugins) {
+    foreach my $gen (@Plugins) {
         ## no critic (ProhibitStringyEval)
         eval "require $gen";
         croak qq{cannot load $gen: $@} if $@;
