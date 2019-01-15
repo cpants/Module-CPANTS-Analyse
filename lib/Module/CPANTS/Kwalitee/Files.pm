@@ -114,7 +114,7 @@ sub analyse {
     my $base_dirs_re = join '|', '', map {quotemeta "$_/"} @base_dirs;
 
     # find special files/dirs
-    my @special_files = sort (qw(Makefile.PL Build.PL META.yml META.json MYMETA.yml MYMETA.json dist.ini cpanfile SIGNATURE MANIFEST test.pl LICENSE LICENCE));
+    my @special_files = sort (qw(Makefile.PL Build.PL META.yml META.json MYMETA.yml MYMETA.json dist.ini cpanfile SIGNATURE MANIFEST MANIFEST.SKIP test.pl LICENSE LICENCE));
     my @special_dirs = sort (qw(lib t xt));
 
     my %special_files_re = (
