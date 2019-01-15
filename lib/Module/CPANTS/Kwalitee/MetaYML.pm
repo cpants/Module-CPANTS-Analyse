@@ -7,7 +7,7 @@ use CPAN::Meta::Validator;
 use CPAN::Meta::Converter;
 use List::Util qw/first/;
 
-our $VERSION = '0.97_11';
+our $VERSION = '0.98';
 $VERSION =~ s/_//; ## no critic
 
 sub order { 10 }

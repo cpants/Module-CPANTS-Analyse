@@ -1,5 +1,14 @@
 Revision history for Module-CPANTS-Analyse
 
+0.98 2019-01-15
+  ** BACKWARD INCOMPATIBLE (INTERNAL) CHANGE **
+  - Module::CPANTS::Kwalitee now uses Module::Find to find
+    Kwalitee modules (instead of Module::Pluggable that unconditonally
+    spits a deprecation warning). You usually don't need to care
+    but if you have your custom Kwalitee plugin loader (such as
+    Module::CPANTS::SiteKwalitee), you need to change it.
+    Sorry for the inconvenience.
+
   - Allow dash and dot in script name in the NAME section for
     non-pm, non-pod files
 
