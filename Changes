@@ -1,5 +1,8 @@
 Revision history for Module-CPANTS-Analyse
 
+0.99 2019-01-15
+  - requires Module::Find
+
 0.98 2019-01-15
   ** BACKWARD INCOMPATIBLE (INTERNAL) CHANGE **
   - Module::CPANTS::Kwalitee now uses Module::Find to find

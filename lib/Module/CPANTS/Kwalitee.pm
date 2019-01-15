@@ -6,7 +6,7 @@ use base qw(Class::Accessor::Fast);
 use Carp;
 use Module::Find qw(useall);
 
-our $VERSION = '0.98';
+our $VERSION = '0.99';
 $VERSION =~ s/_//; ## no critic
 
 __PACKAGE__->mk_accessors(qw(_available _total));
