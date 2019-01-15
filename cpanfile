@@ -10,7 +10,7 @@ requires 'File::Find::Object' => '0.2.1';
 requires 'JSON::PP' => 0;
 requires 'List::Util' => '1.33';
 requires 'Module::ExtractUse' => '0.33'; # for no support
-requires 'Module::Pluggable' => '2.96';
+requires 'Module::Find';
 requires 'Software::License' => '0.103012';
 requires 'Text::Balanced' => 0;
 requires 'version' => '0.73';
