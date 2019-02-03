@@ -29,7 +29,7 @@ sub analyse {
     my $maniskip = $class->_make_maniskip($me, $distdir);
 
     my (%files, %dirs);
-    my (@files_array, @dirs_array);
+    my (@files_array, @dirs_array, @files_to_be_skipped);
     my $size = 0;
     my $latest_mtime = 0;
     my @base_dirs;
@@ -43,7 +43,13 @@ sub analyse {
         (my $path = $name) =~ s!^\Q$distdir\E(?:/|$)!! or next;
         next if $path eq '';
         next if $seen{$path}++;
-        next if $RespectManiskip && $maniskip && $maniskip->($path);
+
+        if ($maniskip && $maniskip->($path)) {
+            next if $RespectManiskip;
+            push @files_to_be_skipped, $path;
+            if (-d $name) { $dirs{$path}{maniskip} = 1 }
+            else { $files{$path}{maniskip} = 1 }
+        }
 
         if (-d $name) {
             $dirs{$path} ||= {};
@@ -106,6 +112,10 @@ sub analyse {
 
     if (@symlinks) {
         $me->d->{error}{symlinks} = join ',', @symlinks;
+    }
+
+    if (@files_to_be_skipped) {
+        $me->d->{error}{no_files_to_be_skipped} = join ',', @files_to_be_skipped;
     }
 
     $me->d->{base_dirs} = [sort @base_dirs] if @base_dirs;
@@ -306,6 +316,16 @@ sub kwalitee_indicators {
         details => sub {
             my $d = shift;
             return "Any Changelog file was not found.";
+        },
+    },
+    {
+        name => 'no_files_to_be_skipped',
+        error => q{This distribution contains files that should be skipped by MANIFEST.SKIP.},
+        remedy => q{Fix MANIFEST.SKIP or use an authoring tool which respects MANIFEST.SKIP. Note that each entry in MANIFEST.SKIP is a regular expression. You may need to add appropriate meta characters not to ignore necessary stuff.},
+        code => sub {shift->{error}{no_files_to_be_skipped} ? 0 : 1},
+        details => sub {
+            my $d = shift;
+            return "The following files were found: ".$d->{error}{no_files_to_be_skipped};
         },
     },
     {
