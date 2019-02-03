@@ -11,12 +11,14 @@ requires 'JSON::PP' => 0;
 requires 'List::Util' => '1.33';
 requires 'Module::ExtractUse' => '0.33'; # for no support
 requires 'Module::Find';
+requires 'perl' => '5.008001';
 requires 'Software::License' => '0.103012';
 requires 'Text::Balanced' => 0;
 requires 'version' => '0.73';
 
 on configure => sub {
   requires 'ExtUtils::MakeMaker::CPANfile' => '0.08';
+  requires 'perl' => '5.008001';
 };
 
 on test => sub {
