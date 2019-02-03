@@ -79,13 +79,13 @@ sub analyse {
             $files{$path}{symlink} = 1;
         }
 
-        if (!-r $name) {
-            $files{$path}{unreadable} = 1;
+        if ($no_index_re && $path =~ qr/$no_index_re/) {
+            $files{$path}{no_index} = 1;
             next;
         }
 
-        if ($no_index_re && $path =~ qr/$no_index_re/) {
-            $files{$path}{no_index} = 1;
+        if (!-r $name) {
+            $files{$path}{unreadable} = 1;
             next;
         }
 
