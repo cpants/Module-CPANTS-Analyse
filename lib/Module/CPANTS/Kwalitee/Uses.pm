@@ -22,7 +22,7 @@ our @STRICT_WARNINGS_EQUIV = qw(
   Any::Moose
   Catmandu::Sane Coat
   Dancer
-  Mo
+  Mo Mu
   Modern::Perl
   Moo Moo::Role
   Moose Moose::Role Moose::Exporter
@@ -30,6 +30,7 @@ our @STRICT_WARNINGS_EQUIV = qw(
   MooseX::Declare MooseX::Role::Parameterized MooseX::Types
   Mouse Mouse::Role
   perl5 perl5i::1 perl5i::2 perl5i::latest
+  Pegex::Base
   Role::Tiny
   strictures
 );
