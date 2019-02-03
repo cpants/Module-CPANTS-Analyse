@@ -21,7 +21,7 @@ my $Available;
 sub import {
     my ($class, @search_paths) = @_;
     for my $path (@search_paths) {
-        next unless $path =~ /^[A-Za-z][A-Za-z0-9_]*(::[A-Za-z][A-Za-z0-9_])*$/;
+        next unless $path =~ /^[A-Za-z][A-Za-z0-9_]*(::[A-Za-z][A-Za-z0-9_]*)*$/;
         push @SearchPaths, $path =~ /^Module::CPANTS::/ ? $path : "Module::CPANTS::$path";
 
         my %seen;
