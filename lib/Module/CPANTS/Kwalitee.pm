@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use base qw(Class::Accessor::Fast);
 use Carp;
-use Module::Find qw(useall);
+use Module::Find qw(usesub);
 
 our $VERSION = '0.99';
 $VERSION =~ s/_//; ## no critic
@@ -23,7 +23,7 @@ sub import {
     push @search_path, 'Module::CPANTS::Kwalitee';
 
     my %seen;
-    push @Plugins, useall $_ for grep {!$seen{$_}++} @search_path;
+    push @Plugins, usesub $_ for grep {!$seen{$_}++} @search_path;
 
     %seen = ();
     @Plugins = sort {$a->order <=> $b->order or $a cmp $b} grep {!$seen{$_}++} @Plugins;
