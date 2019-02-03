@@ -6,7 +6,7 @@ use Perl::PrereqScanner::NotQuiteLite 0.9901;
 use List::Util 1.33 qw/none/;
 use version;
 
-our $VERSION = '0.99';
+our $VERSION = '1.00';
 $VERSION =~ s/_//; ## no critic
 
 # These equivalents should be reasonably well-known and, preferably,
