@@ -44,6 +44,10 @@ sub analyse {
         next if $path eq '';
         next if $seen{$path}++;
 
+        if ($me->d->{is_local_distribution}) {
+            next if $path =~ m!/\.!;
+        }
+
         if ($maniskip && $maniskip->($path)) {
             next if $RespectManiskip;
             push @files_to_be_skipped, $path;
@@ -58,10 +62,6 @@ sub analyse {
             }
             push @dirs_array, $path;
             next;
-        }
-
-        if ($me->d->{is_local_distribution}) {
-            next if $path =~ m!/\.!;
         }
 
         if (my $stat = stat($name)) {
