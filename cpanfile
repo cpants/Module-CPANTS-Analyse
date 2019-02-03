@@ -15,6 +15,10 @@ requires 'Software::License' => '0.103012';
 requires 'Text::Balanced' => 0;
 requires 'version' => '0.73';
 
+on configure => sub {
+  requires 'ExtUtils::MakeMaker::CPANfile' => '0.08';
+};
+
 on test => sub {
   requires 'Cwd' => 0;
   requires 'Test::More' => '0.88';
