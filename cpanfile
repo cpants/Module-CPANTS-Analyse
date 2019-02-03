@@ -9,8 +9,8 @@ requires 'Data::Binary' => '0';
 requires 'File::Find::Object' => '0.2.1';
 requires 'JSON::PP' => 0;
 requires 'List::Util' => '1.33';
-requires 'Module::ExtractUse' => '0.33'; # for no support
 requires 'Module::Find';
+requires 'Perl::PrereqScanner::NotQuiteLite' => '0.9901';
 requires 'perl' => '5.008001';
 requires 'Software::License' => '0.103012';
 requires 'Text::Balanced' => 0;
