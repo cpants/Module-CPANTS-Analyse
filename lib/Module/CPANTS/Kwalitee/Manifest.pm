@@ -145,7 +145,7 @@ L<Module::CPANTS::Analyse>
 
 =head1 AUTHOR
 
-Thomas Klausner, <domm@cpan.org>, http://domm.plix.at
+Thomas Klausner, <domm@cpan.org>, https://domm.plix.at/
 
 =head1 COPYRIGHT AND LICENSE
 

@@ -15,7 +15,7 @@ WriteMakefile(
 
   META_MERGE => {
     resources => {
-      homepage => 'http://cpants.cpanauthors.org',
+      homepage => 'https://cpants.cpanauthors.org',
       repository => 'https://github.com/cpants/Module-CPANTS-Analyse',
       bugtracker => 'https://rt.cpan.org/Public/Dist/Display.html?Name=Module-CPANTS-Analyse',
     },

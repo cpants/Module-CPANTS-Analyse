@@ -78,7 +78,7 @@ L<Module::CPANTS::Analyse>
 L<Thomas Klausner|https://metacpan.org/author/domm>
 and L<Gábor Szabó|https://metacpan.org/author/szabgab>
 with the help of Martín Ferrari and the
-L<Debian Perl packaging team|http://pkg-perl.alioth.debian.org/>.
+Debian Perl packaging team
 
 =head1 COPYRIGHT AND LICENSE
 
