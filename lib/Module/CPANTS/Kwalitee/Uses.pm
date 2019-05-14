@@ -219,7 +219,7 @@ sub kwalitee_indicators {
             error => q{This distribution does not 'use warnings;' (or its equivalents) in all of its modules. Note that this is not about that your modules actually warn when something bad happens. It's bad if nobody can tell if a module warns or not, without reading the source code of your favorite module that actually enforces warnings. In other words, it's bad if someone feels the need to add 'use warnings' to your modules.},
             is_extra => 1,
             ignorable => 1,
-            remedy => q{Add 'use warnings' (or its equivalents) to all modules (this will require perl > 5.6), or convince us that your favorite module is well-known enough and people can easily see the modules warn when something bad happens.},
+            remedy => q{Add 'use warnings' (or its equivalents) to all modules, or convince us that your favorite module is well-known enough and people can easily see the modules warn when something bad happens.},
             code => sub {
                 my $d = shift;
                 my $files = $d->{files_hash} || {};
