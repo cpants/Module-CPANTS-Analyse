@@ -57,7 +57,7 @@ sub analyse {
     # NOTE: all files in xt/ should be ignored because they are
     # for authors only and their dependencies may not be (and
     # often are not) listed in meta files.
-    my @test_files = grep {m!^t\b.*\.t!} sort keys %$files;
+    my @test_files = grep {m!^t\b.*\.t$!} sort keys %$files;
     $me->d->{test_files} = \@test_files;
 
     my %test_modules = map {
