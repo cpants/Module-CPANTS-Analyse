@@ -61,10 +61,11 @@ sub analyse {
     $me->d->{test_files} = \@test_files;
 
     my %test_modules = map {
-        my $m = $_;
+        my $m = my $f = $_;
         $m =~ s|\.pm$||;
         $m =~ s|/|::|g;
-        ($m => $_)
+        (my $m0 = $m) =~ s|^t::(?:lib::)?||;
+        ($m => $f, $m0 => $f)
     } grep {m|^t\b.*\.pm$|} keys %$files;
 
     my %skip=map {$_->{module}=>1 } @$modules;
