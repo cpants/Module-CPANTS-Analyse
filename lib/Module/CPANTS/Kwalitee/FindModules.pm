@@ -75,6 +75,7 @@ sub analyse {
             }
             else {
                 # open file and find first package
+                my ($basename) = $file =~ /(\w+)\.pm/;
                 my $module;
                 my $max_lines_to_look_at = 666;
                 open (my $fh, "<", catfile($me->distdir, $file)) or die "__PACKAGE__: Cannot open $file to find package declaration: $!";
@@ -82,7 +83,7 @@ sub analyse {
                     next if $line =~ /^\s*#/; # ignore comments
                     if ($line =~ /^\s*package\s*(.*?)\s*;/) {
                         $module = $1;
-                        last;
+                        last if $basename and $module =~ /\b$basename$/;
                     }
                     last if $line =~ /^__(DATA|END)__/;
                     $max_lines_to_look_at--;
