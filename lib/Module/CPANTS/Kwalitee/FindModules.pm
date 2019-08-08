@@ -39,7 +39,12 @@ sub analyse {
 
             push @{$me->d->{modules}}, $found;
             if (exists $me->d->{files_hash}{$file}) {
-                $me->d->{files_hash}{$file}{module} = $module;
+                (my $path_part = $module) =~ s|::|/|g;
+                if ($file =~ /\b$path_part\.pm$/) {
+                    $me->d->{files_hash}{$file}{module} = $module;
+                } elsif ("$path_part.pm" =~ /\b$file$/) {
+                    $me->d->{files_hash}{$file}{module} ||= $module;
+                }
             } else {
                 $found->{not_exists} = 1;
             }
