@@ -114,7 +114,7 @@ sub unpack {
           $vname =~ s/\-TRIAL[0-9]*//;
 
           $me->d->{extracts_nicely} = 1;
-          if ($vname eq $stuff[0]) {
+          if ($vname ne $stuff[0]) {
             $me->d->{error}{extracts_nicely} = "expected $vname but got $stuff[0]";
           }
         } else {
