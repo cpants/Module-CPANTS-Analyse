@@ -23,8 +23,10 @@ sub analyse {
     $me->d->{license} = '';
     if ($yaml) {
         if ($yaml->{license} and $yaml->{license} ne 'unknown') {
-            $me->d->{license_from_yaml} = $yaml->{license};
-            $me->d->{license} = $yaml->{license}.' defined in META.yml';
+            my $license = $yaml->{license};
+            $license = join ',', @$license if ref $license eq 'ARRAY';
+            $me->d->{license_from_yaml} = $license;
+            $me->d->{license} = $license.' defined in META.yml';
         }
     }
     # use "files_array" to exclude files listed in "no_index".
