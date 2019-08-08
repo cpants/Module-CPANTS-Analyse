@@ -132,6 +132,7 @@ sub _validate_meta {
     } elsif (!$spec->is_valid) {
         $error = join ';', sort $spec->errors;
     }
+    $error =~ s/(SCALAR|ARRAY|HASH|GLOB|REF)\(0x[0-9a-f]+\)/$1(...)/g;
     return ($spec, $error);
 }
 
