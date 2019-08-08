@@ -152,7 +152,10 @@ sub _scan {
 
         # There may be broken files (intentionally, or unintentionally, esp in tests)
         if (@{$ctx->{errors} || []}) {
-            $files_hash->{$file}{scan_error} = 1;
+            my $error = join ',', @{$ctx->{errors}};
+            $error =~ s/ at \S+ line \d+[^\n]*//gs;
+            $error =~ s/Scan Error: //g;
+            $files_hash->{$file}{scan_error} = $error;
         }
 
         if ($ctx->{perl6}) {
