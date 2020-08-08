@@ -1,5 +1,8 @@
 Revision history for Module-CPANTS-Analyse
 
+  - Fix has_license_in_source_file for distributions that contain only a
+    script under bin or scripts
+
 1.01 2019-08-08
   - Fixed not to set an error message when extracted nicely
     (spotted by Martin Becker++)
