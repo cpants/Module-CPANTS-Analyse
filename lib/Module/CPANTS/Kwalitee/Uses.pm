@@ -29,6 +29,7 @@ our @STRICT_WARNINGS_EQUIV = qw(
   Moose::Util::TypeConstraints Moose::Util::MetaRole
   MooseX::Declare MooseX::Role::Parameterized MooseX::Types
   Mouse Mouse::Role
+  Object::Pad
   perl5 perl5i::1 perl5i::2 perl5i::latest
   Pegex::Base
   Role::Tiny
