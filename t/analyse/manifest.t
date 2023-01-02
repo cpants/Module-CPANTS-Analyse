@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use FindBin;
+use Test::File 1.993;
 use lib "$FindBin::Bin/../lib";
 use Module::CPANTS::TestAnalyse;
 
@@ -50,6 +51,10 @@ test_distribution {
 MANIFEST
 EOF
 
+  if (! Test::File->has_symlinks) {
+    diag "No symlink in this session";
+    return;
+  }
   eval { symlink "$dir/MANIFEST", "$dir/MANIFEST.lnk" };
   if ($@) {
     diag "symlink is not supported";
