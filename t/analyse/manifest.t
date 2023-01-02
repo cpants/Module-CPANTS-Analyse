@@ -71,6 +71,10 @@ test_distribution {
 MANIFEST
 EOF
 
+  if (! Test::File->has_symlinks) {
+    diag "No symlink in this session";
+    return;
+  }
   eval { symlink "$dir/MANIFEST", "$dir/MANIFEST.lnk" };
   if ($@) {
     diag "symlink is not supported";
