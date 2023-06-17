@@ -41,7 +41,7 @@ sub analyse {
 
     # check pod
     my %licenses;
-    foreach my $file (grep { /^(:?bin|scripts)|\.(?:pm|pod|pl|PL)$/ } sort @$files ) {
+    foreach my $file (grep { m!^(?:bin|scripts?)/|\.(?:pm|pod|pl|PL)$! } sort @$files ) {
         next if $file =~ /(?:Makefile|Build)\.PL$/;
         my $path = catfile($distdir, $file);
         next unless -r $path; # skip if not readable
