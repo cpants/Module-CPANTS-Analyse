@@ -95,7 +95,8 @@ sub analyse {
             }
         }
         if (@possible_licenses) {
-            @possible_licenses = map { s/^Software::License:://; $_ } @possible_licenses;
+            my %seen;
+            @possible_licenses = grep {!$seen{$_}++} map { s/^Software::License:://; $_ } @possible_licenses;
             push @{$licenses{$_} ||= []}, $file for @possible_licenses;
             $me->d->{files_hash}{$file}{license} = join ',', @possible_licenses;
         } else {
