@@ -9,7 +9,7 @@ use File::Copy;
 use File::stat;
 use Archive::Any::Lite;
 use Carp;
-use CPAN::DistnameInfo;
+use Parse::Distname;
 
 our $VERSION = '1.01';
 $VERSION =~ s/_//; ## no critic
@@ -51,7 +51,7 @@ sub unpack {
     my $me = shift;
     return 'cant find dist' unless $me->dist;
 
-    my $di = CPAN::DistnameInfo->new($me->dist);
+    my $di = Parse::Distname->new($me->dist);
     my $ext = $di->extension || 'unknown';
 
     $me->d->{package} = $di->filename;
