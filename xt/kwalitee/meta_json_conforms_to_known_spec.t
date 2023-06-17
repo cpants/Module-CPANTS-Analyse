@@ -15,11 +15,11 @@ xt::kwalitee::Test::run(
     ['BARBIE/Template-Plugin-Lingua-EN-NameCase-0.01.tar.gz', 0],
 
     # invalid license
-    ['TOMO/src/Net-SMTPS-0.03.tar.gz', 0], # perl
-    ['RSAVAGE/DBIx-Admin-CreateTable-2.08.tgz', 0], # artistic_2_0
+    ['TOMO/src/Net-SMTPS-0.03.tar.gz',          0],    # perl
+    ['RSAVAGE/DBIx-Admin-CreateTable-2.08.tgz', 0],    # artistic_2_0
 
     # 'origin' for 'repository' does not have a URL scheme
-    ['RJBS/Sub-Import-0.092800.tar.gz', 0],
+    ['RJBS/Sub-Import-0.092800.tar.gz',      0],
     ['MARCEL/Permute-Named-1.100980.tar.gz', 0],
 
     # '' for 'repository' is not a valid URL.
