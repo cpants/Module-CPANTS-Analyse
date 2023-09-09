@@ -24,4 +24,7 @@ xt::kwalitee::Test::run(
 
     # v6 module inside a Perl 5 distribution
     ['NINE/Inline-Perl6-0.07.tar.gz', 1],
+
+    # v5.36.0
+    ['GUGOD/PerlX-ScopeFunction-0.03.tar.gz', 1],
 );
