@@ -40,6 +40,7 @@ jobs:
         cpanm --installdeps --with-develop --notest .
         # --with-configure
         # --with-recommends, --with-suggests
+        cpanm -n Test::File
 
     - name: Run tests
       #env:
