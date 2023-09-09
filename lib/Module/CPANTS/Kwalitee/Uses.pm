@@ -229,6 +229,7 @@ sub kwalitee_indicators {
                 my $d = shift;
                 my $files = $d->{files_hash} || {};
 
+                my $perl_version_with_implicit_use_warnings = version->new('5.036')->numify;
                 my @no_warnings;
                 for my $file (keys %$files) {
                     next unless exists $files->{$file}{module};
@@ -237,6 +238,11 @@ sub kwalitee_indicators {
                     next if $file =~ /\.pod$/;
                     my $module = $files->{$file}{module};
                     my $requires = $files->{$file}{requires} || {};
+                    my $required_perl = $requires->{perl};
+                    if (defined $required_perl) {
+                        $required_perl =~ s/_//;  # tweak 5.008_001 and the likes for silence
+                        next if version->parse($required_perl)->numify >= $perl_version_with_implicit_use_warnings;
+                    }
                     push @no_warnings, $module if none {exists $requires->{$_}} (@WARNINGS_EQUIV, @STRICT_WARNINGS_EQUIV);
                 }
                 if (@no_warnings) {
