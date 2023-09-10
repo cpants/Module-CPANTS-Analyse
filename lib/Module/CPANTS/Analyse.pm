@@ -11,7 +11,7 @@ use Archive::Any::Lite;
 use Carp;
 use Parse::Distname;
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 $VERSION =~ s/_//; ## no critic
 
 __PACKAGE__->mk_accessors(qw(dist opts tarball distdir d mck));
