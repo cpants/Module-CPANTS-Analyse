@@ -46,6 +46,17 @@ jobs:
       #env:
       #  AUTHOR_TESTING: 1
       #  RELEASE_TESTING: 1
+      if: ${{matrix.runner == 'windows-latest'}}
+      run: |
+        perl Makefile.PL
+        gmake
+        gmake test
+
+    - name: Run tests
+      #env:
+      #  AUTHOR_TESTING: 1
+      #  RELEASE_TESTING: 1
+      if: ${{matrix.runner != 'windows-latest'}}
       run: |
         perl Makefile.PL
         make
